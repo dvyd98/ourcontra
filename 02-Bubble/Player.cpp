@@ -10,6 +10,7 @@
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
 #define GLUT_KEY_SPACEBAR 32
+#define PLAYER_VEL 2
 
 
 enum PlayerAnims
@@ -106,6 +107,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 }
 
 void Player::update(int deltaTime)
+void Player::update(int deltaTime, float left)
 {
 	sprite->update(deltaTime);
 	if (bJumping) // lookingTo es una variable que sactualitza segons si el player mira left or right, l'utilitzo per estalviar mirar cada sprite individualment si es left or right
@@ -125,6 +127,7 @@ void Player::update(int deltaTime)
 		posPlayer.x -= 2;
 		lookingTo = LOOKING_LEFT;
 		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
+		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)) || posPlayer.x - 2 <= left)
 		{
 			posPlayer.x += 2;
 			sprite->changeAnimation(STAND_LEFT);
@@ -149,6 +152,7 @@ void Player::update(int deltaTime)
 		posPlayer.x -= 2;
 		lookingTo = LOOKING_LEFT;
 		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
+		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)) || posPlayer.x - 2 <= left)
 		{
 			posPlayer.x += 2;
 			sprite->changeAnimation(STAND_LEFT);
@@ -173,6 +177,8 @@ void Player::update(int deltaTime)
 		posPlayer.x -= 2;
 		lookingTo = LOOKING_LEFT;
 		if(map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
+		if(map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)) || posPlayer.x - 2 <= left)
+>>>>>>> origin/Scroll
 		{
 			posPlayer.x += 2;
 			sprite->changeAnimation(STAND_LEFT);
@@ -281,6 +287,9 @@ void Player::setPosition(const glm::vec2 &pos)
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
-
+glm::ivec2 Player::getPos()
+{
+	return posPlayer;
+}
 
 

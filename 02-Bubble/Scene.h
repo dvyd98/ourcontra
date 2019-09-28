@@ -33,6 +33,7 @@ private:
 	float currentTime;
 	glm::mat4 projection;
 
+	float left, right, bottom, top;
 };
 
 
