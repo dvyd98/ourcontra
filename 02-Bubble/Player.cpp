@@ -27,53 +27,79 @@ enum LookingTo
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	bJumping = false;
-	spritesheet.loadFromFile("images/guyPH.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(16);
+	lookingTo = LOOKING_RIGHT;
+	spritesheet.loadFromFile("images/blueguy.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	sprite = Sprite::createSprite(glm::ivec2(32, 64), glm::vec2(0.1f, 0.1f), &spritesheet, &shaderProgram);
+	sprite->setNumberAnimations(100);
 	
 		sprite->setAnimationSpeed(STAND_LEFT, 8);
-		sprite->addKeyframe(STAND_LEFT, glm::vec2(0.f, 0.f));
+		sprite->addKeyframe(STAND_LEFT, glm::vec2(0.1f, 0.f));
 		
 		sprite->setAnimationSpeed(STAND_RIGHT, 8);
-		sprite->addKeyframe(STAND_RIGHT, glm::vec2(0.25f, 0.f));
+		sprite->addKeyframe(STAND_RIGHT, glm::vec2(0.0f, 0.0f));
 		
 		sprite->setAnimationSpeed(MOVE_LEFT, 8);
-		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.f, 0.f));
+		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.f, 0.2f));
+		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.1f, 0.2f));
+		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.2f, 0.2f));
+		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.3f, 0.2f));
+		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.4f, 0.2f));
+		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.5f, 0.2f));
 		
 		sprite->setAnimationSpeed(MOVE_RIGHT, 8);
-		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.25, 0.f));
+		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.f, 0.1f));
+		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.1f, 0.1f));
+		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.2f, 0.1f));
+		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.3f, 0.1f));
+		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.4f, 0.1f));
+		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.5f, 0.1f));
+
 
 		sprite->setAnimationSpeed(AIM_UP_LOOK_LEFT, 8);
-		sprite->addKeyframe(AIM_UP_LOOK_LEFT, glm::vec2(0.75f, 0.50f));
+		sprite->addKeyframe(AIM_UP_LOOK_LEFT, glm::vec2(0.50f, 0.0f));
 
 		sprite->setAnimationSpeed(AIM_UP_LOOK_RIGHT, 8);
-		sprite->addKeyframe(AIM_UP_LOOK_RIGHT, glm::vec2(0.50f, 0.50f));
+		sprite->addKeyframe(AIM_UP_LOOK_RIGHT, glm::vec2(0.40f, 0.0f));
 
 		sprite->setAnimationSpeed(AIM_UP_WALK_RIGHT, 8);
-		sprite->addKeyframe(AIM_UP_WALK_RIGHT, glm::vec2(0.75f, 0.75f));
+		sprite->addKeyframe(AIM_UP_WALK_RIGHT, glm::vec2(0.0f, 0.5f));
+		sprite->addKeyframe(AIM_UP_WALK_RIGHT, glm::vec2(0.1f, 0.5f));
+		sprite->addKeyframe(AIM_UP_WALK_RIGHT, glm::vec2(0.2f, 0.5f));
 
 		sprite->setAnimationSpeed(AIM_UP_WALK_LEFT, 8);
-		sprite->addKeyframe(AIM_UP_WALK_LEFT, glm::vec2(0.50f, 0.75f));
+		sprite->addKeyframe(AIM_UP_WALK_LEFT, glm::vec2(0.3f, 0.5f));
+		sprite->addKeyframe(AIM_UP_WALK_LEFT, glm::vec2(0.4f, 0.5f));
+		sprite->addKeyframe(AIM_UP_WALK_LEFT, glm::vec2(0.5f, 0.5f));
 
 		sprite->setAnimationSpeed(CROUCH_LOOK_LEFT, 8);
-		sprite->addKeyframe(CROUCH_LOOK_LEFT, glm::vec2(0.0f, 0.75f));
+		sprite->addKeyframe(CROUCH_LOOK_LEFT, glm::vec2(0.3f, 0.0f));
 
 		sprite->setAnimationSpeed(CROUCH_LOOK_RIGHT, 8);
-		sprite->addKeyframe(CROUCH_LOOK_RIGHT, glm::vec2(0.25f, 0.75f));
+		sprite->addKeyframe(CROUCH_LOOK_RIGHT, glm::vec2(0.2f, 0.0f));
 
 		sprite->setAnimationSpeed(AIM_DOWN_WALK_RIGHT, 8);
-		sprite->addKeyframe(AIM_DOWN_WALK_RIGHT, glm::vec2(0.25f, 0.50f));
+		sprite->addKeyframe(AIM_DOWN_WALK_RIGHT, glm::vec2(0.0f, 0.6f));
+		sprite->addKeyframe(AIM_DOWN_WALK_RIGHT, glm::vec2(0.1f, 0.6f));
+		sprite->addKeyframe(AIM_DOWN_WALK_RIGHT, glm::vec2(0.2f, 0.6f));
 
 		sprite->setAnimationSpeed(AIM_DOWN_WALK_LEFT, 8);
-		sprite->addKeyframe(AIM_DOWN_WALK_LEFT, glm::vec2(0.0f, 0.50f));
+		sprite->addKeyframe(AIM_DOWN_WALK_LEFT, glm::vec2(0.3f, 0.6f));
+		sprite->addKeyframe(AIM_DOWN_WALK_LEFT, glm::vec2(0.4f, 0.6f));
+		sprite->addKeyframe(AIM_DOWN_WALK_LEFT, glm::vec2(0.5f, 0.6f));
 
 		sprite->setAnimationSpeed(AIRBONE_RIGHT, 8);
-		sprite->addKeyframe(AIRBONE_RIGHT, glm::vec2(0.50f, 0.25f));
+		sprite->addKeyframe(AIRBONE_RIGHT, glm::vec2(0.0f, 0.3f));
+		sprite->addKeyframe(AIRBONE_RIGHT, glm::vec2(0.1f, 0.3f));
+		sprite->addKeyframe(AIRBONE_RIGHT, glm::vec2(0.2f, 0.3f));
+		sprite->addKeyframe(AIRBONE_RIGHT, glm::vec2(0.3f, 0.3f));
 
 		sprite->setAnimationSpeed(AIRBONE_LEFT, 8);
-		sprite->addKeyframe(AIRBONE_LEFT, glm::vec2(0.50f, 0.25f));
+		sprite->addKeyframe(AIRBONE_LEFT, glm::vec2(0.0f, 0.4f));
+		sprite->addKeyframe(AIRBONE_LEFT, glm::vec2(0.1f, 0.4f));
+		sprite->addKeyframe(AIRBONE_LEFT, glm::vec2(0.2f, 0.4f));
+		sprite->addKeyframe(AIRBONE_LEFT, glm::vec2(0.3f, 0.4f));
 		
-	sprite->changeAnimation(0);
+	sprite->changeAnimation(1);
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	
@@ -84,10 +110,13 @@ void Player::update(int deltaTime)
 	sprite->update(deltaTime);
 	if (bJumping) // lookingTo es una variable que sactualitza segons si el player mira left or right, l'utilitzo per estalviar mirar cada sprite individualment si es left or right
 	{
+		if (lookingTo == LOOKING_RIGHT)
+			if (sprite->animation() != AIRBONE_RIGHT)
+				sprite->changeAnimation(AIRBONE_RIGHT);
 		if (lookingTo == LOOKING_LEFT)
-			sprite->changeAnimation(AIRBONE_LEFT);
-		else if (lookingTo == LOOKING_RIGHT)
-			sprite->changeAnimation(AIRBONE_RIGHT);	
+			if (sprite->animation() != AIRBONE_LEFT)
+				sprite->changeAnimation(AIRBONE_LEFT);
+	
 	}
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_UP))
 	{
@@ -163,16 +192,16 @@ void Player::update(int deltaTime)
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_UP))
 	{
-		if (sprite->animation() == STAND_LEFT || sprite->animation() == AIM_UP_WALK_LEFT)
+		if (lookingTo == LOOKING_LEFT && !bJumping)
 		sprite->changeAnimation(AIM_UP_LOOK_LEFT);
-		else if (sprite->animation() == STAND_RIGHT || sprite->animation() == AIM_UP_WALK_RIGHT)
+		else if (lookingTo == LOOKING_RIGHT && !bJumping)
 			sprite->changeAnimation(AIM_UP_LOOK_RIGHT);
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
 	{
-		if (sprite->animation() == STAND_LEFT || sprite->animation() == AIM_DOWN_WALK_LEFT)
+		if (lookingTo == LOOKING_LEFT && !bJumping)
 			sprite->changeAnimation(CROUCH_LOOK_LEFT);
-		else if (sprite->animation() == STAND_RIGHT || sprite->animation() == AIM_DOWN_WALK_RIGHT)
+		else if (lookingTo == LOOKING_RIGHT && !bJumping)
 			sprite->changeAnimation(CROUCH_LOOK_RIGHT);
 	}
 	else
