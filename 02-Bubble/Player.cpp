@@ -106,7 +106,6 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	
 }
 
-void Player::update(int deltaTime)
 void Player::update(int deltaTime, float left)
 {
 	sprite->update(deltaTime);
@@ -178,7 +177,6 @@ void Player::update(int deltaTime, float left)
 		lookingTo = LOOKING_LEFT;
 		if(map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
 		if(map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)) || posPlayer.x - 2 <= left)
->>>>>>> origin/Scroll
 		{
 			posPlayer.x += 2;
 			sprite->changeAnimation(STAND_LEFT);
