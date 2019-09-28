@@ -249,13 +249,13 @@ void Player::update(int deltaTime, float left)
 		{
 			posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
 			if(jumpAngle > 90)
-				bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y);
+				bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(32, 58), &posPlayer.y);
 		}
 	}
 	else
 	{
 		posPlayer.y += FALL_STEP;
-		if(map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y))
+		if(map->collisionMoveDown(posPlayer, glm::ivec2(32, 58), &posPlayer.y))
 		{
 			if(Game::instance().getKey(' '))
 			{
