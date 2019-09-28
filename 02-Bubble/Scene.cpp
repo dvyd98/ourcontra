@@ -3,13 +3,17 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Scene.h"
 #include "Game.h"
+#include "Player.h"
+
+#include <GL/glew.h>
+#include <GL/glut.h>
 
 
 #define SCREEN_X 0
 #define SCREEN_Y 0
 
 #define INIT_PLAYER_X_TILES 3
-#define INIT_PLAYER_Y_TILES 5
+#define INIT_PLAYER_Y_TILES 3
 
 
 Scene::Scene()
@@ -35,18 +39,28 @@ void Scene::init()
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTileMap(map);
-	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1)/2, float(SCREEN_HEIGHT - 1)/2, 0.f);
+	left = top = 0;
+	right = float(SCREEN_WIDTH - 1) / 2;
+	bottom = float(SCREEN_HEIGHT - 1) / 2;
+	projection = glm::ortho(left, right, bottom, top);
 	currentTime = 0.0f;
 }
 
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
-	player->update(deltaTime);
+	if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && player->getPos().x >= (right + left) / 2) {
+		// TODO posar-ho en un define
+		right += 2;
+		left += 2;
+	}
+	player->update(deltaTime, left);
+		
 }
 
 void Scene::render()
 {
+	projection = glm::ortho(left, right, bottom, top);
 	glm::mat4 modelview;
 
 	texProgram.use();
