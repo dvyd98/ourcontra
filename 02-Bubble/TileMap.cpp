@@ -7,6 +7,10 @@
 
 using namespace std;
 
+enum BACKGROUND_TILES {
+
+};
+
 
 TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)
 {
@@ -83,8 +87,11 @@ bool TileMap::loadLevel(const string &levelFile)
 		for(int i=0; i<mapSize.x; i++)
 		{
 			fin.get(tile);
-			if(tile == ' ')
-				map[j*mapSize.x+i] = 0;
+			/* switch (tile) {
+				case ' ': map[j*mapSize.x + i] = 0; break;
+			}*/
+			if (tile == '.')
+				map[j*mapSize.x + i] = 0;
 			else
 				map[j*mapSize.x+i] = tile - int('0');
 		}
