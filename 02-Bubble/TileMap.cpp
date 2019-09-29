@@ -106,8 +106,11 @@ bool TileMap::loadLevel(const string &levelFile)
 				case 'f': map[j*mapSize.x + i] = ROCK6; break;
 				case 'z': map[j*mapSize.x + i] = ROCK7; break;
 				case 'x': map[j*mapSize.x + i] = ROCK8; break;
-
-
+				case 't': map[j*mapSize.x + i] = BRIDGE1; break;
+				case 'y': map[j*mapSize.x + i] = BRIDGE2; break;
+				case 'c': map[j*mapSize.x + i] = BRIDGE3; break;
+				case 'v': map[j*mapSize.x + i] = BRIDGE4; break;
+				case 'b': map[j*mapSize.x + i] = BRIDGE5; break;
 			}
 		}
 		fin.get(tile);
@@ -211,7 +214,10 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	y = (pos.y + size.y - 1) / tileSize;
 	for(int x=x0; x<=x1; x++)
 	{
-		if(map[y*mapSize.x + x] == GRASS1 || map[y*mapSize.x + x] == GRASS2)
+		if(map[y*mapSize.x + x] == GRASS1 || 
+			map[y*mapSize.x + x] == GRASS2 ||
+			map[y*mapSize.x + x] == BRIDGE1 ||
+			map[y*mapSize.x + x] == BRIDGE2)
 		{
 			if(*posY - tileSize * y + size.y <= 4)
 			{
