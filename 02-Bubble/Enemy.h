@@ -10,8 +10,6 @@ class Enemy
 {
 
 public:
-	Enemy(void) {};
-	~Enemy(void) {};
 	virtual void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) = 0;
 	virtual void update(int deltaTime, float left) = 0;
 	void render();

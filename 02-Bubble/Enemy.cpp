@@ -7,15 +7,6 @@
 
 
 
-Enemy::Enemy()
-{
-}
-
-
-Enemy::~Enemy()
-{
-}
-
 void Enemy::render()
 {
 	sprite->render();
