@@ -1,34 +1,27 @@
-#ifndef _PLAYER_INCLUDE
-#define _PLAYER_INCLUDE
+#ifndef _SOLDIER_INCLUDE
+#define _SOLDIER_INCLUDE
 
 
-#include "Sprite.h"
-#include "TileMap.h"
+#include "Enemy.h"
 
 
-// Player is basically a Sprite that represents the player. As such it has
-// all properties it needs to track its movement, jumping, and collisions.
-
-
-class Player
+class Soldier : public Enemy
 {
 
 public:
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
 	void update(int deltaTime, float left);
 	void render();
-	
+
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 
 	glm::ivec2 getPos();
-	
+
 private:
 	bool bJumping;
-	bool bShooting;
 	int lookingTo;
-	int currentKeyframe;
-	glm::ivec2 tileMapDispl, posPlayer;
+	glm::ivec2 tileMapDispl, posEnemy;
 	int jumpAngle, startY;
 	Texture spritesheet;
 	Sprite *sprite;
@@ -37,6 +30,4 @@ private:
 };
 
 
-#endif // _PLAYER_INCLUDE
-
-
+#endif // _SOLDIER_INCLUDE
