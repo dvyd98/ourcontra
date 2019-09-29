@@ -93,13 +93,13 @@ void Soldier::update(int deltaTime, float left)
 		{
 			posEnemy.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
 			if (jumpAngle > 90)
-				bJumping = !map->collisionMoveDown(posEnemy, glm::ivec2(32, 58), &posEnemy.y);
+				bJumping = !map->collisionMoveDown(posEnemy, glm::ivec2(16, 32), &posEnemy.y);
 		}
 	}
 	else
 	{
 		posEnemy.y += FALL_STEP;
-		if (map->collisionMoveDown(posEnemy, glm::ivec2(32, 58), &posEnemy.y))
+		if (map->collisionMoveDown(posEnemy, glm::ivec2(16, 32), &posEnemy.y))
 		{
 			if (Game::instance().getKey(' '))
 			{

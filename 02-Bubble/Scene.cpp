@@ -20,6 +20,7 @@ Scene::Scene()
 {
 	map = NULL;
 	player = NULL;
+	soldier = NULL;
 }
 
 Scene::~Scene()
@@ -28,6 +29,8 @@ Scene::~Scene()
 		delete map;
 	if(player != NULL)
 		delete player;
+	if (soldier != NULL)
+		delete soldier;
 }
 
 
@@ -42,7 +45,7 @@ void Scene::init()
 	player->setTileMap(map);
 
 	soldier->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	soldier->setPosition(glm::vec2(10 * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+	soldier->setPosition(glm::vec2(10 * map->getTileSize(), 10 * map->getTileSize()));
 	soldier->setTileMap(map);
 
 	left = top = 0;
@@ -78,6 +81,7 @@ void Scene::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
 	player->render();
+	soldier->render();
 }
 
 void Scene::initShaders()

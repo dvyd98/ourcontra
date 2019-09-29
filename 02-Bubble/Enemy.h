@@ -19,7 +19,7 @@ public:
 
 	glm::ivec2 getPos();
 
-private:
+protected:
 	bool bJumping;
 	int lookingTo;
 	glm::ivec2 tileMapDispl, posEnemy;
