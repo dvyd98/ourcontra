@@ -189,7 +189,7 @@ void Player::update(int deltaTime, float left)
 			if (bShooting)
 				sprite->changeAnimation(MOVE_LEFT_AIM);
 			else
-				sprite->changeAnimation(MOVE_LEFT);
+				sprite->changeAnimation(MOVE_LEFT, currentKeyframe);
 		posPlayer.x -= 2;
 		lookingTo = LOOKING_LEFT;
 		if(map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)))
@@ -205,7 +205,7 @@ void Player::update(int deltaTime, float left)
 			if (bShooting)
 				sprite->changeAnimation(MOVE_RIGHT_AIM);
 			else
-				sprite->changeAnimation(MOVE_RIGHT);
+				sprite->changeAnimation(MOVE_RIGHT, currentKeyframe);
 		posPlayer.x += 2;
 		lookingTo = LOOKING_RIGHT;
 		if(map->collisionMoveRight(posPlayer, glm::ivec2(32, 58)))
@@ -230,17 +230,14 @@ void Player::update(int deltaTime, float left)
 	}
 	else
 	{
-		if(sprite->animation() == MOVE_LEFT)
+		if (sprite->animation() == MOVE_LEFT)
 			sprite->changeAnimation(STAND_LEFT);
-		else if(sprite->animation() == MOVE_RIGHT)
+		else if (sprite->animation() == MOVE_RIGHT)
 			sprite->changeAnimation(STAND_RIGHT);
-
 		else if (sprite->animation() == MOVE_LEFT_AIM)
-			sprite->changeAnimation(MOVE_LEFT, currentKeyframe);
-
+			sprite->changeAnimation(STAND_LEFT);
 		else if (sprite->animation() == MOVE_RIGHT_AIM)
-			sprite->changeAnimation(MOVE_RIGHT, currentKeyframe);
-
+			sprite->changeAnimation(STAND_RIGHT);
 		else if (sprite->animation() == AIM_UP_LOOK_LEFT)
 			sprite->changeAnimation(STAND_LEFT);
 		else if (sprite->animation() == AIM_UP_LOOK_RIGHT)
