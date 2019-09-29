@@ -27,6 +27,7 @@ private:
 	bool bJumping;
 	bool bShooting;
 	int lookingTo;
+	int currentKeyframe;
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY;
 	Texture spritesheet;

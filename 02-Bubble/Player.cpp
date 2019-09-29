@@ -118,6 +118,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 void Player::update(int deltaTime, float left)
 {
+	currentKeyframe = sprite->keyframe();
 	sprite->update(deltaTime);
 	if (bJumping) // lookingTo es una variable que sactualitza segons si el player mira left or right, l'utilitzo per estalviar mirar cada sprite individualment si es left or right
 	{
@@ -129,7 +130,7 @@ void Player::update(int deltaTime, float left)
 				sprite->changeAnimation(AIRBONE_LEFT);
 	
 	}
-	if (Game::instance().getKey('a') || Game::instance().getKey('a'))
+	if (Game::instance().getKey('a'))
 		bShooting = true;
 	else bShooting = false;
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_UP))
@@ -233,10 +234,13 @@ void Player::update(int deltaTime, float left)
 			sprite->changeAnimation(STAND_LEFT);
 		else if(sprite->animation() == MOVE_RIGHT)
 			sprite->changeAnimation(STAND_RIGHT);
+
 		else if (sprite->animation() == MOVE_LEFT_AIM)
-			sprite->changeAnimation(STAND_LEFT);
+			sprite->changeAnimation(MOVE_LEFT, currentKeyframe);
+
 		else if (sprite->animation() == MOVE_RIGHT_AIM)
-			sprite->changeAnimation(STAND_RIGHT);
+			sprite->changeAnimation(MOVE_RIGHT, currentKeyframe);
+
 		else if (sprite->animation() == AIM_UP_LOOK_LEFT)
 			sprite->changeAnimation(STAND_LEFT);
 		else if (sprite->animation() == AIM_UP_LOOK_RIGHT)
