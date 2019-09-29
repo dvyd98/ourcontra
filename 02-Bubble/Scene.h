@@ -30,7 +30,7 @@ private:
 private:
 	TileMap *map;
 	Player *player;
-	Enemy *soldier;
+	Soldier *soldier;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;

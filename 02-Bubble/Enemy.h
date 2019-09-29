@@ -12,12 +12,12 @@ class Enemy
 public:
 	virtual void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) = 0;
 	virtual void update(int deltaTime, float left) = 0;
-	void render();
+	virtual void render() = 0;
 
-	void setTileMap(TileMap *tileMap);
-	void setPosition(const glm::vec2 &pos);
+	virtual void setTileMap(TileMap *tileMap)= 0;
+	virtual void setPosition(const glm::vec2 &pos) = 0;
 
-	glm::ivec2 getPos();
+	virtual glm::ivec2 getPos() = 0;
 
 protected:
 	bool bJumping;

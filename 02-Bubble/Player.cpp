@@ -15,7 +15,7 @@
 
 enum PlayerAnims
 {
-	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, AIM_UP_LOOK_LEFT, AIM_UP_LOOK_RIGHT, CROUCH_LOOK_LEFT, 
+	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, MOVE_LEFT_AIM, MOVE_RIGHT_AIM, AIM_UP_LOOK_LEFT, AIM_UP_LOOK_RIGHT, CROUCH_LOOK_LEFT, 
 	CROUCH_LOOK_RIGHT, AIM_UP_WALK_RIGHT, AIM_UP_WALK_LEFT, AIM_DOWN_WALK_RIGHT, AIM_DOWN_WALK_LEFT, AIRBONE_LEFT, AIRBONE_RIGHT
 };
 
@@ -28,6 +28,7 @@ enum LookingTo
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	bJumping = false;
+	bShooting = false;
 	lookingTo = LOOKING_RIGHT;
 	spritesheet.loadFromFile("images/blueguy.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 64), glm::vec2(0.1f, 0.1f), &spritesheet, &shaderProgram);
@@ -55,6 +56,15 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.4f, 0.1f));
 		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.5f, 0.1f));
 
+		sprite->setAnimationSpeed(MOVE_LEFT_AIM, 8);
+		sprite->addKeyframe(MOVE_LEFT_AIM, glm::vec2(0.7f, 0.2f));
+		sprite->addKeyframe(MOVE_LEFT_AIM, glm::vec2(0.8f, 0.2f));
+		sprite->addKeyframe(MOVE_LEFT_AIM, glm::vec2(0.9f, 0.2f));
+
+		sprite->setAnimationSpeed(MOVE_RIGHT_AIM, 8);
+		sprite->addKeyframe(MOVE_RIGHT_AIM, glm::vec2(0.7f, 0.1f));
+		sprite->addKeyframe(MOVE_RIGHT_AIM, glm::vec2(0.8f, 0.1f));
+		sprite->addKeyframe(MOVE_RIGHT_AIM, glm::vec2(0.9f, 0.1f));
 
 		sprite->setAnimationSpeed(AIM_UP_LOOK_LEFT, 8);
 		sprite->addKeyframe(AIM_UP_LOOK_LEFT, glm::vec2(0.50f, 0.0f));
@@ -119,14 +129,17 @@ void Player::update(int deltaTime, float left)
 				sprite->changeAnimation(AIRBONE_LEFT);
 	
 	}
+	if (Game::instance().getKey('a') || Game::instance().getKey('a'))
+		bShooting = true;
+	else bShooting = false;
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_UP))
 	{
 		if (sprite->animation() != AIM_UP_WALK_LEFT && !bJumping)
 			sprite->changeAnimation(AIM_UP_WALK_LEFT);
 		posPlayer.x -= 2;
 		lookingTo = LOOKING_LEFT;
-		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
-		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)) || posPlayer.x - 2 <= left)
+		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)))
+		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)) || posPlayer.x - 2 <= left)
 		{
 			posPlayer.x += 2;
 			sprite->changeAnimation(STAND_LEFT);
@@ -138,7 +151,7 @@ void Player::update(int deltaTime, float left)
 		sprite->changeAnimation(AIM_UP_WALK_RIGHT);
 		posPlayer.x += 2;
 		lookingTo = LOOKING_RIGHT;
-		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
+		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)))
 		{
 		posPlayer.x -= 2;
 		sprite->changeAnimation(STAND_RIGHT);
@@ -150,8 +163,8 @@ void Player::update(int deltaTime, float left)
 			sprite->changeAnimation(AIM_DOWN_WALK_LEFT);
 		posPlayer.x -= 2;
 		lookingTo = LOOKING_LEFT;
-		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
-		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)) || posPlayer.x - 2 <= left)
+		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)))
+		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)) || posPlayer.x - 2 <= left)
 		{
 			posPlayer.x += 2;
 			sprite->changeAnimation(STAND_LEFT);
@@ -163,7 +176,7 @@ void Player::update(int deltaTime, float left)
 			sprite->changeAnimation(AIM_DOWN_WALK_RIGHT);
 		posPlayer.x += 2;
 		lookingTo = LOOKING_RIGHT;
-		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
+		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)))
 		{
 			posPlayer.x -= 2;
 			sprite->changeAnimation(STAND_RIGHT);
@@ -171,12 +184,15 @@ void Player::update(int deltaTime, float left)
 	}
 	else if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
-		if(sprite->animation() != MOVE_LEFT && !bJumping)
-			sprite->changeAnimation(MOVE_LEFT);
+		if((sprite->animation() != MOVE_LEFT && !bShooting || sprite->animation() != MOVE_LEFT_AIM && bShooting) && !bJumping )
+			if (bShooting)
+				sprite->changeAnimation(MOVE_LEFT_AIM);
+			else
+				sprite->changeAnimation(MOVE_LEFT);
 		posPlayer.x -= 2;
 		lookingTo = LOOKING_LEFT;
-		if(map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
-		if(map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)) || posPlayer.x - 2 <= left)
+		if(map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)))
+		if(map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)) || posPlayer.x - 2 <= left)
 		{
 			posPlayer.x += 2;
 			sprite->changeAnimation(STAND_LEFT);
@@ -184,11 +200,14 @@ void Player::update(int deltaTime, float left)
 	}
 	else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
-		if(sprite->animation() != MOVE_RIGHT && !bJumping)
-			sprite->changeAnimation(MOVE_RIGHT);
+		if((sprite->animation() != MOVE_RIGHT && !bShooting || sprite->animation() != MOVE_RIGHT_AIM && bShooting) && !bJumping)
+			if (bShooting)
+				sprite->changeAnimation(MOVE_RIGHT_AIM);
+			else
+				sprite->changeAnimation(MOVE_RIGHT);
 		posPlayer.x += 2;
 		lookingTo = LOOKING_RIGHT;
-		if(map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
+		if(map->collisionMoveRight(posPlayer, glm::ivec2(32, 58)))
 		{
 			posPlayer.x -= 2;
 			sprite->changeAnimation(STAND_RIGHT);
@@ -213,6 +232,10 @@ void Player::update(int deltaTime, float left)
 		if(sprite->animation() == MOVE_LEFT)
 			sprite->changeAnimation(STAND_LEFT);
 		else if(sprite->animation() == MOVE_RIGHT)
+			sprite->changeAnimation(STAND_RIGHT);
+		else if (sprite->animation() == MOVE_LEFT_AIM)
+			sprite->changeAnimation(STAND_LEFT);
+		else if (sprite->animation() == MOVE_RIGHT_AIM)
 			sprite->changeAnimation(STAND_RIGHT);
 		else if (sprite->animation() == AIM_UP_LOOK_LEFT)
 			sprite->changeAnimation(STAND_LEFT);

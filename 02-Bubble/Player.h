@@ -25,6 +25,7 @@ public:
 	
 private:
 	bool bJumping;
+	bool bShooting;
 	int lookingTo;
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY;
