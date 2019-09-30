@@ -65,6 +65,14 @@ void Soldier::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 void Soldier::update(int deltaTime, float left)
 {
 	sprite->update(deltaTime);
+	if (lookingTo == LOOKING_LEFT) {
+		posEnemy.x -= 2;
+		if (sprite->animation() != MOVE_LEFT) sprite->changeAnimation(MOVE_LEFT);
+	}
+	else {
+		posEnemy.x += 2;
+		if (sprite->animation() != MOVE_RIGHT) sprite->changeAnimation(MOVE_RIGHT);
+	}
 	if (bJumping) // lookingTo es una variable que sactualitza segons si el player mira left or right, l'utilitzo per estalviar mirar cada sprite individualment si es left or right
 	{
 		if (lookingTo == LOOKING_RIGHT)
@@ -75,10 +83,22 @@ void Soldier::update(int deltaTime, float left)
 				sprite->changeAnimation(AIRBONE_LEFT);
 
 	}
-
-	if (false) {
+	posEnemy.y += FALL_STEP;
+	posEnemy.x -= 2;
+	if (!map->collisionMoveDown(posEnemy, glm::ivec2(16, 32), &posEnemy.y)) {
+		if (lookingTo == LOOKING_LEFT) {
+			lookingTo = LOOKING_RIGHT;
+			posEnemy.x += 2;
+		}
+		else {
+			lookingTo = LOOKING_LEFT;
+			posEnemy.x -= 2;
+		}
 
 	}
+	posEnemy.y -= FALL_STEP;
+	posEnemy.x += 2;
+	if (false) {}
 	else {
 		if (sprite->animation() == AIRBONE_LEFT && !bJumping)
 			sprite->changeAnimation(MOVE_LEFT);
@@ -105,7 +125,7 @@ void Soldier::update(int deltaTime, float left)
 		posEnemy.y += FALL_STEP;
 		if (map->collisionMoveDown(posEnemy, glm::ivec2(16, 32), &posEnemy.y))
 		{
-			if ((rand() % 1000) == 1)
+			if ((rand() % 1000) == 1) // jump randomly
 			{
 				bJumping = true;
 				jumpAngle = 0;
