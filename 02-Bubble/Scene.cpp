@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "Game.h"
 #include "Player.h"
+#include "Soldier.h"
 
 #include <GL/glew.h>
 #include <GL/glut.h>

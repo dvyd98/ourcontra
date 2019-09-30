@@ -12,6 +12,11 @@
 #define GLUT_KEY_SPACEBAR 32
 #define PLAYER_VEL 2
 
+Soldier::Soldier()
+{
+
+}
+
 enum SoldierAnims
 {
 	MOVE_LEFT, MOVE_RIGHT, AIRBONE_LEFT, AIRBONE_RIGHT
@@ -109,25 +114,4 @@ void Soldier::update(int deltaTime, float left)
 		}
 	}
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
-}
-
-void Soldier::render()
-{
-	sprite->render();
-}
-
-void Soldier::setTileMap(TileMap *tileMap)
-{
-	map = tileMap;
-}
-
-void Soldier::setPosition(const glm::vec2 &pos)
-{
-	posEnemy = pos;
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
-}
-
-glm::ivec2 Soldier::getPos()
-{
-	return posEnemy;
 }
