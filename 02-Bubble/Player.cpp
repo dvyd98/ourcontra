@@ -130,8 +130,9 @@ void Player::update(int deltaTime, float left)
 				sprite->changeAnimation(AIRBONE_LEFT);
 	
 	}
-	if (Game::instance().getKey('a'))
-		bShooting = true;
+	if (Game::instance().getKey('a')) {
+
+	}
 	else bShooting = false;
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_UP))
 	{

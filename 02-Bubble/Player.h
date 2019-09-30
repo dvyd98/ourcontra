@@ -4,6 +4,7 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
+#include "Projectile.h"
 
 
 // Player is basically a Sprite that represents the player. As such it has
@@ -22,11 +23,13 @@ public:
 	void setPosition(const glm::vec2 &pos);
 
 	glm::ivec2 getPos();
+
+	int lookingTo;
 	
 private:
 	bool bJumping;
 	bool bShooting;
-	int lookingTo;
+	
 	int currentKeyframe;
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY;

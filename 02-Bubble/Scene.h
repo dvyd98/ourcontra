@@ -7,6 +7,7 @@
 #include "TileMap.h"
 #include "Player.h"
 #include "Soldier.h"
+#include "Projectile.h"
 
 
 // Scene contains all the entities of our game.
