@@ -45,7 +45,7 @@ void Scene::init()
 	player->setTileMap(map);
 
 	soldier->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	soldier->setPosition(glm::vec2(10 * map->getTileSize(), 1 * map->getTileSize()));
+	soldier->setPosition(glm::vec2(20 * map->getTileSize(), 1 * map->getTileSize()));
 	soldier->setTileMap(map);
 
 	left = top = 0;
