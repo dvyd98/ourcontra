@@ -1,20 +1,20 @@
 TILEMAP
-74 16 							-- Size of tile map in tiles
+205 16 							-- Size of tile map in tiles
 16 16 							-- Tile size & block size
 images/background.png 			-- Tilesheet
 16 16								-- Number of tiles in tilesheet
-..........................................................................
-..........................................................................
-..........................................................................
-..........................................................................
-..........................................................................
-..........................................................................
-..........................................................................
-..qwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwtytytytyqwqwqwqwqwtytytyty
-..asasasasasasasasasasasasasasasasasasasasasasascvvvvvvbasasasasascvvvvvvb
-,,ererererqwqwqwerererererqwqwererererererererer,,,,,,,,ererererer,,,,,,,,
-,,dfdfdfdfasasasdfdfdfdfdfasasdfdfdfdfdfqwqwqwdf,,,,,,,,dfdfdfdfdf,,,,,,,,
-,2erererererererqwererqwererererererererzxzxzxer2,,,,,,2ererererer2,,,,,,2
-,222222222dfdfdfasdfdfas22dfdf222222dfdfdfdfdf222,,,,,,222222222222,,,,,,2
-,,,,,,,,,222222222qwqw222222222,,,,222444422222,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,222222,,,,,,,,,,,,,,222222,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+.............................................................................................................................................................................................................
+......................................................................................+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++....
+......................................................................................++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++...
+......................................................................................+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++..
+......................................................................................+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++..
+......................................................................................qwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqw++++++++++qwqwqwqwqw++++++++++++++++++qwqw+++++++++++++++++++++++++++++++++++++++++..
+......................................................................................asasasasasasasasasasasasasasasasas++++++++++asasasasas++++++++++++++++++asas+++++++++++++++++++++++++++++++++++++++++..
+..qwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwtytytytyqwqwqwqwqwtytytytyqwqwqwqwqwqwqwqwererererererererererererererqwqwqwqwqwqwqwerererer++qwqw++++++++++qwqwer++qwqw++++++++++++++++++++++qwqwqwqw+++++..
+..asasasasasasasasasasasasasasasasasasasasasasascvvvvvvbasasasasascvvvvvvbasasasasasasasasdfdfdfdfdfdfdfdfdfdfdfdfdfdfasasasasasasasdfdfdfdf++asas++++++++++asasdf++asas++++++++++++++++++++++asasasas+++++..
+,,ererererqwqwqwerererererqwqwererererererererer,,,,,,,,ererererer,,,,,,,,ererererererererererererererqwqwqwqwqwqwqwerererererererererererqwqwqwer++qwqw++++ererer++erqwqwqwqwqw++++++++++qwqwererererqw+++..
+,,dfdfdfdfasasasdfdfdfdfdfasasdfdfdfdfdfqwqwqwdf,,,,,,,,dfdfdfdfdf,,,,,,,,dfdfdfdfdfdfdfdfdfdfdfqwqwdfasasasasasasasdfdfdfdfdfdfdfdfdfqwdfasasasdf++asas++++dfdfqw++dfasasasasas++++++++++asasdfqwqwqwas+++..
+,2erererererererqwererqwererererererererzxzxzxer2,,,,,,2ererererer2,,,,,,2erererererererererererzxzxerererererererererererqwqwerqwqwerzxererererer++erqwqwqwererzx++erererererer++++qwqw++erererzxzxzxerqw+..
+,222222222dfdfdfasdfdfas22dfdf222222dfdfdfdfdf222,,,,,,222222222222,,,,,,22222dfdfdfdfdfdfdfdfdfdfdf22dfdfdfdfdfdfdfdfdfdfasasdfasasdfdfdfdfdfdfdf++dfasasasdfdfdf++dfdfdfdfdfdf++++asas++dfdfdfdfdfdfdfas+..
+,,,,,,,,,222222222qwqw222222222,,,,222444422222,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,2222222222222qwqwqw22222222222222qwqwqwqwqwqwerererererererererererer++qwererererqwer++ererererqwqwqw++erer++ererqwqwqwqwqwqwqwq
+,,,,,,,,,,,,,,,,,222222,,,,,,,,,,,,,,222222,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,22222222,,,,,,,,,,,,2222sasasasasdfdfdfdfdfdfdfdfdfdfdfdf++asdfdfdfdfasdf++dfdfdfdfasasas++dfdf++dfdfasasasasasasasa
