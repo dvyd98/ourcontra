@@ -11,7 +11,7 @@ class Soldier : public Enemy
 public:
 	Soldier();
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
-	void update(int deltaTime, float left);
+	void update(int deltaTime);
 
 };
 

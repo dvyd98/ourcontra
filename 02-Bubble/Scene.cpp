@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <list>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Scene.h"
 #include "Game.h"
@@ -41,6 +42,7 @@ void Scene::init()
 	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	soldier = new Soldier();
+	projlist = new list<Projectile>();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTileMap(map);
@@ -64,8 +66,15 @@ void Scene::update(int deltaTime)
 		right += 2;
 		left += 2;
 	}
+	if (Game::instance().getKey('a')) {
+		spawnProjectile(player->getPos());
+	}
 	player->update(deltaTime, left);
-	soldier->update(deltaTime, left);
+	soldier->update(deltaTime);
+	list<Projectile>::iterator it;
+	for (it = projlist->begin(); it != projlist->end(); ++it) {
+		it->update(deltaTime);
+	}
 		
 }
 
@@ -83,6 +92,10 @@ void Scene::render()
 	map->render();
 	player->render();
 	soldier->render();
+	list<Projectile>::iterator it;
+	for (it = projlist->begin(); it != projlist->end(); ++it) {
+		it->render();
+	}
 }
 
 void Scene::initShaders()
@@ -113,6 +126,16 @@ void Scene::initShaders()
 	texProgram.bindFragmentOutput("outColor");
 	vShader.free();
 	fShader.free();
+}
+
+void Scene::spawnProjectile(glm::ivec2 position) 
+{
+	projectile = new Projectile();
+	projectile->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	projectile->setPosition(glm::vec2(position.x, position.y));
+	projectile->setTileMap(map);
+	projlist->push_back(*(projectile));
+
 }
 
 

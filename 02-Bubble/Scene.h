@@ -3,6 +3,7 @@
 
 
 #include <glm/glm.hpp>
+#include <list>
 #include "ShaderProgram.h"
 #include "TileMap.h"
 #include "Player.h"
@@ -24,6 +25,7 @@ public:
 	void init();
 	void update(int deltaTime);
 	void render();
+	void spawnProjectile(glm::ivec2 position);
 
 private:
 	void initShaders();
@@ -32,6 +34,8 @@ private:
 	TileMap *map;
 	Player *player;
 	Enemy *soldier;
+	Projectile *projectile;
+	list<Projectile> *projlist;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;

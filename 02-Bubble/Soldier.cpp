@@ -62,7 +62,7 @@ void Soldier::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
 
-void Soldier::update(int deltaTime, float left)
+void Soldier::update(int deltaTime)
 {
 	sprite->update(deltaTime);
 	if (lookingTo == LOOKING_LEFT) {
