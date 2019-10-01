@@ -61,17 +61,19 @@ void Scene::init()
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
+	list<Projectile>::iterator it;
 	if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && player->getPos().x >= (right + left) / 2) {
 		// TODO posar-ho en un define
 		right += 2;
 		left += 2;
 	}
 	if (Game::instance().getKey('a')) {
+		if (projlist->size() < 3)
 		spawnProjectile(player->getPos());
 	}
 	player->update(deltaTime, left);
 	soldier->update(deltaTime);
-	list<Projectile>::iterator it;
+	despawnOffScreenProjectiles();
 	for (it = projlist->begin(); it != projlist->end(); ++it) {
 		it->update(deltaTime);
 	}
@@ -128,14 +130,29 @@ void Scene::initShaders()
 	fShader.free();
 }
 
+bool Scene::isOffScreen(Projectile &pj) 
+{
+	if (pj.getPos().x < left || pj.getPos().x > right) return true;
+	return false;
+}
+
 void Scene::spawnProjectile(glm::ivec2 position) 
 {
 	projectile = new Projectile();
 	projectile->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	projectile->setPosition(glm::vec2(position.x, position.y));
+	projectile->setPosition(glm::vec2(position.x + 16, position.y + 32));
 	projectile->setTileMap(map);
 	projlist->push_back(*(projectile));
+}
 
+void Scene::despawnOffScreenProjectiles()
+{
+	list<Projectile>::iterator it = projlist->begin();
+	while (it != projlist->end()) {
+		if (isOffScreen((*it))) 
+			it = projlist->erase(it);
+		else ++it;
+	}
 }
 
 
