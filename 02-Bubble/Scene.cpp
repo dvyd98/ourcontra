@@ -68,7 +68,7 @@ void Scene::update(int deltaTime)
 		left += 2;
 	}
 	if (Game::instance().getKey('a')) {
-		if (projlist->size() < 3)
+		if (projlist->size() < 4)
 		spawnProjectile(player->getPos());
 	}
 	player->update(deltaTime, left);
