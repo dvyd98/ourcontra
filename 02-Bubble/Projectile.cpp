@@ -42,7 +42,7 @@ void Projectile::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram
 	else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))  newPos = glm::ivec2{ 0,6 };
 	else {
 		if (dir == STAND_LEFT || dir == AIRBONE_LEFT) newPos = glm::ivec2{ -6,0 };
-		else if (dir == STAND_RIGHT || AIRBONE_RIGHT) newPos = glm::ivec2{ 6,0 };
+		else if (dir == STAND_RIGHT || dir == AIRBONE_RIGHT) newPos = glm::ivec2{ 6,0 };
 	}
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posProjectile.x), float(tileMapDispl.y + posProjectile.y)));
 
