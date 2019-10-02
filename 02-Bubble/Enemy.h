@@ -12,7 +12,7 @@ class Enemy
 public:
 	Enemy();
 	virtual void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) = 0;
-	virtual void update(int deltaTime, float left) = 0;
+	virtual void update(int deltaTime) = 0;
 
 	void render();
 	void setTileMap(TileMap *tileMap);

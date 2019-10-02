@@ -131,7 +131,7 @@ void Player::update(int deltaTime, float left)
 	
 	}
 	if (Game::instance().getKey('a')) {
-
+		bShooting = true;
 	}
 	else bShooting = false;
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_UP))

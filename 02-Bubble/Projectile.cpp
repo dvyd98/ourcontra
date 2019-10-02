@@ -29,9 +29,10 @@ void Projectile::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posProjectile.x), float(tileMapDispl.y + posProjectile.y)));
 }
 
-void Projectile::update(int deltaTime, float left)
+void Projectile::update(int deltaTime)
 {
 	sprite->update(deltaTime);
+	posProjectile.x += 6;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posProjectile.x), float(tileMapDispl.y + posProjectile.y)));
 }
 
