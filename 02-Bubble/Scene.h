@@ -36,6 +36,7 @@ private:
 	TileMap *map;
 	Player *player;
 	Enemy *soldier;
+	list<Enemy*> *enemies;
 	Projectile *projectile;
 	list<Projectile> *projlist;
 	ShaderProgram texProgram;

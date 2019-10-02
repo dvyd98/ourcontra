@@ -10,7 +10,6 @@
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
 #define GLUT_KEY_SPACEBAR 32
-#define PLAYER_VEL 2
 
 
 enum PlayerAnims
@@ -140,7 +139,6 @@ void Player::update(int deltaTime, float left)
 			sprite->changeAnimation(AIM_UP_WALK_LEFT);
 		posPlayer.x -= 2;
 		lookingTo = LOOKING_LEFT;
-		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)))
 		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)) || posPlayer.x - 2 <= left)
 		{
 			posPlayer.x += 2;
@@ -150,13 +148,13 @@ void Player::update(int deltaTime, float left)
 	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_UP))
 	{
 		if (sprite->animation() != AIM_UP_WALK_RIGHT && !bJumping)
-		sprite->changeAnimation(AIM_UP_WALK_RIGHT);
+			sprite->changeAnimation(AIM_UP_WALK_RIGHT);
 		posPlayer.x += 2;
 		lookingTo = LOOKING_RIGHT;
 		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)))
 		{
-		posPlayer.x -= 2;
-		sprite->changeAnimation(STAND_RIGHT);
+			posPlayer.x -= 2;
+			sprite->changeAnimation(STAND_RIGHT);
 		}
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_DOWN))
@@ -165,7 +163,6 @@ void Player::update(int deltaTime, float left)
 			sprite->changeAnimation(AIM_DOWN_WALK_LEFT);
 		posPlayer.x -= 2;
 		lookingTo = LOOKING_LEFT;
-		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)))
 		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)) || posPlayer.x - 2 <= left)
 		{
 			posPlayer.x += 2;
@@ -193,11 +190,14 @@ void Player::update(int deltaTime, float left)
 				sprite->changeAnimation(MOVE_LEFT, currentKeyframe);
 		posPlayer.x -= 2;
 		lookingTo = LOOKING_LEFT;
-		if(map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)))
 		if(map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)) || posPlayer.x - 2 <= left)
 		{
 			posPlayer.x += 2;
-			sprite->changeAnimation(STAND_LEFT);
+			if (bJumping) {
+				if (sprite->animation() != AIRBONE_LEFT)
+					sprite->changeAnimation(AIRBONE_LEFT);
+			}
+			else sprite->changeAnimation(STAND_LEFT);
 		}
 	}
 	else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT))

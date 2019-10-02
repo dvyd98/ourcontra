@@ -86,6 +86,23 @@ bool TileMap::loadLevel(const string &levelFile)
 	sstream.str(line);
 	sstream >> tilesheetSize.x >> tilesheetSize.y;
 	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
+
+	getline(fin, line);
+	sstream.str(line);
+	sstream >> numEnemies;
+
+	enemies = new vector<infoEnemies>();
+	for (int i = 0; i < numEnemies; ++i) {
+		getline(fin, line);
+		sstream.str(line);
+		infoEnemies aux;
+		string s;
+		int x, y;
+		sstream >> x >> y >> s;
+		aux.x = x; aux.y = y;
+		if (s == "Soldier") aux.type = SOLDIER;
+		enemies->push_back(aux);
+	}
 	
 	map = new int[mapSize.x * mapSize.y];
 	for(int j=0; j<mapSize.y; j++)
@@ -118,6 +135,7 @@ bool TileMap::loadLevel(const string &levelFile)
 		fin.get(tile);
 #endif
 	}
+
 	fin.close();
 	
 	return true;
