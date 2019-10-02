@@ -26,6 +26,7 @@ public:
 	glm::ivec2 getPos();
 
 	int lookingTo;
+	Sprite *sprite;
 	
 private:
 	bool bJumping;
@@ -35,7 +36,6 @@ private:
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY;
 	Texture spritesheet;
-	Sprite *sprite;
 	TileMap *map;
 
 };

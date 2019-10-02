@@ -85,12 +85,12 @@ void Scene::update(int deltaTime)
 		right += PLAYER_VEL;
 		left += PLAYER_VEL;
 	}
-	if (Game::instance().getKey('a')) {
-		if (projlist->size() < 4)
-		spawnProjectile(player->getPos());
-	}
 	player->update(deltaTime, left);
 	soldier->update(deltaTime);
+	if (Game::instance().getKey('a')) {
+		if (projlist->size() < 4)
+			spawnProjectile(player->getPos());
+	}
 
 	for (it2 = enemies->begin(); it2 != enemies->end(); ++it2) {
 		(*it2)->update(deltaTime);
@@ -165,14 +165,14 @@ bool Scene::isOffScreen(Projectile &pj)
 
 bool Scene::isOffScreen(Enemy &pj)
 {
-	if (pj.getPos().x < left || pj.getPos().x > right) return true;
+	if (pj.getPos().x < left || pj.getPos().x > right || pj.getPos().y < top || pj.getPos().y > bottom) return true;
 	return false;
 }
 
 void Scene::spawnProjectile(glm::ivec2 position) 
 {
 	projectile = new Projectile();
-	projectile->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	projectile->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, player->sprite->animation());
 	projectile->setPosition(glm::vec2(position.x + 16, position.y + 32));
 	projectile->setTileMap(map);
 	projlist->push_back(*(projectile));
@@ -191,7 +191,8 @@ void Scene::despawnOffScreenProjectiles()
 void Scene::despawnOffScreenEnemies() {
 	list<Enemy*>::iterator it;
 	for (it = enemies->begin(); it != enemies->end(); ++it) {
-		if (isOffScreen(*(*it)));
+		if (isOffScreen(*(*it))) it = enemies->erase(it);
+		else ++it;
 	}
 }
 
