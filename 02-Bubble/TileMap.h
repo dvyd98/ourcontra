@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include "Texture.h"
 #include "ShaderProgram.h"
+#include <vector>
 
 
 // Class Tilemap is capable of loading a tile map from a text file in a very
@@ -12,6 +13,13 @@
 // it builds a single VBO that contains all tiles. As a result the render
 // method draws the whole map independently of what is visible.
 
+enum enemyType {
+	SOLDIER
+};
+
+struct infoEnemies {
+	int x; int y; enemyType type;
+};
 
 class TileMap
 {
@@ -28,6 +36,10 @@ public:
 	
 	int getTileSize() const { return tileSize; }
 
+	int getNumEnemies() const { return numEnemies; }
+
+	infoEnemies getEnemy(int i) { return (*enemies)[i]; }
+
 	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
@@ -41,10 +53,12 @@ private:
 	GLuint vbo;
 	GLint posLocation, texCoordLocation;
 	glm::ivec2 position, mapSize, tilesheetSize;
-	int tileSize, blockSize;
+	int tileSize, blockSize, numEnemies;
 	Texture tilesheet;
 	glm::vec2 tileTexSize;
 	int *map;
+
+	vector<infoEnemies> *enemies;
 
 };
 

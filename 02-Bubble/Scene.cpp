@@ -42,14 +42,32 @@ void Scene::init()
 	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	soldier = new Soldier();
-	projlist = new list<Projectile>();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTileMap(map);
 
+	projlist = new list<Projectile>();
+
 	soldier->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	soldier->setPosition(glm::vec2(15 * map->getTileSize(), 1 * map->getTileSize()));
 	soldier->setTileMap(map);
+
+	int n = map->getNumEnemies();
+	enemies = new list<Enemy*>();
+	for (int i = 0; i < n; ++i) {
+		switch (map->getEnemy(i).type)
+		{
+			case SOLDIER: {
+				Enemy *aux = new Soldier();
+				aux->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+				aux->setPosition(glm::vec2(map->getEnemy(i).x * map->getTileSize(), map->getEnemy(i).y * map->getTileSize()));
+				aux->setTileMap(map);
+				enemies->push_back(aux);
+			}
+		}
+	}
+
+
 
 	left = top = 0;
 	right = float(SCREEN_WIDTH - 1) / 2;
@@ -62,10 +80,10 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	list<Projectile>::iterator it;
+	list<Enemy*>::iterator it2;
 	if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && player->getPos().x >= (right + left) / 2) {
-		// TODO posar-ho en un define
-		right += 2;
-		left += 2;
+		right += PLAYER_VEL;
+		left += PLAYER_VEL;
 	}
 	if (Game::instance().getKey('a')) {
 		if (projlist->size() < 4)
@@ -73,6 +91,11 @@ void Scene::update(int deltaTime)
 	}
 	player->update(deltaTime, left);
 	soldier->update(deltaTime);
+
+	for (it2 = enemies->begin(); it2 != enemies->end(); ++it2) {
+		(*it2)->update(deltaTime);
+	}
+
 	despawnOffScreenProjectiles();
 	for (it = projlist->begin(); it != projlist->end(); ++it) {
 		it->update(deltaTime);
@@ -94,6 +117,10 @@ void Scene::render()
 	map->render();
 	player->render();
 	soldier->render();
+	list<Enemy*>::iterator it2;
+	for (it2 = enemies->begin(); it2 != enemies->end(); ++it2) {
+		(*it2)->render();
+	}
 	list<Projectile>::iterator it;
 	for (it = projlist->begin(); it != projlist->end(); ++it) {
 		it->render();

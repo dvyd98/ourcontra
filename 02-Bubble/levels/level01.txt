@@ -2,7 +2,11 @@ TILEMAP
 205 16 							-- Size of tile map in tiles
 16 16 							-- Tile size & block size
 images/background.png 			-- Tilesheet
-16 16								-- Number of tiles in tilesheet
+16 16							-- Number of tiles in tilesheet
+3				-- Number of enemies (x in tiles, y in tiles, type)
+16 5 Soldier
+19 5 Soldier
+23 5 Soldier
 .............................................................................................................................................................................................................
 ......................................................................................+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++....
 ......................................................................................++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++...
@@ -18,3 +22,4 @@ images/background.png 			-- Tilesheet
 ,222222222dfdfdfasdfdfas22dfdf222222dfdfdfdfdf222,,,,,,222222222222,,,,,,22222dfdfdfdfdfdfdfdfdfdfdf22dfdfdfdfdfdfdfdfdfdfasasdfasasdfdfdfdfdfdfdf++dfasasasdfdfdf++dfdfdfdfdfdf++++asas++dfdfdfdfdfdfdfas+..
 ,,,,,,,,,222222222qwqw222222222,,,,222444422222,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,2222222222222qwqwqw22222222222222qwqwqwqwqwqwerererererererererererer++qwererererqwer++ererererqwqwqw++erer++ererqwqwqwqwqwqwqwq
 ,,,,,,,,,,,,,,,,,222222,,,,,,,,,,,,,,222222,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,22222222,,,,,,,,,,,,2222sasasasasdfdfdfdfdfdfdfdfdfdfdfdf++asdfdfdfdfasdf++dfdfdfdfasasas++dfdf++dfdfasasasasasasasa
+

@@ -10,6 +10,7 @@
 // Player is basically a Sprite that represents the player. As such it has
 // all properties it needs to track its movement, jumping, and collisions.
 
+#define PLAYER_VEL 2
 
 class Player
 {
