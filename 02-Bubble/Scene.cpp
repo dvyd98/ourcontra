@@ -159,13 +159,13 @@ void Scene::initShaders()
 
 bool Scene::isOffScreen(Projectile &pj) 
 {
-	if (pj.getPos().x < left || pj.getPos().x > right) return true;
+	if (pj.getPos().x < left || pj.getPos().x > right || pj.getPos().y < top || pj.getPos().y > bottom) return true;
 	return false;
 }
 
 bool Scene::isOffScreen(Enemy &pj)
 {
-	if (pj.getPos().x < left || pj.getPos().x > right || pj.getPos().y < top || pj.getPos().y > bottom) return true;
+	if (pj.getPos().x < left || pj.getPos().x > right) return true;
 	return false;
 }
 
