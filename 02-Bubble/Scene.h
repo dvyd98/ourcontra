@@ -26,8 +26,10 @@ public:
 	void update(int deltaTime);
 	void render();
 	bool Scene::isOffScreen(Projectile &pj);
+	bool Scene::isOffScreen(Enemy &pj);
 	void spawnProjectile(glm::ivec2 position);
 	void Scene::despawnOffScreenProjectiles();
+	void Scene::despawnOffScreenEnemies();
 
 private:
 	void initShaders();

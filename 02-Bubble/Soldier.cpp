@@ -84,7 +84,6 @@ void Soldier::update(int deltaTime)
 
 	}
 	posEnemy.y += FALL_STEP;
-	posEnemy.x -= 2;
 	if (!map->collisionMoveDown(posEnemy, glm::ivec2(16, 32), &posEnemy.y)) {
 		if (lookingTo == LOOKING_LEFT) {
 			lookingTo = LOOKING_RIGHT;
@@ -97,7 +96,6 @@ void Soldier::update(int deltaTime)
 
 	}
 	posEnemy.y -= FALL_STEP;
-	posEnemy.x += 2;
 	if (false) {}
 	else {
 		if (sprite->animation() == AIRBONE_LEFT && !bJumping)

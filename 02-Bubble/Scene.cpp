@@ -163,6 +163,12 @@ bool Scene::isOffScreen(Projectile &pj)
 	return false;
 }
 
+bool Scene::isOffScreen(Enemy &pj)
+{
+	if (pj.getPos().x < left || pj.getPos().x > right) return true;
+	return false;
+}
+
 void Scene::spawnProjectile(glm::ivec2 position) 
 {
 	projectile = new Projectile();
@@ -181,6 +187,15 @@ void Scene::despawnOffScreenProjectiles()
 		else ++it;
 	}
 }
+
+void Scene::despawnOffScreenEnemies() {
+	list<Enemy*>::iterator it;
+	for (it = enemies->begin(); it != enemies->end(); ++it) {
+		if (isOffScreen(*(*it)));
+	}
+}
+
+
 
 
 
