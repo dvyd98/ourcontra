@@ -81,7 +81,10 @@ void Scene::update(int deltaTime)
 	currentTime += deltaTime;
 	list<Projectile>::iterator it;
 	list<Enemy*>::iterator it2;
-	if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && player->getPos().x >= (right + left) / 2) {
+	if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && 
+		player->getPos().x >= (right + left) / 2 && 
+		right <= (map->getMapSize().x * map->getTileSize() +5*map->getTileSize())) {
+		
 		right += PLAYER_VEL;
 		left += PLAYER_VEL;
 	}

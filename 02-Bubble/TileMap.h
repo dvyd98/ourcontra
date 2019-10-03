@@ -38,6 +38,8 @@ public:
 
 	int getNumEnemies() const { return numEnemies; }
 
+	glm::ivec2 getMapSize() const { return mapSize; }
+
 	infoEnemies getEnemy(int i) { return (*enemies)[i]; }
 
 	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
