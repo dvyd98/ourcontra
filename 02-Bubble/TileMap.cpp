@@ -93,15 +93,19 @@ bool TileMap::loadLevel(const string &levelFile)
 
 	enemies = new vector<infoEnemies>();
 	for (int i = 0; i < numEnemies; ++i) {
-		getline(fin, line);
-		sstream.str(line);
-		infoEnemies aux;
 		string s;
-		int x, y;
+		int x = NULL, y = NULL;
+		enemyType type = SOLDIER;
+		getline(fin, line);
+		sstream.clear();
+		sstream.str(line);
 		sstream >> x >> y >> s;
-		aux.x = x; aux.y = y;
-		if (s == "Soldier") aux.type = SOLDIER;
-		enemies->push_back(aux);
+		if (s == "Soldier") type = SOLDIER;
+
+		enemies->push_back(infoEnemies());
+		(*enemies)[i].x = x;
+		(*enemies)[i].y = y;
+		(*enemies)[i].type = type;
 	}
 	
 	map = new int[mapSize.x * mapSize.y];
