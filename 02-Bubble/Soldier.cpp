@@ -29,6 +29,7 @@ enum LookingTo
 
 void Soldier::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
+	life = 1;
 	bJumping = false;
 	lookingTo = LOOKING_LEFT;
 	spritesheet.loadFromFile("images/soldier.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -103,6 +104,7 @@ void Soldier::update(int deltaTime)
 		else if (sprite->animation() == AIRBONE_RIGHT && !bJumping)
 			sprite->changeAnimation(MOVE_RIGHT);
 	}
+
 	if (bJumping)
 	{
 		jumpAngle += JUMP_ANGLE_STEP;

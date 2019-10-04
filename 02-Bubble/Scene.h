@@ -34,6 +34,8 @@ public:
 	void spawnProjectile(glm::ivec2 position);
 	void Scene::despawnOffScreenProjectiles();
 	void Scene::despawnOffScreenEnemies();
+	bool Scene::areTouching(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lpos2, glm::ivec2 rpos2);
+	void Scene::checkPhysics();
 
 private:
 	void initShaders();
@@ -42,7 +44,6 @@ private:
 private:
 	TileMap *map;
 	Player *player;
-	Enemy *soldier;
 	list<Enemy*> *enemies;
 	Projectile *projectile;
 	list<Projectile> *projlist;

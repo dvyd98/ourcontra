@@ -21,6 +21,7 @@ public:
 	
 
 protected:
+	int life;
 	bool bJumping;
 	int lookingTo;
 	glm::ivec2 tileMapDispl, posEnemy;

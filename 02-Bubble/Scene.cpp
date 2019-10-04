@@ -22,7 +22,6 @@ Scene::Scene()
 {
 	map = NULL;
 	player = NULL;
-	soldier = NULL;
 }
 
 Scene::~Scene()
@@ -31,8 +30,6 @@ Scene::~Scene()
 		delete map;
 	if(player != NULL)
 		delete player;
-	if (soldier != NULL)
-		delete soldier;
 }
 
 
@@ -63,7 +60,6 @@ void Scene::update(int deltaTime)
 		left += PLAYER_VEL;
 	}
 	player->update(deltaTime, left);
-	soldier->update(deltaTime);
 	if (Game::instance().getKey('a')) {
 		if (projlist->size() < 4)
 			spawnProjectile(player->getPos());
@@ -73,7 +69,7 @@ void Scene::update(int deltaTime)
 		(*it2)->update(deltaTime);
 	}
 
-	despawnOffScreenProjectiles();
+	checkPhysics();
 	for (it = projlist->begin(); it != projlist->end(); ++it) {
 		it->update(deltaTime);
 	}
@@ -93,7 +89,6 @@ void Scene::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
 	player->render();
-	soldier->render();
 	list<Enemy*>::iterator it2;
 	for (it2 = enemies->begin(); it2 != enemies->end(); ++it2) {
 		(*it2)->render();
@@ -106,16 +101,11 @@ void Scene::render()
 
 void Scene::initEntities() {
 	player = new Player();
-	soldier = new Soldier();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTileMap(map);
 
 	projlist = new list<Projectile>();
-
-	soldier->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	soldier->setPosition(glm::vec2(15 * map->getTileSize(), 1 * map->getTileSize()));
-	soldier->setTileMap(map);
 
 	int n = map->getNumEnemies();
 	enemies = new list<Enemy*>();
@@ -204,6 +194,42 @@ void Scene::despawnOffScreenEnemies() {
 }
 
 void Scene::changeToScene(sceneState scene) {
+
+}
+
+bool Scene::areTouching(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lpos2, glm::ivec2 rpos2)
+{
+	if (lpos1.x > rpos2.x || lpos2.x > rpos1.x) return false;
+	if (lpos1.y < rpos2.y || lpos2.y < rpos1.y) return false;
+	return true;
+}
+
+void Scene::checkPhysics() 
+{
+	list<Enemy*>::iterator it_enemy;
+	list<Projectile>::iterator it_projec = projlist->begin();
+
+	while (it_projec != projlist->end()) {
+		if (isOffScreen((*it_projec)))
+			it_projec = projlist->erase(it_projec);
+		else {
+			glm::ivec2 lpos1 = (it_projec)->getPos() + glm::ivec2{ 8,-7 };
+			glm::ivec2 rpos1 = lpos1 + glm::ivec2{ 2,-2 };
+			it_enemy = enemies->begin();
+			bool shot = false;
+			while ( it_enemy != enemies->end()) {
+				glm::ivec2 lpos2 = (*it_enemy)->getPos();
+				glm::ivec2 rpos2 = lpos2 + glm::ivec2{ 16,-32 };
+				if (areTouching(lpos1, rpos1, lpos2, rpos2)) {
+					it_enemy = enemies->erase(it_enemy);
+					shot = true;
+				}
+				else ++it_enemy;
+			}
+			if (shot) it_projec = projlist->erase(it_projec);
+			else ++it_projec;
+		}
+	}
 
 }
 
