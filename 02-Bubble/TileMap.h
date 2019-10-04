@@ -6,6 +6,8 @@
 #include "Texture.h"
 #include "ShaderProgram.h"
 #include <vector>
+#include <fstream>
+#include <sstream>
 
 
 // Class Tilemap is capable of loading a tile map from a text file in a very
@@ -49,6 +51,8 @@ public:
 private:
 	bool loadLevel(const string &levelFile);
 	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
+	void loadTileMap();
+	void loadMenu();
 
 private:
 	GLuint vao;
@@ -61,6 +65,8 @@ private:
 	int *map;
 
 	vector<infoEnemies> *enemies;
+
+	ifstream fin;
 
 };
 

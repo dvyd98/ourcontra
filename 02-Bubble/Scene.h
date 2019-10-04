@@ -15,6 +15,9 @@
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
 
+enum sceneState {
+	MENU, HOW_TO, PAUSE, CREDITS, LVL1, LVL2
+};
 
 class Scene
 {
@@ -24,6 +27,7 @@ public:
 	~Scene();
 
 	void init();
+	void changeToScene(sceneState state);
 	void update(int deltaTime);
 	void render();
 	bool Scene::isOffScreen(Projectile &pj);
@@ -36,6 +40,7 @@ public:
 
 private:
 	void initShaders();
+	void initEntities();
 
 private:
 	TileMap *map;
