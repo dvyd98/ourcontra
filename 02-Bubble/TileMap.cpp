@@ -1,13 +1,11 @@
 #include <iostream>
-#include <fstream>
-#include <sstream>
 #include <vector>
 #include "TileMap.h"
 
 
 using namespace std;
 
-enum BACKGROUND_TILES {
+enum BACKGROUND_TILES_LVL1 {
 	BLACK, GRASS1, GRASS2, ROCK1, ROCK2, BRIDGE1, BRIDGE2, BLANK1, PALM_TOP1, PALM_TOP2, BLANK2, PALM_TOP3, BLANK3, PALM_TOP4, STAR1, STAR2,
 	BLUE, ROCK3, ROCK4, ROCK5, ROCK6, BRIDGE3, BRIDGE4, BRIDGE5, PALM_BOT1, PALM_BOT2, PALM_BOT3, PALM_BOT4, PALM_BOT5, PALM_BOT6, START3, STAR4,
 	BLANK4, ROCK7, ROCK8, SEA1, SEA2, SEA3, SEA4, SEA5, SEA6, SEA7, SEA8, SEA9, BLANK5, BLANK6,
@@ -57,17 +55,33 @@ void TileMap::free()
 
 bool TileMap::loadLevel(const string &levelFile)
 {
-	ifstream fin;
-	string line, tilesheetFile;
+	string line;
 	stringstream sstream;
-	char tile;
+	string typeScene;
 	
 	fin.open(levelFile.c_str());
 	if(!fin.is_open())
 		return false;
 	getline(fin, line);
-	if(line.compare(0, 7, "TILEMAP") != 0)
-		return false;
+	sstream.str(line);
+	sstream >> typeScene;
+	if (typeScene == "TILEMAP") {
+		loadTileMap();
+	}
+	if (typeScene == "MENU") {
+		loadMenu();
+	}
+	
+	
+	return true;
+}
+
+void TileMap::loadTileMap() {
+	string line;
+	stringstream sstream;
+	string tilesheetFile;
+	char tile;
+
 	getline(fin, line);
 	sstream.str(line);
 	sstream >> mapSize.x >> mapSize.y;
@@ -107,31 +121,31 @@ bool TileMap::loadLevel(const string &levelFile)
 		(*enemies)[i].y = y;
 		(*enemies)[i].type = type;
 	}
-	
+
 	map = new int[mapSize.x * mapSize.y];
-	for(int j=0; j<mapSize.y; j++)
+	for (int j = 0; j<mapSize.y; j++)
 	{
-		for(int i=0; i<mapSize.x; i++)
+		for (int i = 0; i<mapSize.x; i++)
 		{
 			fin.get(tile);
 			switch (tile) {
-				case '.': map[j*mapSize.x + i] = BLACK; break;
-				case ',': map[j*mapSize.x + i] = BLUE; break;
-				case 'q': map[j*mapSize.x + i] = GRASS1; break;
-				case 'w': map[j*mapSize.x + i] = GRASS2; break;
-				case 'a': map[j*mapSize.x + i] = ROCK3; break;
-				case 's': map[j*mapSize.x + i] = ROCK4; break;
-				case 'e': map[j*mapSize.x + i] = ROCK1; break;
-				case 'r': map[j*mapSize.x + i] = ROCK2; break;
-				case 'd': map[j*mapSize.x + i] = ROCK5; break;
-				case 'f': map[j*mapSize.x + i] = ROCK6; break;
-				case 'z': map[j*mapSize.x + i] = ROCK7; break;
-				case 'x': map[j*mapSize.x + i] = ROCK8; break;
-				case 't': map[j*mapSize.x + i] = BRIDGE1; break;
-				case 'y': map[j*mapSize.x + i] = BRIDGE2; break;
-				case 'c': map[j*mapSize.x + i] = BRIDGE3; break;
-				case 'v': map[j*mapSize.x + i] = BRIDGE4; break;
-				case 'b': map[j*mapSize.x + i] = BRIDGE5; break;
+			case '.': map[j*mapSize.x + i] = BLACK; break;
+			case ',': map[j*mapSize.x + i] = BLUE; break;
+			case 'q': map[j*mapSize.x + i] = GRASS1; break;
+			case 'w': map[j*mapSize.x + i] = GRASS2; break;
+			case 'a': map[j*mapSize.x + i] = ROCK3; break;
+			case 's': map[j*mapSize.x + i] = ROCK4; break;
+			case 'e': map[j*mapSize.x + i] = ROCK1; break;
+			case 'r': map[j*mapSize.x + i] = ROCK2; break;
+			case 'd': map[j*mapSize.x + i] = ROCK5; break;
+			case 'f': map[j*mapSize.x + i] = ROCK6; break;
+			case 'z': map[j*mapSize.x + i] = ROCK7; break;
+			case 'x': map[j*mapSize.x + i] = ROCK8; break;
+			case 't': map[j*mapSize.x + i] = BRIDGE1; break;
+			case 'y': map[j*mapSize.x + i] = BRIDGE2; break;
+			case 'c': map[j*mapSize.x + i] = BRIDGE3; break;
+			case 'v': map[j*mapSize.x + i] = BRIDGE4; break;
+			case 'b': map[j*mapSize.x + i] = BRIDGE5; break;
 			}
 		}
 		fin.get(tile);
@@ -141,8 +155,22 @@ bool TileMap::loadLevel(const string &levelFile)
 	}
 
 	fin.close();
-	
-	return true;
+}
+
+void TileMap::loadMenu() {
+	string line;
+	stringstream sstream;
+	string tilesheetFile;
+
+	getline(fin, line);
+	sstream.str(line);
+	sstream >> tilesheetFile;
+	tilesheet.loadFromFile(tilesheetFile, TEXTURE_PIXEL_FORMAT_RGBA);
+	tilesheet.setWrapS(GL_CLAMP_TO_EDGE);
+	tilesheet.setWrapT(GL_CLAMP_TO_EDGE);
+	tilesheet.setMinFilter(GL_NEAREST);
+	tilesheet.setMagFilter(GL_NEAREST);
+
 }
 
 void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)

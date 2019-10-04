@@ -40,34 +40,8 @@ void Scene::init()
 {
 	initShaders();
 	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	player = new Player();
-	soldier = new Soldier();
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
-	player->setTileMap(map);
-
-	projlist = new list<Projectile>();
-
-	soldier->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	soldier->setPosition(glm::vec2(15 * map->getTileSize(), 1 * map->getTileSize()));
-	soldier->setTileMap(map);
-
-	int n = map->getNumEnemies();
-	enemies = new list<Enemy*>();
-	for (int i = 0; i < n; ++i) {
-		switch (map->getEnemy(i).type)
-		{
-			case SOLDIER: {
-				Enemy *aux = new Soldier();
-				aux->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-				aux->setPosition(glm::vec2(map->getEnemy(i).x * map->getTileSize(), map->getEnemy(i).y * map->getTileSize()));
-				aux->setTileMap(map);
-				enemies->push_back(aux);
-			}
-		}
-	}
-
-
+	
+	initEntities();
 
 	left = top = 0;
 	right = float(SCREEN_WIDTH - 1) / 2;
@@ -128,6 +102,36 @@ void Scene::render()
 	for (it = projlist->begin(); it != projlist->end(); ++it) {
 		it->render();
 	}
+}
+
+void Scene::initEntities() {
+	player = new Player();
+	soldier = new Soldier();
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+	player->setTileMap(map);
+
+	projlist = new list<Projectile>();
+
+	soldier->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	soldier->setPosition(glm::vec2(15 * map->getTileSize(), 1 * map->getTileSize()));
+	soldier->setTileMap(map);
+
+	int n = map->getNumEnemies();
+	enemies = new list<Enemy*>();
+	for (int i = 0; i < n; ++i) {
+		switch (map->getEnemy(i).type)
+		{
+		case SOLDIER: {
+			Enemy *aux = new Soldier();
+			aux->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+			aux->setPosition(glm::vec2(map->getEnemy(i).x * map->getTileSize(), map->getEnemy(i).y * map->getTileSize()));
+			aux->setTileMap(map);
+			enemies->push_back(aux);
+		}
+		}
+	}
+
 }
 
 void Scene::initShaders()
@@ -199,6 +203,9 @@ void Scene::despawnOffScreenEnemies() {
 	}
 }
 
+void Scene::changeToScene(sceneState scene) {
+
+}
 
 
 

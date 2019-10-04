@@ -1,0 +1,2 @@
+MENU
+images/menu/menu_default.png
