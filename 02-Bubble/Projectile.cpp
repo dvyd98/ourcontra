@@ -81,3 +81,8 @@ glm::ivec2 Projectile::getPos()
 {
 	return posProjectile;
 }
+
+int Projectile::getRank()
+{
+	return rank;
+}

@@ -18,6 +18,7 @@ public:
 
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
+	int getRank();
 
 	glm::ivec2 getPos();
 
@@ -27,6 +28,7 @@ private:
 	Sprite *sprite;
 	TileMap *map;
 	int direction;
+	int rank;
 
 };
 
