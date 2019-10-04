@@ -38,26 +38,15 @@ void Scene::init()
 	initShaders();
 	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
+	enemymanager = new EnemyManager();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTileMap(map);
 
+	enemymanager->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, map);
+
 	projlist = new list<Projectile>();
 
-	int n = map->getNumEnemies();
-	enemies = new list<Enemy*>();
-	for (int i = 0; i < n; ++i) {
-		switch (map->getEnemy(i).type)
-		{
-			case SOLDIER: {
-				Enemy *aux = new Soldier();
-				aux->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-				aux->setPosition(glm::vec2(map->getEnemy(i).x * map->getTileSize(), map->getEnemy(i).y * map->getTileSize()));
-				aux->setTileMap(map);
-				enemies->push_back(aux);
-			}
-		}
-	}
 
 
 
@@ -72,7 +61,6 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	list<Projectile>::iterator it;
-	list<Enemy*>::iterator it2;
 	if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && 
 		player->getPos().x >= (right + left) / 2 && 
 		right <= (map->getMapSize().x * map->getTileSize() +5*map->getTileSize())) {
@@ -86,11 +74,10 @@ void Scene::update(int deltaTime)
 			spawnProjectile(player->getPos());
 	}
 
-	for (it2 = enemies->begin(); it2 != enemies->end(); ++it2) {
-		(*it2)->update(deltaTime);
-	}
+	enemymanager->update(deltaTime, left, right, bottom, top);
+	
 
-	checkPhysics();
+	//checkPhysics();
 	for (it = projlist->begin(); it != projlist->end(); ++it) {
 		it->update(deltaTime);
 	}
@@ -110,10 +97,8 @@ void Scene::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
 	player->render();
-	list<Enemy*>::iterator it2;
-	for (it2 = enemies->begin(); it2 != enemies->end(); ++it2) {
-		(*it2)->render();
-	}
+	enemymanager->render();
+	
 	list<Projectile>::iterator it;
 	for (it = projlist->begin(); it != projlist->end(); ++it) {
 		it->render();

@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Soldier.h"
 #include "Projectile.h"
+#include "EnemyManager.h"
 
 
 // Scene contains all the entities of our game.
@@ -39,6 +40,7 @@ private:
 private:
 	TileMap *map;
 	Player *player;
+	EnemyManager *enemymanager;
 	list<Enemy*> *enemies;
 	Projectile *projectile;
 	list<Projectile> *projlist;
