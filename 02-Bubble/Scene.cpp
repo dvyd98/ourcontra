@@ -36,9 +36,8 @@ Scene::~Scene()
 void Scene::init()
 {
 	initShaders();
-	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	
-	initEntities();
+	currentState = MENU;
+	map = TileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 
 	left = top = 0;
 	right = float(SCREEN_WIDTH - 1) / 2;
@@ -47,15 +46,43 @@ void Scene::init()
 	currentTime = 0.0f;
 }
 
+int c = 100;
+
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
+
+	// check si volem ser god
+	godMode();
+
+	// aixo es com un timer
+	if (--c == 0) {
+		c = 100;
+		//currentState = LVL1;
+		// quan es canvia el current state s'ha de canviar el map
+	}
+
+	switch (currentState)
+	{
+	case MENU: updateMenu(deltaTime); break;
+	case LVL1: updateLvl1(deltaTime); break;
+	}
+		
+}
+
+void Scene::updateMenu(int deltaTime) {
+	// click start to toggle 1 or 2 players
+	if (Game::instance().getKey('t'))
+		map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+}
+
+void Scene::updateLvl1(int deltaTime) {
 	list<Projectile>::iterator it;
 	list<Enemy*>::iterator it2;
-	if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && 
-		player->getPos().x >= (right + left) / 2 && 
-		right <= (map->getMapSize().x * map->getTileSize() +5*map->getTileSize())) {
-		
+	if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) &&
+		player->getPos().x >= (right + left) / 2 &&
+		right <= (map->getMapSize().x * map->getTileSize() + 5 * map->getTileSize())) {
+
 		right += PLAYER_VEL;
 		left += PLAYER_VEL;
 	}
@@ -73,7 +100,19 @@ void Scene::update(int deltaTime)
 	for (it = projlist->begin(); it != projlist->end(); ++it) {
 		it->update(deltaTime);
 	}
+}
+
+void Scene::godMode() {
+	if (Game::instance().getKey('1')) {
+		map = TileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		currentState = MENU;
 		
+	}
+	if (Game::instance().getKey('2')) {
+		currentState = LVL1;
+		map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		initEntities();
+	}
 }
 
 void Scene::render()
@@ -88,14 +127,16 @@ void Scene::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
-	player->render();
-	list<Enemy*>::iterator it2;
-	for (it2 = enemies->begin(); it2 != enemies->end(); ++it2) {
-		(*it2)->render();
-	}
-	list<Projectile>::iterator it;
-	for (it = projlist->begin(); it != projlist->end(); ++it) {
-		it->render();
+	if (currentState == LVL1 || currentState == LVL2) {
+		player->render();
+		list<Enemy*>::iterator it2;
+		for (it2 = enemies->begin(); it2 != enemies->end(); ++it2) {
+			(*it2)->render();
+		}
+		list<Projectile>::iterator it;
+		for (it = projlist->begin(); it != projlist->end(); ++it) {
+			it->render();
+		}
 	}
 }
 
@@ -191,10 +232,6 @@ void Scene::despawnOffScreenEnemies() {
 		if (isOffScreen(*(*it))) it = enemies->erase(it);
 		else ++it;
 	}
-}
-
-void Scene::changeToScene(sceneState scene) {
-
 }
 
 bool Scene::areTouching(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lpos2, glm::ivec2 rpos2)

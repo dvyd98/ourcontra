@@ -19,6 +19,10 @@ enum enemyType {
 	SOLDIER
 };
 
+enum MENU_FRAMES {
+	MENU_1_PLAYER, MENU_1_PLAYER_BLINK, MENU_2_PLAYER, MENU_2_PLAYER_BLINK
+};
+
 struct infoEnemies {
 	int x; int y; enemyType type;
 };
@@ -36,7 +40,7 @@ public:
 	void render() const;
 	void free();
 	
-	int getTileSize() const { return tileSize; }
+	int getTileSize() const { return tileSize.x; }
 
 	int getNumEnemies() const { return numEnemies; }
 
@@ -47,7 +51,9 @@ public:
 	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
-	
+
+	void toggleFrame(const glm::vec2 &minCoords, ShaderProgram &program);
+
 private:
 	bool loadLevel(const string &levelFile);
 	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
@@ -58,8 +64,8 @@ private:
 	GLuint vao;
 	GLuint vbo;
 	GLint posLocation, texCoordLocation;
-	glm::ivec2 position, mapSize, tilesheetSize;
-	int tileSize, blockSize, numEnemies;
+	glm::ivec2 position, mapSize, tilesheetSize, tileSize, blockSize;
+	int numEnemies;
 	Texture tilesheet;
 	glm::vec2 tileTexSize;
 	int *map;

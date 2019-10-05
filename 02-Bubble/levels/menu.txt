@@ -1,2 +1,2 @@
 MENU
-images/menu/menu_default.png
+images/menu/menu_spritesheet.png

@@ -26,20 +26,22 @@ public:
 	~Scene();
 
 	void init();
-	void changeToScene(sceneState state);
 	void update(int deltaTime);
 	void render();
-	bool Scene::isOffScreen(Projectile &pj);
-	bool Scene::isOffScreen(Enemy &pj);
+	bool isOffScreen(Projectile &pj);
+	bool isOffScreen(Enemy &pj);
 	void spawnProjectile(glm::ivec2 position);
-	void Scene::despawnOffScreenProjectiles();
-	void Scene::despawnOffScreenEnemies();
-	bool Scene::areTouching(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lpos2, glm::ivec2 rpos2);
-	void Scene::checkPhysics();
+	void despawnOffScreenProjectiles();
+	void despawnOffScreenEnemies();
+	bool areTouching(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lpos2, glm::ivec2 rpos2);
+	void checkPhysics();
 
 private:
 	void initShaders();
 	void initEntities();
+	void updateMenu(int deltaTime);
+	void updateLvl1(int deltaTime);
+	void godMode();
 
 private:
 	TileMap *map;
@@ -52,6 +54,8 @@ private:
 	glm::mat4 projection;
 
 	float left, right, bottom, top;
+
+	int currentState;
 };
 
 
