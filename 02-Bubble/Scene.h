@@ -29,13 +29,6 @@ public:
 	void init();
 	void update(int deltaTime);
 	void render();
-	bool isOffScreen(Projectile &pj);
-	bool isOffScreen(Enemy &pj);
-	void spawnProjectile(glm::ivec2 position);
-	void despawnOffScreenProjectiles();
-	void despawnOffScreenEnemies();
-	bool areTouching(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lpos2, glm::ivec2 rpos2);
-	void checkPhysics();
 
 private:
 	void initShaders();
@@ -48,8 +41,6 @@ private:
 	TileMap *map;
 	Player *player;
 	EnemyManager *enemymanager;
-	Projectile *projectile;
-	list<Projectile> *projlist;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;

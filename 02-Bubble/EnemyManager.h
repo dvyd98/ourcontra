@@ -15,14 +15,25 @@ class EnemyManager
 public:
 	EnemyManager();
 	~EnemyManager();
-	void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, TileMap *tileMap
+	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, TileMap *tileMap, Player *p1
 		);
-	void EnemyManager::update(int deltaTime, float left, float right, float bottom, float top);
-	void EnemyManager::render();
-	bool EnemyManager::isOffScreen(Enemy &pj);
+	void update(int deltaTime, float left, float right, float bottom, float top);
+	void render();
+	bool isOffScreen(Enemy &pj);
+	bool isOffScreen(Projectile &pj);
+	void spawnProjectile(glm::ivec2 position);
+	void despawnOffScreenProjectiles();
+	void despawnOffScreenEnemies();
+	bool areTouching(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lpos2, glm::ivec2 rpos2);
+	void checkPhysics();
 
 	list<Enemy*> *enemies;
 	TileMap *map;
+	Projectile *projectile;
+	Player* player;
+	list<Projectile> *projlist;
+	glm::ivec2 tilemap;
+	ShaderProgram texProgram;
 
 private:
 	float left, right, bottom, top;
