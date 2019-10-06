@@ -31,3 +31,9 @@ glm::ivec2 Enemy::getPos()
 {
 	return posEnemy;
 }
+
+bool Enemy::decreaseLife(int dmg)
+{
+	life -= dmg;
+	return (life > 0 ? false : true);
+}

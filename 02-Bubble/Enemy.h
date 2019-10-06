@@ -18,6 +18,7 @@ public:
 	void render();
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
+	bool decreaseLife(int dmg);
 	glm::ivec2 getPos();
 	
 

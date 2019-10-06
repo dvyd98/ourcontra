@@ -131,10 +131,10 @@ void EnemyManager::checkPhysics()
 			vector<glm::ivec2> box = it_projec->buildHitBox();
 			it_enemy = enemies->begin();
 			bool shot = false;
-			while ( it_enemy != enemies->end()) {
+			while ( it_enemy != enemies->end() && !shot) {
 				vector<glm::ivec2> boxEnemy = (*it_enemy)->buildHitBox();
 				if (areTouching(box[0], box[1], boxEnemy[0], boxEnemy[1])) {
-					it_enemy = enemies->erase(it_enemy);
+					if ((*it_enemy)->decreaseLife(it_projec->getDmg())) it_enemy = enemies->erase(it_enemy);
 					shot = true;
 				}
 				else ++it_enemy;

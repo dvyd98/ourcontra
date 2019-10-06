@@ -20,6 +20,8 @@ enum PlayerAnims
 
 void Projectile::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int dir)
 {
+	rank = RANK1;
+	damage = 1;
 	spritesheet.loadFromFile("images/projectile.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.1f, 0.1f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(100);
@@ -85,6 +87,11 @@ glm::ivec2 Projectile::getPos()
 int Projectile::getRank()
 {
 	return rank;
+}
+
+int Projectile::getDmg()
+{
+	return damage;
 }
 
 vector<glm::ivec2> Projectile::buildHitBox()

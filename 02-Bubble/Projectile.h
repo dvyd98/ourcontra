@@ -19,6 +19,7 @@ public:
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 	int getRank();
+	int getDmg();
 	vector<glm::ivec2> buildHitBox();
 
 	glm::ivec2 getPos();
@@ -30,6 +31,7 @@ private:
 	TileMap *map;
 	int direction;
 	int rank;
+	int damage;
 
 };
 
