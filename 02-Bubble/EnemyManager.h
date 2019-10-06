@@ -25,6 +25,7 @@ public:
 	void despawnOffScreenProjectiles();
 	void despawnOffScreenEnemies();
 	bool areTouching(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lpos2, glm::ivec2 rpos2);
+	vector<glm::ivec2> buildHitBox(Enemy &badguy);
 	void checkPhysics();
 
 	list<Enemy*> *enemies;

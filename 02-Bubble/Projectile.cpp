@@ -86,3 +86,17 @@ int Projectile::getRank()
 {
 	return rank;
 }
+
+vector<glm::ivec2> Projectile::buildHitBox()
+{
+	switch (rank)
+	{
+	case RANK1: {
+		glm::ivec2 lpos1 = posProjectile + glm::ivec2{ 8,-7 };
+		glm::ivec2 rpos1 = lpos1 + glm::ivec2{ 2,-2 };
+		return vector<glm::ivec2> {lpos1, rpos1 };
+	}
+
+
+	}
+}

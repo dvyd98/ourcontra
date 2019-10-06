@@ -1,7 +1,6 @@
 #include "EnemyManager.h"
 #include "Game.h"
 
-
 EnemyManager::EnemyManager()
 {
 }
@@ -42,6 +41,8 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 	bottom = bottomm;
 	top = topp;
 
+	despawnOffScreenEnemies();
+
 	checkPhysics(); // coctel
 
 	list<Enemy*>::iterator it_enemy;
@@ -78,7 +79,7 @@ bool EnemyManager::isOffScreen(Projectile &pj)
 
 bool EnemyManager::isOffScreen(Enemy &pj)
 {
-	if (pj.getPos().x < left || pj.getPos().x > right) return true;
+	if (pj.getPos().y < top || pj.getPos().y > bottom) return true;
 	return false;
 }
 
@@ -117,6 +118,7 @@ bool EnemyManager::areTouching(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lp
 	return true;
 }
 
+
 void EnemyManager::checkPhysics()
 {
 	list<Enemy*>::iterator it_enemy;
@@ -126,14 +128,12 @@ void EnemyManager::checkPhysics()
 		if (isOffScreen((*it_projec)))
 			it_projec = projlist->erase(it_projec);
 		else {
-			glm::ivec2 lpos1 = (it_projec)->getPos() + glm::ivec2{ 8,-7 };
-			glm::ivec2 rpos1 = lpos1 + glm::ivec2{ 2,-2 };
+			vector<glm::ivec2> box = it_projec->buildHitBox();
 			it_enemy = enemies->begin();
 			bool shot = false;
 			while ( it_enemy != enemies->end()) {
-				glm::ivec2 lpos2 = (*it_enemy)->getPos();
-				glm::ivec2 rpos2 = lpos2 + glm::ivec2{ 16,-32 };
-				if (areTouching(lpos1, rpos1, lpos2, rpos2)) {
+				vector<glm::ivec2> boxEnemy = (*it_enemy)->buildHitBox();
+				if (areTouching(box[0], box[1], boxEnemy[0], boxEnemy[1])) {
 					it_enemy = enemies->erase(it_enemy);
 					shot = true;
 				}

@@ -31,7 +31,7 @@ void Soldier::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	life = 1;
 	bJumping = false;
-	lookingTo = LOOKING_LEFT;
+	lookingTo = LOOKING_RIGHT;
 	spritesheet.loadFromFile("images/soldier.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(16, 32), glm::vec2(0.1f, 0.25f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(100);
@@ -85,7 +85,7 @@ void Soldier::update(int deltaTime)
 
 	}
 	posEnemy.y += FALL_STEP;
-	if (!map->collisionMoveDown(posEnemy, glm::ivec2(16, 32), &posEnemy.y)) {
+	if (!map->collisionMoveDown(posEnemy, glm::ivec2(16, 26), &posEnemy.y)) {
 		if (lookingTo == LOOKING_LEFT) {
 			lookingTo = LOOKING_RIGHT;
 			posEnemy.x += 2;
@@ -117,13 +117,13 @@ void Soldier::update(int deltaTime)
 		{
 			posEnemy.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
 			if (jumpAngle > 90)
-				bJumping = !map->collisionMoveDown(posEnemy, glm::ivec2(16,32), &posEnemy.y);
+				bJumping = !map->collisionMoveDown(posEnemy, glm::ivec2(16,26), &posEnemy.y);
 		}
 	}
 	else
 	{
 		posEnemy.y += FALL_STEP;
-		if (map->collisionMoveDown(posEnemy, glm::ivec2(16, 32), &posEnemy.y))
+		if (map->collisionMoveDown(posEnemy, glm::ivec2(16, 26), &posEnemy.y))
 		{
 			if ((rand() % 1000) == 1) // jump randomly
 			{
@@ -134,4 +134,11 @@ void Soldier::update(int deltaTime)
 		}
 	}
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
+}
+
+vector<glm::ivec2> Soldier::buildHitBox()
+{
+	glm::ivec2 lpos1 = posEnemy;
+	glm::ivec2 rpos1 = lpos1 + glm::ivec2{ 16,-32 };
+	return vector<glm::ivec2> {lpos1, rpos1 };
 }

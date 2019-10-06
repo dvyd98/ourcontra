@@ -19,6 +19,7 @@ public:
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 	int getRank();
+	vector<glm::ivec2> buildHitBox();
 
 	glm::ivec2 getPos();
 

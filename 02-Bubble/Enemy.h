@@ -13,6 +13,7 @@ public:
 	Enemy();
 	virtual void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) = 0;
 	virtual void update(int deltaTime) = 0;
+	virtual vector<glm::ivec2> buildHitBox() = 0;
 
 	void render();
 	void setTileMap(TileMap *tileMap);
