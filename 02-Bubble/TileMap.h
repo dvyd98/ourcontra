@@ -54,7 +54,6 @@ public:
 
 	// funcions de menu
 	void toggleFrame(const glm::vec2 &minCoords, ShaderProgram &program, int frame);
-	void doSelectAnimation();
 	int getMenuFrame() { return map[0]; }
 
 private:

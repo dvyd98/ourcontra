@@ -296,7 +296,3 @@ void TileMap::toggleFrame(const glm::vec2 &minCoords, ShaderProgram &program, in
 	map[0] = frame;
 	prepareArrays(minCoords, program);
 }
-
-void TileMap::doSelectAnimation() {
-
-}

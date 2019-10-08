@@ -17,7 +17,9 @@
 #define INIT_PLAYER_X_TILES 3
 #define INIT_PLAYER_Y_TILES 3
 
-#define SELECT_DELAY 5
+#define SELECT_DELAY 8
+#define BLINK_ANIMATION_DURATION 10
+#define BLINKS 6
 
 
 Scene::Scene()
@@ -48,6 +50,8 @@ void Scene::init()
 	projection = glm::ortho(left, right, bottom, top);
 
 	currentTime = 0.0f;
+	selectDelay = SELECT_DELAY;
+	onePlayer = true;
 }
 
 void Scene::update(int deltaTime)
@@ -66,28 +70,42 @@ void Scene::update(int deltaTime)
 			right += 2;
 		}
 		else currentState = MENU;
+		break;
 	}
 	case MENU: updateMenu(deltaTime); break;
+	case MENU_TO_LVL1: {
+		if (--blinkAnimation == 0 && blinks-- > 0) {
+			switch (map->getMenuFrame()) {
+			case MENU_1_PLAYER: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_1_PLAYER_BLINK); break;
+			case MENU_1_PLAYER_BLINK: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_1_PLAYER); break;
+			case MENU_2_PLAYER: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_2_PLAYER_BLINK); break;
+			case MENU_2_PLAYER_BLINK: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_2_PLAYER); break;
+			}
+			blinkAnimation = BLINK_ANIMATION_DURATION;
+		}
+		else if (blinks == 0) changeToScene(LVL1);
+		break;
+	}
 	case LVL1: updateLvl1(deltaTime); break;
 	case LVL2: updateLvl2(deltaTime); break;
 	}
 		
 }
 
-int c = 7;
-
 void Scene::updateMenu(int deltaTime) {
 	// click start to toggle 1 or 2 players
-	if (--c == 0) {
+	if (--selectDelay == 0) {
 		if (Game::instance().getKey(','))
-			map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, 
+			map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram,
 				((map->getMenuFrame() == MENU_1_PLAYER) ? MENU_2_PLAYER : MENU_1_PLAYER));
 		// start game with enter
 		if (Game::instance().getKey('.')) {
-			map->doSelectAnimation();
-			changeToScene(LVL1);
+			onePlayer = map->getMenuFrame() == MENU_1_PLAYER;
+			currentState = MENU_TO_LVL1;
+			blinks = BLINKS;
+			blinkAnimation = BLINK_ANIMATION_DURATION;
 		}
-		c = 7;
+		selectDelay = SELECT_DELAY;
 	}
 }
 
@@ -204,10 +222,3 @@ void Scene::initShaders()
 	vShader.free();
 	fShader.free();
 }
-
-
-
-
-
-
-
