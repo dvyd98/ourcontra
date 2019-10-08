@@ -52,7 +52,10 @@ public:
 	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
 
-	void toggleFrame(const glm::vec2 &minCoords, ShaderProgram &program);
+	// funcions de menu
+	void toggleFrame(const glm::vec2 &minCoords, ShaderProgram &program, int frame);
+	void doSelectAnimation();
+	int getMenuFrame() { return map[0]; }
 
 private:
 	bool loadLevel(const string &levelFile);
