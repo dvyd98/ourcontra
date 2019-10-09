@@ -17,6 +17,10 @@
 #define INIT_PLAYER_X_TILES 3
 #define INIT_PLAYER_Y_TILES 3
 
+#define SELECT_DELAY 8
+#define BLINK_ANIMATION_DURATION 10
+#define BLINKS 6
+
 
 Scene::Scene()
 {
@@ -36,46 +40,73 @@ Scene::~Scene()
 void Scene::init()
 {
 	initShaders();
-	currentState = MENU;
+	currentState = LOADING_MENU;
 	map = TileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 
-	initEntities();
-
-	left = top = 0;
-	right = float(SCREEN_WIDTH - 1) / 2;
+	left = - float(SCREEN_WIDTH -1)/2;
+	top = 0;
+	right = 0;
 	bottom = float(SCREEN_HEIGHT - 1) / 2;
 	projection = glm::ortho(left, right, bottom, top);
-	currentTime = 0.0f;
-}
 
-int c = 100;
+	currentTime = 0.0f;
+	selectDelay = SELECT_DELAY;
+	onePlayer = true;
+}
 
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 
-	// check si volem ser god
+	// godmode shortcuts
 	godMode();
 
-	// aixo es com un timer
-	if (--c == 0) {
-		c = 100;
-		//currentState = LVL1;
-		// quan es canvia el current state s'ha de canviar el map
-	}
-
+	// updates segons la scene
 	switch (currentState)
 	{
+	case LOADING_MENU: {
+		if (left < 0) {
+			left += 2;
+			right += 2;
+		}
+		else currentState = MENU;
+		break;
+	}
 	case MENU: updateMenu(deltaTime); break;
+	case MENU_TO_LVL1: {
+		if (--blinkAnimation == 0 && blinks-- > 0) {
+			switch (map->getMenuFrame()) {
+			case MENU_1_PLAYER: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_1_PLAYER_BLINK); break;
+			case MENU_1_PLAYER_BLINK: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_1_PLAYER); break;
+			case MENU_2_PLAYER: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_2_PLAYER_BLINK); break;
+			case MENU_2_PLAYER_BLINK: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_2_PLAYER); break;
+			}
+			blinkAnimation = BLINK_ANIMATION_DURATION;
+		}
+		else if (blinks == 0) changeToScene(LVL1);
+		break;
+	}
 	case LVL1: updateLvl1(deltaTime); break;
+	case LVL2: updateLvl2(deltaTime); break;
 	}
 		
 }
 
 void Scene::updateMenu(int deltaTime) {
 	// click start to toggle 1 or 2 players
-	if (Game::instance().getKey('t'))
-		map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	if (--selectDelay == 0) {
+		if (Game::instance().getKey(','))
+			map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram,
+				((map->getMenuFrame() == MENU_1_PLAYER) ? MENU_2_PLAYER : MENU_1_PLAYER));
+		// start game with enter
+		if (Game::instance().getKey('.')) {
+			onePlayer = map->getMenuFrame() == MENU_1_PLAYER;
+			currentState = MENU_TO_LVL1;
+			blinks = BLINKS;
+			blinkAnimation = BLINK_ANIMATION_DURATION;
+		}
+		selectDelay = SELECT_DELAY;
+	}
 }
 
 void Scene::updateLvl1(int deltaTime) {
@@ -94,6 +125,28 @@ void Scene::updateLvl1(int deltaTime) {
 	
 }
 
+void Scene::updateLvl2(int deltaTime) {
+	// TODO
+}
+
+void Scene::changeToScene(int scene) {
+	currentState = scene;
+	switch (currentState) {
+	case MENU: {
+		break;
+	}
+	case LVL1: {
+		// TODO animation de menu a lvl1
+		map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		initEntities();
+		break;
+	}
+	case LVL2: {
+		break;
+	}
+	}
+}
+
 void Scene::godMode() {
 	if (Game::instance().getKey('1')) {
 		map = TileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -103,6 +156,11 @@ void Scene::godMode() {
 		currentState = LVL1;
 		map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		initEntities();
+	}
+	if (Game::instance().getKey('3')) {
+		currentState = LVL2;
+		map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+
 	}
 }
 
@@ -164,10 +222,3 @@ void Scene::initShaders()
 	vShader.free();
 	fShader.free();
 }
-
-
-
-
-
-
-

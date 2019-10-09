@@ -184,11 +184,6 @@ void TileMap::loadMenu() {
 	blockSize.y = 16 * 15;
 }
 
-void TileMap::toggleFrame(const glm::vec2 &minCoords, ShaderProgram &program) {
-	map[0] = (map[0] == MENU_1_PLAYER) ? MENU_2_PLAYER : MENU_1_PLAYER;
-	prepareArrays(minCoords, program);
-}
-
 void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 {
 	int tile, nTiles = 0;
@@ -295,32 +290,9 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	return false;
 }
 
+// funcions menu
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void TileMap::toggleFrame(const glm::vec2 &minCoords, ShaderProgram &program, int frame) {
+	map[0] = frame;
+	prepareArrays(minCoords, program);
+}
