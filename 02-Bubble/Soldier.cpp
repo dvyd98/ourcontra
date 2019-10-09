@@ -12,6 +12,11 @@
 #define GLUT_KEY_SPACEBAR 32
 #define PLAYER_VEL 2
 
+enum State
+{
+	ALIVE, DEAD
+};
+
 Soldier::Soldier()
 {
 
@@ -19,7 +24,7 @@ Soldier::Soldier()
 
 enum SoldierAnims
 {
-	MOVE_LEFT, MOVE_RIGHT, AIRBONE_LEFT, AIRBONE_RIGHT
+	MOVE_LEFT, MOVE_RIGHT, AIRBONE_LEFT, AIRBONE_RIGHT, DYING
 };
 
 enum LookingTo
@@ -29,6 +34,7 @@ enum LookingTo
 
 void Soldier::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
+	state = ALIVE;
 	life = 1;
 	bJumping = false;
 	lookingTo = LOOKING_RIGHT;
