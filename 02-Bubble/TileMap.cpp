@@ -314,7 +314,8 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 		if(map[y*mapSize.x + x] == GRASS1 || 
 			map[y*mapSize.x + x] == GRASS2 ||
 			map[y*mapSize.x + x] == BRIDGE1 ||
-			map[y*mapSize.x + x] == BRIDGE2)
+			map[y*mapSize.x + x] == BRIDGE2 ||
+			y > 13)
 		{
 			if(*posY - tileSize.y * y + size.y <= 4)
 			{
