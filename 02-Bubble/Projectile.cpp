@@ -18,7 +18,7 @@ enum PlayerAnims
 };
 
 
-void Projectile::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int dir)
+void Projectile::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int dir, const glm::ivec2 projDir)
 {
 	rank = RANK1;
 	damage = 1;
@@ -34,24 +34,7 @@ void Projectile::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram
 
 	sprite->changeAnimation(1);
 	tileMapDispl = tileMapPos;
-	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_UP)) newPos = glm::ivec2{ -6,-6 };
-	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_UP)) newPos = glm::ivec2{ 6,-6 };
-	else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_DOWN)) newPos = glm::ivec2{ -6,6 };
-	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_DOWN)) newPos = glm::ivec2{ 6,6 };
-	else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT)) newPos = glm::ivec2{ -6,0 };
-	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) newPos = glm::ivec2{ 6,0 };
-	else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) newPos = glm::ivec2{ 0,-6 };
-	else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
-		if (dir == CROUCH_LOOK_LEFT)
-			newPos = glm::ivec2{ -6,0 };
-		else if (dir == CROUCH_LOOK_RIGHT)
-			newPos = glm::ivec2{ 6,0 };
-		else newPos = glm::ivec2{ 0, 6 };
-	}
-	else {
-		if (dir == STAND_LEFT || dir == AIRBONE_LEFT) newPos = glm::ivec2{ -6,0 };
-		else if (dir == STAND_RIGHT || dir == AIRBONE_RIGHT) newPos = glm::ivec2{ 6,0 };
-	}
+	newPos = projDir,
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posProjectile.x), float(tileMapDispl.y + posProjectile.y)));
 
 }

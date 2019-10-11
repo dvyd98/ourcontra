@@ -14,7 +14,7 @@
 
 enum State
 {
-	ALIVE, DEAD
+	ALIVE, DEAD, DYING
 };
 
 Soldier::Soldier()
@@ -24,7 +24,7 @@ Soldier::Soldier()
 
 enum SoldierAnims
 {
-	MOVE_LEFT, MOVE_RIGHT, AIRBONE_LEFT, AIRBONE_RIGHT, DYING
+	MOVE_LEFT, MOVE_RIGHT, AIRBONE_LEFT, AIRBONE_RIGHT
 };
 
 enum LookingTo
@@ -34,6 +34,7 @@ enum LookingTo
 
 void Soldier::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
+	type = "soldier";
 	state = ALIVE;
 	life = 1;
 	bJumping = false;

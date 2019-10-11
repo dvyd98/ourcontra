@@ -4,6 +4,7 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
+#include <string>
 
 
 class Enemy
@@ -20,11 +21,13 @@ public:
 	void setPosition(const glm::vec2 &pos);
 	bool decreaseLife(int dmg);
 	glm::ivec2 getPos();
+	string getType();
 	
 
 protected:
 	int life;
 	int state;
+	string type;
 	bool bJumping;
 	int lookingTo;
 	glm::ivec2 tileMapDispl, posEnemy;

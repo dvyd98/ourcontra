@@ -41,3 +41,8 @@ bool Enemy::decreaseLife(int dmg)
 	life -= dmg;
 	return (life > 0 ? false : true);
 }
+
+string Enemy::getType()
+{
+	return type;
+}
