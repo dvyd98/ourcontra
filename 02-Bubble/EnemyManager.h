@@ -2,6 +2,7 @@
 #define _ENEMYMANAGER_INCLUDE
 
 #include "Soldier.h"
+#include "Rifleman.h"
 #include "Player.h"
 #include "ShaderProgram.h"
 #include "TileMap.h"
@@ -21,7 +22,8 @@ public:
 	void render();
 	bool isOffScreen(Enemy &pj);
 	bool isOffScreen(Projectile &pj);
-	void spawnProjectile(glm::ivec2 position);
+	void spawnProjectilePlayer(glm::ivec2 position);
+	void spawnProjectileRifleman(glm::ivec2 position, Enemy* badguy);
 	void despawnOffScreenProjectiles();
 	void despawnOffScreenEnemies();
 	bool areTouching(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lpos2, glm::ivec2 rpos2);
@@ -33,6 +35,7 @@ public:
 	Projectile *projectile;
 	Player* player;
 	list<Projectile> *projlist;
+	list<Projectile> *projlistRifleman;
 	glm::ivec2 tilemap;
 	ShaderProgram texProgram;
 

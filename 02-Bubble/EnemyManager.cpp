@@ -1,6 +1,14 @@
 #include "EnemyManager.h"
 #include "Game.h"
 
+
+enum PlayerAnims
+{
+	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, MOVE_LEFT_AIM, MOVE_RIGHT_AIM, AIM_UP_LOOK_LEFT, AIM_UP_LOOK_RIGHT, CROUCH_LOOK_LEFT,
+	CROUCH_LOOK_RIGHT, AIM_UP_WALK_RIGHT, AIM_UP_WALK_LEFT, AIM_DOWN_WALK_RIGHT, AIM_DOWN_WALK_LEFT, AIRBONE_LEFT, AIRBONE_RIGHT
+};
+
+
 EnemyManager::EnemyManager()
 {
 }
@@ -20,6 +28,7 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 	int n = map->getNumEnemies();
 	enemies = new list<Enemy*>();
 	projlist = new list<Projectile>();
+	projlistRifleman = new list<Projectile>();
 	for (int i = 0; i < n; ++i) {
 		switch (map->getEnemy(i).type)
 		{
@@ -32,6 +41,11 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 		}
 		}
 	}
+	Enemy *test = new Rifleman();
+	test->init(tilemap, texProgram);
+	test->setPosition(glm::vec2(6 * map->getTileSize(), 3 * map->getTileSize()));
+	test->setTileMap(map);
+	enemies->push_back(test);
 }
 
 void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottomm, float topp)
@@ -48,13 +62,19 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 	list<Enemy*>::iterator it_enemy;
 	for (it_enemy = enemies->begin(); it_enemy != enemies->end(); ++it_enemy) {
 		(*it_enemy)->update(deltaTime);
+		if ((*it_enemy)->getType() == "rifleman") {
+			spawnProjectileRifleman(player->getPos(), *it_enemy);
+		}
 	}
 	if (Game::instance().getKey('a')) {
 		if (projlist->size() < 4)
-			spawnProjectile(player->getPos());
+			spawnProjectilePlayer(player->getPos());
 	}
 	list<Projectile>::iterator it;
 	for (it = projlist->begin(); it != projlist->end(); ++it) {
+		it->update(deltaTime);
+	}
+	for (it = projlistRifleman->begin(); it != projlistRifleman->end(); ++it) {
 		it->update(deltaTime);
 	}
 }
@@ -67,6 +87,9 @@ void EnemyManager::render()
 	}
 	list<Projectile>::iterator it;
 	for (it = projlist->begin(); it != projlist->end(); ++it) {
+		it->render();
+	}
+	for (it = projlistRifleman->begin(); it != projlistRifleman->end(); ++it) {
 		it->render();
 	}
 }
@@ -83,13 +106,53 @@ bool EnemyManager::isOffScreen(Enemy &pj)
 	return false;
 }
 
-void EnemyManager::spawnProjectile(glm::ivec2 position)
+void EnemyManager::spawnProjectilePlayer(glm::ivec2 position)
 {
 	projectile = new Projectile();
-	projectile->init(tilemap, texProgram, player->sprite->animation());
+	glm::ivec2 newPos;
+	int dir = player->sprite->animation();
+	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_UP)) newPos = glm::ivec2{ -6,-6 };
+	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_UP)) newPos = glm::ivec2{ 6,-6 };
+	else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_DOWN)) newPos = glm::ivec2{ -6,6 };
+	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_DOWN)) newPos = glm::ivec2{ 6,6 };
+	else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT)) newPos = glm::ivec2{ -6,0 };
+	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) newPos = glm::ivec2{ 6,0 };
+	else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) newPos = glm::ivec2{ 0,-6 };
+	else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
+		if (dir == CROUCH_LOOK_LEFT)
+			newPos = glm::ivec2{ -6,0 };
+		else if (dir == CROUCH_LOOK_RIGHT)
+			newPos = glm::ivec2{ 6,0 };
+		else newPos = glm::ivec2{ 0, 6 };
+	}
+	else {
+		if (dir == STAND_LEFT || dir == AIRBONE_LEFT) newPos = glm::ivec2{ -6,0 };
+		else if (dir == STAND_RIGHT || dir == AIRBONE_RIGHT) newPos = glm::ivec2{ 6,0 };
+	}
+
+	projectile->init(tilemap, texProgram, dir, newPos);
 	projectile->setPosition(glm::vec2(position.x + 16, position.y + 32));
 	projectile->setTileMap(map);
 	projlist->push_back(*(projectile));
+}
+
+void EnemyManager::spawnProjectileRifleman(glm::ivec2 position, Enemy* badguy)
+{
+	projectile = new Projectile();
+	glm::ivec2 posEnemy = badguy->getPos();
+	glm::ivec2 newPos;
+	if (position.y < posEnemy.y) {
+		if (position.x < posEnemy.x) newPos = glm::ivec2{ -6,-6 };
+		else newPos = glm::ivec2{ 6,-6 };
+	}
+	else {
+		if (position.x < posEnemy.x) newPos = glm::ivec2{ -6,6 };
+		else newPos = glm::ivec2{ 6,6 };
+	}
+	projectile->init(tilemap, texProgram, 0, newPos);
+	projectile->setPosition(glm::vec2(posEnemy.x, posEnemy.y + 26));
+	projectile->setTileMap(map);
+	projlistRifleman->push_back(*(projectile));
 }
 
 void EnemyManager::despawnOffScreenProjectiles()

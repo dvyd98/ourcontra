@@ -12,7 +12,7 @@ class Projectile
 {
 
 public:
-	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int dir);
+	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int dir, const glm::ivec2 projDir);
 	void update(int deltaTime);
 	void render();
 
