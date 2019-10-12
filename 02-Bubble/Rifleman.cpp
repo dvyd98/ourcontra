@@ -101,7 +101,7 @@ glm::ivec2 Rifleman::getProjectileSpawn()
 	else if (sprite->animation() == AIM_UP_LOOK_LEFT)
 		return glm::ivec2{ 5, 0 };
 	else if (sprite->animation() == AIM_UP_LOOK_RIGHT)
-		return glm::ivec2{ 27, 0 };
+		return glm::ivec2{ 10, 0 };
 	else if (sprite->animation() == AIM_DOWN_LOOK_LEFT)
 		return glm::ivec2{ -4, 16 };
 	else if (sprite->animation() == AIM_DOWN_LOOK_RIGHT)

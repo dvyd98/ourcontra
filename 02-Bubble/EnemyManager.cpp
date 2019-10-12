@@ -34,15 +34,22 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 	projlist = new list<Projectile>();
 	projlistRifleman = new list<Projectile>();
 	for (int i = 0; i < n; ++i) {
-		switch (map->getEnemy(i).type)
+		int enemyType = map->getEnemy(i).type;
+		if (enemyType == SOLDIER)
 		{
-		case SOLDIER: {
 			Enemy *aux = new Soldier();
 			aux->init(tilemap, texProgram);
 			aux->setPosition(glm::vec2(map->getEnemy(i).x * map->getTileSize(), map->getEnemy(i).y * map->getTileSize()));
 			aux->setTileMap(map);
 			enemies->push_back(aux);
 		}
+		else if (enemyType  == BRIDGE)
+		{
+			Enemy *bridgeboy = new Bridge();
+			bridgeboy->init(tilemap, texProgram);
+			bridgeboy->setPosition(glm::vec2(map->getEnemy(i).x * map->getTileSize(), map->getEnemy(i).y * map->getTileSize()));
+			bridgeboy->setTileMap(map);
+			enemies->push_back(bridgeboy);
 		}
 	}
 	Enemy *test = new Rifleman();
@@ -50,6 +57,12 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 	test->setPosition(glm::vec2(14 * map->getTileSize(), 9 * map->getTileSize()));
 	test->setTileMap(map);
 	enemies->push_back(test);
+
+	Enemy *test2 = new Bridge();
+	test2->init(tilemap, texProgram);
+	test2->setPosition(glm::vec2(14 * map->getTileSize(), 7 * map->getTileSize()));
+	test2->setTileMap(map);
+	enemies->push_back(test2);
 }
 
 void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottomm, float topp)
@@ -212,7 +225,7 @@ void EnemyManager::checkPhysics()
 			bool shot = false;
 			while ( it_enemy != enemies->end() && !shot) {
 				vector<glm::ivec2> boxEnemy = (*it_enemy)->buildHitBox();
-				if (areTouching(box[0], box[1], boxEnemy[0], boxEnemy[1])) {
+				if ((*it_enemy)->getType() != "bridge" && areTouching(box[0], box[1], boxEnemy[0], boxEnemy[1])) {
 					if ((*it_enemy)->decreaseLife(it_projec->getDmg())) it_enemy = enemies->erase(it_enemy);
 					shot = true;
 				}
@@ -241,7 +254,7 @@ void EnemyManager::checkPhysics()
 	it_enemy = enemies->begin();
 	while (it_enemy != enemies->end()) {  // are we touching bad guys?
 		vector<glm::ivec2> boxEnemy = (*it_enemy)->buildHitBox();
-		if (areTouching(boxPlayer[0], boxPlayer[1], boxEnemy[0], boxEnemy[1])) {
+		if ((*it_enemy)->getType() != "bridge" && areTouching(boxPlayer[0], boxPlayer[1], boxEnemy[0], boxEnemy[1])) {
 			player->state = DEAD;
 		}
 		++it_enemy;

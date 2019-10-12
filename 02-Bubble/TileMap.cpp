@@ -111,7 +111,7 @@ void TileMap::loadTileMap() {
 		sstream.str(line);
 		sstream >> x >> y >> s;
 		if (s == "Soldier") type = SOLDIER;
-
+		else if (s == "Bridge") type = BRIDGE;
 		enemies->push_back(infoEnemies());
 		(*enemies)[i].x = x;
 		(*enemies)[i].y = y;

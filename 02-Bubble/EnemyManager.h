@@ -4,6 +4,7 @@
 #include "Soldier.h"
 #include "Rifleman.h"
 #include "Player.h"
+#include "Bridge.h"
 #include "ShaderProgram.h"
 #include "TileMap.h"
 #include <glm/glm.hpp>
