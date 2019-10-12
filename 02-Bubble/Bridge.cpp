@@ -18,7 +18,7 @@ enum States
 
 enum BridgeAnims
 {
-	EDGE_LEFT, EDGE_RIGHT, DESTROYED_LEFT, DESTROYED_RIGHT, CENTRAL
+	EDGE_LEFT, EDGE_RIGHT, DESTROYED_LEFT, DESTROYED_RIGHT, CENTRAL, EMPTY
 };
 
 
@@ -61,6 +61,9 @@ void Bridge::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->setAnimationSpeed(DESTROYED_RIGHT, 8);
 	sprite->addKeyframe(DESTROYED_RIGHT, glm::vec2(0.1f, 0.2f));
 
+	sprite->setAnimationSpeed(EMPTY, 8);
+	sprite->addKeyframe(EMPTY, glm::vec2(0.6f, 0.6f));
+
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
@@ -69,6 +72,11 @@ void Bridge::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 void Bridge::update(int deltaTime)
 {
 	sprite->update(deltaTime);
+	if (state == DEAD) {
+		if (bridgeType == "left") sprite->changeAnimation(DESTROYED_LEFT);
+		else if (bridgeType == "right") sprite->changeAnimation(DESTROYED_RIGHT);
+		else if (bridgeType == "central") sprite->changeAnimation(EMPTY);
+	}
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
 

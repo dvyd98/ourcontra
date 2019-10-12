@@ -22,13 +22,13 @@ public:
 	bool decreaseLife(int dmg);
 	glm::ivec2 getPos();
 	string getType();
-
+	int state;
 	Sprite *sprite;
 	
 
 protected:
 	int life;
-	int state;
+	
 	string type;
 	bool bJumping;
 	int lookingTo;

@@ -235,6 +235,12 @@ bool EnemyManager::areTouching(glm::ivec2 obj1_left, glm::ivec2 obj1_right, glm:
 	return true;
 }
 
+bool EnemyManager::areTouchingYcoord(glm::ivec2 obj1_left, glm::ivec2 obj1_right, glm::ivec2 obj2_left, glm::ivec2 obj2_right)
+{
+	if (obj1_left.x > obj2_right.x || obj2_left.x > obj1_right.x) return false;
+	return true;
+}
+
 
 void EnemyManager::checkPhysics()
 {
@@ -279,11 +285,15 @@ void EnemyManager::checkPhysics()
 	it_enemy = enemies->begin();
 	while (it_enemy != enemies->end()) {  // are we touching bad guys?
 		vector<glm::ivec2> boxEnemy = (*it_enemy)->buildHitBox();
-		if (areTouching(boxPlayer[0], boxPlayer[1], boxEnemy[0], boxEnemy[1])) {
-			if ((*it_enemy)->getType() != "bridge")
-			player->state = DEAD;
-			else {
-				if (!player->isJumping()) player->posPlayer.y -= FALL_STEP;
+		if ((*it_enemy)->getType() != "bridge") {
+			if (areTouching(boxPlayer[0], boxPlayer[1], boxEnemy[0], boxEnemy[1])) {
+					player->state = DEAD;
+			}
+		}
+		else {
+			if (areTouchingYcoord(boxPlayer[0], boxPlayer[1], boxEnemy[0], boxEnemy[1])) {
+				(*it_enemy)->state = DEAD;
+				if (!player->isJumping() && (*it_enemy)->state == ALIVE) player->posPlayer.y -= FALL_STEP;
 			}
 		}
 		++it_enemy;
