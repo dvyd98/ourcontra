@@ -12,7 +12,7 @@ class Projectile
 {
 
 public:
-	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int dir, const glm::ivec2 projDir);
+	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int speed, const glm::ivec2 projDir);
 	void update(int deltaTime);
 	void render();
 
@@ -21,13 +21,13 @@ public:
 	int getRank();
 	int getDmg();
 	vector<glm::ivec2> buildHitBox();
-
+	Sprite *sprite;
 	glm::ivec2 getPos();
 
 private:
 	glm::ivec2 tileMapDispl, posProjectile, newPos;
 	Texture spritesheet;
-	Sprite *sprite;
+	
 	TileMap *map;
 	int direction;
 	int rank;

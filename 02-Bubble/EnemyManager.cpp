@@ -8,6 +8,10 @@ enum PlayerAnims
 	CROUCH_LOOK_RIGHT, AIM_UP_WALK_RIGHT, AIM_UP_WALK_LEFT, AIM_DOWN_WALK_RIGHT, AIM_DOWN_WALK_LEFT, AIRBONE_LEFT, AIRBONE_RIGHT
 };
 
+enum States
+{
+	ALIVE, DEAD, DYING
+};
 
 EnemyManager::EnemyManager()
 {
@@ -43,7 +47,7 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 	}
 	Enemy *test = new Rifleman();
 	test->init(tilemap, texProgram);
-	test->setPosition(glm::vec2(14 * map->getTileSize(), 1 * map->getTileSize()));
+	test->setPosition(glm::vec2(14 * map->getTileSize(), 9 * map->getTileSize()));
 	test->setTileMap(map);
 	enemies->push_back(test);
 }
@@ -61,10 +65,11 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 
 	list<Enemy*>::iterator it_enemy;
 	for (it_enemy = enemies->begin(); it_enemy != enemies->end(); ++it_enemy) {
-		(*it_enemy)->update(deltaTime);
 		if ((*it_enemy)->getType() == "rifleman" && projlistRifleman->size() < 4) {
-			spawnProjectileRifleman(player->getPos(), *it_enemy);
+			Rifleman* rifleguy = dynamic_cast<Rifleman*>(*it_enemy);
+			spawnProjectileRifleman(player->getPos(), rifleguy);
 		}
+		(*it_enemy)->update(deltaTime);
 	}
 	if (Game::instance().getKey('a')) {
 		if (projlist->size() < 4)
@@ -111,50 +116,51 @@ void EnemyManager::spawnProjectilePlayer(glm::ivec2 position)
 	projectile = new Projectile();
 	glm::ivec2 newPos;
 	int dir = player->sprite->animation();
-	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_UP)) newPos = glm::ivec2{ -6,-6 };
-	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_UP)) newPos = glm::ivec2{ 6,-6 };
-	else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_DOWN)) newPos = glm::ivec2{ -6,6 };
-	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_DOWN)) newPos = glm::ivec2{ 6,6 };
-	else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT)) newPos = glm::ivec2{ -6,0 };
-	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) newPos = glm::ivec2{ 6,0 };
-	else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) newPos = glm::ivec2{ 0,-6 };
+	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_UP)) newPos = glm::ivec2{ -1,-1 };
+	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_UP)) newPos = glm::ivec2{ 1,-1 };
+	else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_DOWN)) newPos = glm::ivec2{ -1,1 };
+	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_DOWN)) newPos = glm::ivec2{ 1,1 };
+	else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT)) newPos = glm::ivec2{ -1,0 };
+	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) newPos = glm::ivec2{ 1,0 };
+	else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) newPos = glm::ivec2{ 0,-1 };
 	else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
 		if (dir == CROUCH_LOOK_LEFT)
-			newPos = glm::ivec2{ -6,0 };
+			newPos = glm::ivec2{ -1,0 };
 		else if (dir == CROUCH_LOOK_RIGHT)
-			newPos = glm::ivec2{ 6,0 };
-		else newPos = glm::ivec2{ 0, 6 };
+			newPos = glm::ivec2{ 1,0 };
+		else newPos = glm::ivec2{ 0, 1 };
 	}
 	else {
-		if (dir == STAND_LEFT || dir == AIRBONE_LEFT) newPos = glm::ivec2{ -6,0 };
-		else if (dir == STAND_RIGHT || dir == AIRBONE_RIGHT) newPos = glm::ivec2{ 6,0 };
+		if (dir == STAND_LEFT || dir == AIRBONE_LEFT) newPos = glm::ivec2{ -1,0 };
+		else if (dir == STAND_RIGHT || dir == AIRBONE_RIGHT) newPos = glm::ivec2{ 1,0 };
 	}
 
-	projectile->init(tilemap, texProgram, dir, newPos);
-	projectile->setPosition(glm::vec2(position.x + 16, position.y + 32));
+	projectile->init(tilemap, texProgram, 6, newPos);
+	projectile->setPosition(position + player->getProjectileSpawn());
 	projectile->setTileMap(map);
 	projlist->push_back(*(projectile));
 }
 
-void EnemyManager::spawnProjectileRifleman(glm::ivec2 position, Enemy* badguy)
+void EnemyManager::spawnProjectileRifleman(glm::ivec2 position, Rifleman* badguy)
 {
 	projectile = new Projectile();
 	glm::ivec2 posEnemy = badguy->getPos();
 	glm::ivec2 newPos;
 	if (position.y + 30 < posEnemy.y - 40) {
-		if (position.x < posEnemy.x) newPos = glm::ivec2{ -6,-6 };
-		else newPos = glm::ivec2{ 6,-6 };
+		if (position.x < posEnemy.x) newPos = glm::ivec2{ -1,-1 };
+		else newPos = glm::ivec2{ 1,-1 };
 	}
 	else if (position.y + 30 > posEnemy.y + 40) {
-		if (position.x < posEnemy.x) newPos = glm::ivec2{ -6,6 };
-		else newPos = glm::ivec2{ 6,6 };
+		if (position.x < posEnemy.x) newPos = glm::ivec2{ -1,1 };
+		else newPos = glm::ivec2{ 1,1 };
 	}
 	else {
-		if (position.x < posEnemy.x) newPos = glm::ivec2{ -6,0 };
-		else newPos = glm::ivec2{ 6,0 };
+		if (position.x < posEnemy.x) newPos = glm::ivec2{ -1,0 };
+		else newPos = glm::ivec2{ 1,0 };
 	}
-	projectile->init(tilemap, texProgram, 0, newPos);
-	projectile->setPosition(glm::vec2(posEnemy.x, posEnemy.y + 26));
+	badguy->projDir = newPos;
+	projectile->init(tilemap, texProgram, 2, newPos);
+	projectile->setPosition(posEnemy + badguy->getProjectileSpawn());
 	projectile->setTileMap(map);
 	projlistRifleman->push_back(*(projectile));
 }
@@ -225,7 +231,7 @@ void EnemyManager::checkPhysics()
 		else {
 			vector<glm::ivec2> box = it_projec->buildHitBox();
 			if (areTouching(boxPlayer[0], boxPlayer[1], box[0], box[1])) {
-				player->sprite->changeAnimation(14);
+				player->state = DEAD;
 			}
 			++it_projec;
 		}
@@ -236,7 +242,7 @@ void EnemyManager::checkPhysics()
 	while (it_enemy != enemies->end()) {  // are we touching bad guys?
 		vector<glm::ivec2> boxEnemy = (*it_enemy)->buildHitBox();
 		if (areTouching(boxPlayer[0], boxPlayer[1], boxEnemy[0], boxEnemy[1])) {
-			player->sprite->changeAnimation(14);
+			player->state = DEAD;
 		}
 		++it_enemy;
 	}

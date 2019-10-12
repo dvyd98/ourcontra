@@ -11,6 +11,11 @@
 #define FALL_STEP 4
 #define GLUT_KEY_SPACEBAR 32
 
+enum States
+{
+	ALIVE, DEAD, DYING
+};
+
 
 enum PlayerAnims
 {
@@ -29,7 +34,8 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	bJumping = false;
 	bShooting = false;
 	lookingTo = LOOKING_RIGHT;
-	life = 1;
+	life = 2;
+	state = ALIVE;
 	spritesheet.loadFromFile("images/blueguy.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
 	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
@@ -120,182 +126,193 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	
 }
 
-void Player::update(int deltaTime, float left)
+void Player::update(int deltaTime, float left, float right, float bottom, float top)
 {
+	
 	currentKeyframe = sprite->keyframe();
 	sprite->update(deltaTime);
-	if (bJumping) // lookingTo es una variable que sactualitza segons si el player mira left or right, l'utilitzo per estalviar mirar cada sprite individualment si es left or right
-	{
-		if (lookingTo == LOOKING_RIGHT)
-			if (sprite->animation() != AIRBONE_RIGHT)
-				sprite->changeAnimation(AIRBONE_RIGHT);
-		if (lookingTo == LOOKING_LEFT)
-			if (sprite->animation() != AIRBONE_LEFT)
-				sprite->changeAnimation(AIRBONE_LEFT);
-	
-	}
-	if (Game::instance().getKey('a')) {
-		bShooting = true;
-	}
-	else bShooting = false;
-	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_UP))
-	{
-		if (sprite->animation() != AIM_UP_WALK_LEFT && !bJumping)
-			sprite->changeAnimation(AIM_UP_WALK_LEFT);
-		posPlayer.x -= 2;
-		lookingTo = LOOKING_LEFT;
-		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)) || posPlayer.x - 2 <= left)
+	if (state == ALIVE) {
+		if (bJumping) // lookingTo es una variable que sactualitza segons si el player mira left or right, l'utilitzo per estalviar mirar cada sprite individualment si es left or right
 		{
-			posPlayer.x += 2;
-			sprite->changeAnimation(STAND_LEFT);
-		}
-	}
-	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_UP))
-	{
-		if (sprite->animation() != AIM_UP_WALK_RIGHT && !bJumping)
-			sprite->changeAnimation(AIM_UP_WALK_RIGHT);
-		posPlayer.x += 2;
-		lookingTo = LOOKING_RIGHT;
-		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)))
-		{
-			posPlayer.x -= 2;
-			sprite->changeAnimation(STAND_RIGHT);
-		}
-	}
-	else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_DOWN))
-	{
-		if (sprite->animation() != AIM_DOWN_WALK_LEFT && !bJumping)
-			sprite->changeAnimation(AIM_DOWN_WALK_LEFT);
-		posPlayer.x -= 2;
-		lookingTo = LOOKING_LEFT;
-		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)) || posPlayer.x - 2 <= left)
-		{
-			posPlayer.x += 2;
-			sprite->changeAnimation(STAND_LEFT);
-		}
-	}
-	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_DOWN))
-	{
-		if (sprite->animation() != AIM_DOWN_WALK_RIGHT && !bJumping)
-			sprite->changeAnimation(AIM_DOWN_WALK_RIGHT);
-		posPlayer.x += 2;
-		lookingTo = LOOKING_RIGHT;
-		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)))
-		{
-			posPlayer.x -= 2;
-			sprite->changeAnimation(STAND_RIGHT);
-		}
-	}
-	else if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))
-	{
-		if((sprite->animation() != MOVE_LEFT && !bShooting || sprite->animation() != MOVE_LEFT_AIM && bShooting) && !bJumping )
-			if (bShooting)
-				sprite->changeAnimation(MOVE_LEFT_AIM);
-			else
-				sprite->changeAnimation(MOVE_LEFT);
-		posPlayer.x -= 2;
-		lookingTo = LOOKING_LEFT;
-		if(map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)) || posPlayer.x - 2 <= left)
-		{
-			posPlayer.x += 2;
-			if (bJumping) {
+			if (lookingTo == LOOKING_RIGHT)
+				if (sprite->animation() != AIRBONE_RIGHT)
+					sprite->changeAnimation(AIRBONE_RIGHT);
+			if (lookingTo == LOOKING_LEFT)
 				if (sprite->animation() != AIRBONE_LEFT)
 					sprite->changeAnimation(AIRBONE_LEFT);
-			}
-			else sprite->changeAnimation(STAND_LEFT);
-		}
-	}
-	else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
-	{
-		if((sprite->animation() != MOVE_RIGHT && !bShooting || sprite->animation() != MOVE_RIGHT_AIM && bShooting) && !bJumping)
-			if (bShooting)
-				sprite->changeAnimation(MOVE_RIGHT_AIM);
-			else
-				sprite->changeAnimation(MOVE_RIGHT);
-		posPlayer.x += 2;
-		lookingTo = LOOKING_RIGHT;
-		if(map->collisionMoveRight(posPlayer, glm::ivec2(32, 58)))
-		{
-			posPlayer.x -= 2;
-			sprite->changeAnimation(STAND_RIGHT);
-		}
-	}
-	else if (Game::instance().getSpecialKey(GLUT_KEY_UP))
-	{
-		if (lookingTo == LOOKING_LEFT && !bJumping)
-		sprite->changeAnimation(AIM_UP_LOOK_LEFT);
-		else if (lookingTo == LOOKING_RIGHT && !bJumping)
-			sprite->changeAnimation(AIM_UP_LOOK_RIGHT);
-	}
-	else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
-	{
-		if (lookingTo == LOOKING_LEFT && !bJumping)
-			sprite->changeAnimation(CROUCH_LOOK_LEFT);
-		else if (lookingTo == LOOKING_RIGHT && !bJumping)
-			sprite->changeAnimation(CROUCH_LOOK_RIGHT);
-	}
-	else
-	{
-		if (sprite->animation() == MOVE_LEFT)
-			sprite->changeAnimation(STAND_LEFT);
-		else if (sprite->animation() == MOVE_RIGHT)
-			sprite->changeAnimation(STAND_RIGHT);
-		else if (sprite->animation() == MOVE_LEFT_AIM)
-			sprite->changeAnimation(STAND_LEFT);
-		else if (sprite->animation() == MOVE_RIGHT_AIM)
-			sprite->changeAnimation(STAND_RIGHT);
-		else if (sprite->animation() == AIM_UP_LOOK_LEFT)
-			sprite->changeAnimation(STAND_LEFT);
-		else if (sprite->animation() == AIM_UP_LOOK_RIGHT)
-			sprite->changeAnimation(STAND_RIGHT);
-		else if (sprite->animation() == AIM_UP_WALK_LEFT)
-			sprite->changeAnimation(STAND_LEFT);
-		else if (sprite->animation() == AIM_UP_WALK_RIGHT)
-			sprite->changeAnimation(STAND_RIGHT);
-		else if (sprite->animation() == CROUCH_LOOK_LEFT)
-			sprite->changeAnimation(STAND_LEFT);
-		else if (sprite->animation() == CROUCH_LOOK_RIGHT)
-			sprite->changeAnimation(STAND_RIGHT);
-		else if (sprite->animation() == AIM_DOWN_WALK_LEFT)
-			sprite->changeAnimation(STAND_LEFT);
-		else if (sprite->animation() == AIM_DOWN_WALK_RIGHT)
-			sprite->changeAnimation(STAND_RIGHT);
-		/*else if (sprite->animation() == AIRBONE_LEFT && !bJumping)
-			sprite->changeAnimation(STAND_LEFT);
-		else if (sprite->animation() == AIRBONE_RIGHT && !bJumping)
-			sprite->changeAnimation(STAND_RIGHT);*/
 
-	}
-	
-	if(bJumping)
-	{
-		jumpAngle += JUMP_ANGLE_STEP;
-		if(jumpAngle == 180)
+		}
+		if (Game::instance().getKey('a')) {
+			bShooting = true;
+		}
+		else bShooting = false;
+		if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_UP))
 		{
-			bJumping = false;
-			posPlayer.y = startY;
+			if (sprite->animation() != AIM_UP_WALK_LEFT && !bJumping)
+				sprite->changeAnimation(AIM_UP_WALK_LEFT);
+			posPlayer.x -= 2;
+			lookingTo = LOOKING_LEFT;
+			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)) || posPlayer.x - 2 <= left)
+			{
+				posPlayer.x += 2;
+				sprite->changeAnimation(STAND_LEFT);
+			}
+		}
+		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_UP))
+		{
+			if (sprite->animation() != AIM_UP_WALK_RIGHT && !bJumping)
+				sprite->changeAnimation(AIM_UP_WALK_RIGHT);
+			posPlayer.x += 2;
+			lookingTo = LOOKING_RIGHT;
+			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)))
+			{
+				posPlayer.x -= 2;
+				sprite->changeAnimation(STAND_RIGHT);
+			}
+		}
+		else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_DOWN))
+		{
+			if (sprite->animation() != AIM_DOWN_WALK_LEFT && !bJumping)
+				sprite->changeAnimation(AIM_DOWN_WALK_LEFT);
+			posPlayer.x -= 2;
+			lookingTo = LOOKING_LEFT;
+			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)) || posPlayer.x - 2 <= left)
+			{
+				posPlayer.x += 2;
+				sprite->changeAnimation(STAND_LEFT);
+			}
+		}
+		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_DOWN))
+		{
+			if (sprite->animation() != AIM_DOWN_WALK_RIGHT && !bJumping)
+				sprite->changeAnimation(AIM_DOWN_WALK_RIGHT);
+			posPlayer.x += 2;
+			lookingTo = LOOKING_RIGHT;
+			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)))
+			{
+				posPlayer.x -= 2;
+				sprite->changeAnimation(STAND_RIGHT);
+			}
+		}
+		else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
+		{
+			if ((sprite->animation() != MOVE_LEFT && !bShooting || sprite->animation() != MOVE_LEFT_AIM && bShooting) && !bJumping)
+				if (bShooting)
+					sprite->changeAnimation(MOVE_LEFT_AIM);
+				else
+					sprite->changeAnimation(MOVE_LEFT);
+			posPlayer.x -= 2;
+			lookingTo = LOOKING_LEFT;
+			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)) || posPlayer.x - 2 <= left)
+			{
+				posPlayer.x += 2;
+				if (bJumping) {
+					if (sprite->animation() != AIRBONE_LEFT)
+						sprite->changeAnimation(AIRBONE_LEFT);
+				}
+				else sprite->changeAnimation(STAND_LEFT);
+			}
+		}
+		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
+		{
+			if ((sprite->animation() != MOVE_RIGHT && !bShooting || sprite->animation() != MOVE_RIGHT_AIM && bShooting) && !bJumping)
+				if (bShooting)
+					sprite->changeAnimation(MOVE_RIGHT_AIM);
+				else
+					sprite->changeAnimation(MOVE_RIGHT);
+			posPlayer.x += 2;
+			lookingTo = LOOKING_RIGHT;
+			if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 58)))
+			{
+				posPlayer.x -= 2;
+				sprite->changeAnimation(STAND_RIGHT);
+			}
+		}
+		else if (Game::instance().getSpecialKey(GLUT_KEY_UP))
+		{
+			if (lookingTo == LOOKING_LEFT && !bJumping)
+				sprite->changeAnimation(AIM_UP_LOOK_LEFT);
+			else if (lookingTo == LOOKING_RIGHT && !bJumping)
+				sprite->changeAnimation(AIM_UP_LOOK_RIGHT);
+		}
+		else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
+		{
+			if (lookingTo == LOOKING_LEFT && !bJumping)
+				sprite->changeAnimation(CROUCH_LOOK_LEFT);
+			else if (lookingTo == LOOKING_RIGHT && !bJumping)
+				sprite->changeAnimation(CROUCH_LOOK_RIGHT);
 		}
 		else
 		{
-			posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
-			if(jumpAngle > 90)
-				bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(32, 58), &posPlayer.y);
+			if (sprite->animation() == MOVE_LEFT)
+				sprite->changeAnimation(STAND_LEFT);
+			else if (sprite->animation() == MOVE_RIGHT)
+				sprite->changeAnimation(STAND_RIGHT);
+			else if (sprite->animation() == MOVE_LEFT_AIM)
+				sprite->changeAnimation(STAND_LEFT);
+			else if (sprite->animation() == MOVE_RIGHT_AIM)
+				sprite->changeAnimation(STAND_RIGHT);
+			else if (sprite->animation() == AIM_UP_LOOK_LEFT)
+				sprite->changeAnimation(STAND_LEFT);
+			else if (sprite->animation() == AIM_UP_LOOK_RIGHT)
+				sprite->changeAnimation(STAND_RIGHT);
+			else if (sprite->animation() == AIM_UP_WALK_LEFT)
+				sprite->changeAnimation(STAND_LEFT);
+			else if (sprite->animation() == AIM_UP_WALK_RIGHT)
+				sprite->changeAnimation(STAND_RIGHT);
+			else if (sprite->animation() == CROUCH_LOOK_LEFT)
+				sprite->changeAnimation(STAND_LEFT);
+			else if (sprite->animation() == CROUCH_LOOK_RIGHT)
+				sprite->changeAnimation(STAND_RIGHT);
+			else if (sprite->animation() == AIM_DOWN_WALK_LEFT)
+				sprite->changeAnimation(STAND_LEFT);
+			else if (sprite->animation() == AIM_DOWN_WALK_RIGHT)
+				sprite->changeAnimation(STAND_RIGHT);
+			else if (sprite->animation() == AIRBONE_LEFT && !bJumping)
+				sprite->changeAnimation(STAND_LEFT);
+			else if (sprite->animation() == AIRBONE_RIGHT && !bJumping)
+				sprite->changeAnimation(STAND_RIGHT);
+
 		}
-	}
-	else
-	{
-		posPlayer.y += FALL_STEP;
-		if(map->collisionMoveDown(posPlayer, glm::ivec2(32, 58), &posPlayer.y))
+
+		if (bJumping)
 		{
-			if(Game::instance().getKey(' '))
+			jumpAngle += JUMP_ANGLE_STEP;
+			if (jumpAngle == 180)
 			{
-				bJumping = true;
-				jumpAngle = 0;
-				startY = posPlayer.y;
+				bJumping = false;
+				posPlayer.y = startY;
+			}
+			else
+			{
+				posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
+				glm::ivec2 aux = posPlayer + glm::ivec2(8, 44);
+				if (jumpAngle > 90)
+					bJumping = !map->collisionMoveDown(aux, glm::ivec2(12, 20), &posPlayer.y);
+				posPlayer = aux + glm::ivec2(-8, -44);
 			}
 		}
+		else
+		{
+			posPlayer.y += FALL_STEP;
+			glm::ivec2 aux = posPlayer + glm::ivec2(10, 30);
+			if (map->collisionMoveDown(aux, glm::ivec2(10, 28), &aux.y))
+			{
+				if (Game::instance().getKey(' '))
+				{
+					bJumping = true;
+					jumpAngle = 0;
+					startY = posPlayer.y;
+				}
+			}
+			posPlayer = aux + glm::ivec2(-10, -30);
+		}
 	}
-	
+	else if (state == DEAD) {
+		posPlayer.y = top + 20;
+		posPlayer.x = left + 20;
+		state = ALIVE;
+	}
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
@@ -322,7 +339,12 @@ glm::ivec2 Player::getPos()
 
 vector<glm::ivec2> Player::buildHitBox()
 {
-	if (!bJumping) {
+	if (sprite->animation() == CROUCH_LOOK_LEFT || sprite->animation() == CROUCH_LOOK_RIGHT) {
+		glm::ivec2 lpos1 = posPlayer + glm::ivec2{ 4,50 };
+		glm::ivec2 rpos1 = posPlayer + glm::ivec2{ 28,63 };
+		return vector<glm::ivec2> {lpos1, rpos1 };
+	}
+	else if (!bJumping) {
 		glm::ivec2 lpos1 = posPlayer + glm::ivec2{ 10,30 };
 		glm::ivec2 rpos1 = lpos1 + glm::ivec2{ 10,33 };
 		return vector<glm::ivec2> {lpos1, rpos1 };
@@ -332,4 +354,28 @@ vector<glm::ivec2> Player::buildHitBox()
 		glm::ivec2 rpos1 = posPlayer + glm::ivec2{ 20,63 };
 		return vector<glm::ivec2> {lpos1, rpos1 };
 	}
+}
+
+glm::ivec2 Player::getProjectileSpawn() {
+	if (sprite->animation() == MOVE_LEFT_AIM || sprite->animation() == STAND_LEFT)
+		return glm::ivec2{ -2, 32 };
+	else if (sprite->animation() == MOVE_RIGHT_AIM || sprite->animation() == STAND_RIGHT)
+		return glm::ivec2{ 18, 32 };
+	else if (sprite->animation() == AIM_UP_LOOK_LEFT)
+		return glm::ivec2{ 4, 18 };
+	else if (sprite->animation() == AIM_UP_LOOK_RIGHT)
+		return glm::ivec2{ 12, 18 };
+	else if (sprite->animation() == AIM_UP_WALK_LEFT)
+		return glm::ivec2{ 5, 28 };
+	else if (sprite->animation() == AIM_UP_WALK_RIGHT)
+		return glm::ivec2{ 11, 28 };
+	else if (sprite->animation() == AIM_DOWN_WALK_LEFT)
+		return glm::ivec2{ 5, 52 };
+	else if (sprite->animation() == AIM_DOWN_WALK_RIGHT)
+		return glm::ivec2{ 28, 52 };
+	else if (sprite->animation() == CROUCH_LOOK_LEFT)
+		return glm::ivec2{ -4, 46 };
+	else if (sprite->animation() == CROUCH_LOOK_RIGHT)
+		return glm::ivec2{ 21, 46 };
+	else return glm::ivec2{ 10, 46 };
 }

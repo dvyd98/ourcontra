@@ -8,17 +8,11 @@
 
 enum upgradeRank
 {
-	RANK1, RANK2, RANK3, FLAMETHROWER
-};
-
-enum PlayerAnims
-{
-	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, MOVE_LEFT_AIM, MOVE_RIGHT_AIM, AIM_UP_LOOK_LEFT, AIM_UP_LOOK_RIGHT, CROUCH_LOOK_LEFT,
-	CROUCH_LOOK_RIGHT, AIM_UP_WALK_RIGHT, AIM_UP_WALK_LEFT, AIM_DOWN_WALK_RIGHT, AIM_DOWN_WALK_LEFT, AIRBONE_LEFT, AIRBONE_RIGHT
+	RIFLEMAN, RANK1, RANK2, RANK3, FLAMETHROWER
 };
 
 
-void Projectile::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int dir, const glm::ivec2 projDir)
+void Projectile::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int speed, const glm::ivec2 projDir)
 {
 	rank = RANK1;
 	damage = 1;
@@ -30,15 +24,18 @@ void Projectile::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram
 	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.1f, 0.1f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(100);
 
+	sprite->setAnimationSpeed(RIFLEMAN, 8);
+	sprite->addKeyframe(RIFLEMAN, glm::vec2(0.1f, 0.0f));
+
 	sprite->setAnimationSpeed(RANK1, 8);
 	sprite->addKeyframe(RANK1, glm::vec2(0.0f, 0.0f));
 
 	sprite->setAnimationSpeed(RANK2, 8);
 	sprite->addKeyframe(RANK2, glm::vec2(0.0f, 0.1f));
 
-	sprite->changeAnimation(0);
+	sprite->changeAnimation(1);
 	tileMapDispl = tileMapPos;
-	newPos = projDir,
+	newPos = projDir * speed,
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posProjectile.x), float(tileMapDispl.y + posProjectile.y)));
 
 }
