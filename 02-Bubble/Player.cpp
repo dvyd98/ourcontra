@@ -288,7 +288,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 				posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
 				glm::ivec2 aux = posPlayer + glm::ivec2(8, 44);
 				if (jumpAngle > 90)
-					bJumping = !map->collisionMoveDown(aux, glm::ivec2(12, 20), &posPlayer.y);
+					bJumping = !map->collisionMoveDown(aux, glm::ivec2(12, 20), &aux.y);
 				posPlayer = aux + glm::ivec2(-8, -44);
 			}
 		}

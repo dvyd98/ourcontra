@@ -22,6 +22,8 @@ public:
 	bool decreaseLife(int dmg);
 	glm::ivec2 getPos();
 	string getType();
+
+	Sprite *sprite;
 	
 
 protected:
@@ -33,7 +35,6 @@ protected:
 	glm::ivec2 tileMapDispl, posEnemy;
 	int jumpAngle, startY;
 	Texture spritesheet;
-	Sprite *sprite;
 	TileMap *map;
 
 };

@@ -8,6 +8,11 @@ enum PlayerAnims
 	CROUCH_LOOK_RIGHT, AIM_UP_WALK_RIGHT, AIM_UP_WALK_LEFT, AIM_DOWN_WALK_RIGHT, AIM_DOWN_WALK_LEFT, AIRBONE_LEFT, AIRBONE_RIGHT
 };
 
+enum BridgeAnims
+{
+	EDGE_LEFT, EDGE_RIGHT, DESTROYED_LEFT, DESTROYED_RIGHT, CENTRAL
+};
+
 enum States
 {
 	ALIVE, DEAD, DYING
@@ -43,12 +48,31 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 			aux->setTileMap(map);
 			enemies->push_back(aux);
 		}
-		else if (enemyType  == BRIDGE)
+		else if (enemyType  == BRIDGE_EDGE_LEFT)
 		{
 			Enemy *bridgeboy = new Bridge();
 			bridgeboy->init(tilemap, texProgram);
 			bridgeboy->setPosition(glm::vec2(map->getEnemy(i).x * map->getTileSize(), map->getEnemy(i).y * map->getTileSize()));
 			bridgeboy->setTileMap(map);
+			bridgeboy->sprite->changeAnimation(EDGE_LEFT);
+			enemies->push_back(bridgeboy);
+		}
+		else if (enemyType == BRIDGE_EDGE_RIGHT)
+		{
+			Enemy *bridgeboy = new Bridge();
+			bridgeboy->init(tilemap, texProgram);
+			bridgeboy->setPosition(glm::vec2(map->getEnemy(i).x * map->getTileSize(), map->getEnemy(i).y * map->getTileSize()));
+			bridgeboy->setTileMap(map);
+			bridgeboy->sprite->changeAnimation(EDGE_RIGHT);
+			enemies->push_back(bridgeboy);
+		}
+		else if (enemyType == BRIDGE_CENTRAL)
+		{
+			Enemy *bridgeboy = new Bridge();
+			bridgeboy->init(tilemap, texProgram);
+			bridgeboy->setPosition(glm::vec2(map->getEnemy(i).x * map->getTileSize(), map->getEnemy(i).y * map->getTileSize()));
+			bridgeboy->setTileMap(map);
+			bridgeboy->sprite->changeAnimation(CENTRAL);
 			enemies->push_back(bridgeboy);
 		}
 	}
