@@ -46,9 +46,9 @@ void Bridge::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(EDGE_LEFT, glm::vec2(0.2f, 0.0f));
 
 	sprite->setAnimationSpeed(EDGE_RIGHT, 8);
-	sprite->addKeyframe(EDGE_RIGHT, glm::vec2(0.4f, 0.0f));
-	sprite->addKeyframe(EDGE_RIGHT, glm::vec2(0.5f, 0.0f));
 	sprite->addKeyframe(EDGE_RIGHT, glm::vec2(0.6f, 0.0f));
+	sprite->addKeyframe(EDGE_RIGHT, glm::vec2(0.5f, 0.0f));
+	sprite->addKeyframe(EDGE_RIGHT, glm::vec2(0.4f, 0.0f));
 
 	sprite->setAnimationSpeed(CENTRAL, 8);
 	sprite->addKeyframe(CENTRAL, glm::vec2(0.0f, 0.1f));

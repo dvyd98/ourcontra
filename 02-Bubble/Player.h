@@ -26,11 +26,14 @@ public:
 	glm::ivec2 getPos();
 	glm::ivec2 getProjectileSpawn();
 
+	bool isJumping();
+
 	vector<glm::ivec2> buildHitBox();
 
 	int lookingTo;
 	int life;
 	int state;
+	glm::ivec2 posPlayer;
 	Sprite *sprite;
 	
 private:
@@ -38,7 +41,7 @@ private:
 	bool bShooting;
 	
 	int currentKeyframe;
-	glm::ivec2 tileMapDispl, posPlayer;
+	glm::ivec2 tileMapDispl;
 	int jumpAngle, startY;
 	Texture spritesheet;
 	TileMap *map;

@@ -11,7 +11,7 @@ public:
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
 	void update(int deltaTime);
 	vector<glm::ivec2> buildHitBox();
-
+	string bridgeType;
 };
 
 

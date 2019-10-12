@@ -379,3 +379,8 @@ glm::ivec2 Player::getProjectileSpawn() {
 		return glm::ivec2{ 21, 46 };
 	else return glm::ivec2{ 10, 46 };
 }
+
+bool Player::isJumping()
+{
+	return bJumping;
+}
