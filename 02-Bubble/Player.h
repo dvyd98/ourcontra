@@ -17,18 +17,20 @@ class Player
 
 public:
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
-	void update(int deltaTime, float left);
+	void update(int deltaTime, float left, float right, float bottom, float top);
 	void render();
 	
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 
 	glm::ivec2 getPos();
+	glm::ivec2 getProjectileSpawn();
 
 	vector<glm::ivec2> buildHitBox();
 
 	int lookingTo;
 	int life;
+	int state;
 	Sprite *sprite;
 	
 private:

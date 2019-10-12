@@ -12,7 +12,7 @@
 #define GLUT_KEY_SPACEBAR 32
 #define PLAYER_VEL 2
 
-enum State
+enum States
 {
 	ALIVE, DEAD, DYING
 };

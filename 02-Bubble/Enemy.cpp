@@ -5,9 +5,9 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 
-enum State
+enum States
 {
-	ALIVE, DEAD
+	ALIVE, DEAD, DYING
 };
 
 Enemy::Enemy() 

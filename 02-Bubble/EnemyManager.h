@@ -23,7 +23,7 @@ public:
 	bool isOffScreen(Enemy &pj);
 	bool isOffScreen(Projectile &pj);
 	void spawnProjectilePlayer(glm::ivec2 position);
-	void spawnProjectileRifleman(glm::ivec2 position, Enemy* badguy);
+	void spawnProjectileRifleman(glm::ivec2 position, Rifleman* badguy);
 	void despawnOffScreenProjectiles();
 	void despawnOffScreenEnemies();
 	bool areTouching(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lpos2, glm::ivec2 rpos2);

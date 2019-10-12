@@ -118,7 +118,7 @@ void Scene::updateLvl1(int deltaTime) {
 		right += PLAYER_VEL;
 		left += PLAYER_VEL;
 	}
-	player->update(deltaTime, left);
+	player->update(deltaTime, left, right, bottom, top);
 
 	enemymanager->update(deltaTime, left, right, bottom, top);
 	
@@ -189,7 +189,7 @@ void Scene::render()
 void Scene::initEntitiesLvl1() {
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+	player->setPosition(glm::vec2(3 * map->getTileSize(), 0 * map->getTileSize()));
 	player->setTileMap(map);
 
 	enemymanager = new EnemyManager();

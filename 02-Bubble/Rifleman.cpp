@@ -11,7 +11,7 @@
 #define GLUT_KEY_SPACEBAR 32
 #define PLAYER_VEL 2
 
-enum State
+enum States
 {
 	ALIVE, DEAD, DYING
 };
@@ -75,6 +75,12 @@ void Rifleman::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 void Rifleman::update(int deltaTime)
 {
 	sprite->update(deltaTime);
+	if (sprite->animation() != AIM_LEFT && projDir == glm::ivec2{ -1,0 }) sprite->changeAnimation(AIM_LEFT);
+	else if (sprite->animation() != AIM_RIGHT && projDir == glm::ivec2{ 1,0 }) sprite->changeAnimation(AIM_RIGHT);
+	else if (sprite->animation() != AIM_UP_LOOK_LEFT && projDir == glm::ivec2{ -1,-1 }) sprite->changeAnimation(AIM_UP_LOOK_LEFT);
+	else if (sprite->animation() != AIM_UP_LOOK_RIGHT && projDir == glm::ivec2{ 1,-1 }) sprite->changeAnimation(AIM_UP_LOOK_RIGHT);
+	else if (projDir == glm::ivec2{ -1,1 }) sprite->changeAnimation(AIM_DOWN_LOOK_LEFT);
+	else if (projDir == glm::ivec2{ 1,1 }) sprite->changeAnimation(AIM_DOWN_LOOK_RIGHT);
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
@@ -84,4 +90,20 @@ vector<glm::ivec2> Rifleman::buildHitBox()
 	glm::ivec2 lpos1 = posEnemy + glm::ivec2{ 8,8 };
 	glm::ivec2 rpos1 = lpos1 + glm::ivec2{ 16,24 };
 	return vector<glm::ivec2> {lpos1, rpos1 };
+}
+
+glm::ivec2 Rifleman::getProjectileSpawn()
+{
+	if (sprite->animation() == AIM_LEFT)
+		return glm::ivec2{ -4, 5 };
+	else if (sprite->animation() == AIM_RIGHT)
+		return glm::ivec2{ 18, 5 };
+	else if (sprite->animation() == AIM_UP_LOOK_LEFT)
+		return glm::ivec2{ 5, 0 };
+	else if (sprite->animation() == AIM_UP_LOOK_RIGHT)
+		return glm::ivec2{ 27, 0 };
+	else if (sprite->animation() == AIM_DOWN_LOOK_LEFT)
+		return glm::ivec2{ -4, 16 };
+	else if (sprite->animation() == AIM_DOWN_LOOK_RIGHT)
+		return glm::ivec2{ 20, 16 };
 }
