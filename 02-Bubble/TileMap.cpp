@@ -8,7 +8,7 @@ using namespace std;
 enum BACKGROUND_TILES_LVL1 {
 	BLACK, GRASS1, GRASS2, ROCK1, ROCK2, BRIDGE1, BRIDGE2, BLANK1, PALM_TOP1, PALM_TOP2, BLANK2, PALM_TOP3, BLANK3, PALM_TOP4, STAR1, STAR2,
 	BLUE, ROCK3, ROCK4, ROCK5, ROCK6, BRIDGE3, BRIDGE4, BRIDGE5, PALM_BOT1, PALM_BOT2, PALM_BOT3, PALM_BOT4, PALM_BOT5, PALM_BOT6, START3, STAR4,
-	BLANK4, ROCK7, ROCK8, SEA1, SEA2, SEA3, SEA4, SEA5, SEA6, SEA7, SEA8, SEA9, BLANK5, BLANK6,
+	BLANK4, ROCK7, ROCK8, SEA1, SEA2, SEA3, SEA4, SEA5, SEA6, SEA7, SEA8, SEA9, SEA10, SEA11, BLANK5, BLANK6,
 	JUNGLE1, JUNGLE2, BLANK7, JUNGLE3, BLANK8, BLANK9, BLANK10, BLANK11, M1, M2, M3, M4, BLANK12, BLANK13, BLANK14, BLANK15,
 	JUNGLE4, JUNGLE5, BLANK16, JUGNLE6, JUNGLE7, BLANK17, BLANK18, M5, M6, M7, M8, M9, M10, BLANK19, BLANK20, BLANK21,
 	JUNLE8, JUNGLE10, BLANK22, BLANK23, BLANK24, BLANK25, BLANK26, M11, M12, M13, M14, BLANK27, M15, BLANK28, BLANK, BLANK29,
@@ -65,13 +65,9 @@ bool TileMap::loadLevel(const string &levelFile)
 	getline(fin, line);
 	sstream.str(line);
 	sstream >> typeScene;
-	if (typeScene == "TILEMAP") {
-		loadTileMap();
-	}
-	if (typeScene == "MENU") {
-		loadMenu();
-	}
-	
+	if (typeScene == "LEVEL1") loadTileMap();
+	if (typeScene == "LEVEL2") loadLevel2();
+	if (typeScene == "MENU") loadMenu();
 	
 	return true;
 }
@@ -121,7 +117,6 @@ void TileMap::loadTileMap() {
 		(*enemies)[i].y = y;
 		(*enemies)[i].type = type;
 	}
-
 	map = new int[mapSize.x * mapSize.y];
 	for (int j = 0; j<mapSize.y; j++)
 	{
@@ -146,6 +141,16 @@ void TileMap::loadTileMap() {
 			case 'c': map[j*mapSize.x + i] = BRIDGE3; break;
 			case 'v': map[j*mapSize.x + i] = BRIDGE4; break;
 			case 'b': map[j*mapSize.x + i] = BRIDGE5; break;
+			case 'n': map[j*mapSize.x + i] = SEA1; break;
+			case 'm': map[j*mapSize.x + i] = SEA2; break;
+			case 'j': map[j*mapSize.x + i] = SEA3; break;
+			case 'u': map[j*mapSize.x + i] = SEA6; break;
+			case 'i': map[j*mapSize.x + i] = SEA10; break;
+			case 'k': map[j*mapSize.x + i] = SEA4; break;
+			case 'o': map[j*mapSize.x + i] = SEA8; break;
+			case 'l': map[j*mapSize.x + i] = SEA9; break;
+			case 'ñ': map[j*mapSize.x + i] = SEA7; break;
+			case 'p': map[j*mapSize.x + i] = SEA5; break;
 			}
 		}
 		fin.get(tile);
@@ -156,6 +161,36 @@ void TileMap::loadTileMap() {
 
 	fin.close();
 }
+
+void TileMap::loadLevel2() {
+	string line;
+	stringstream sstream;
+	string tilesheetFile;
+
+	getline(fin, line);
+	sstream.str(line);
+	sstream >> tilesheetFile;
+	tilesheet.loadFromFile(tilesheetFile, TEXTURE_PIXEL_FORMAT_RGBA);
+	tilesheet.setWrapS(GL_CLAMP_TO_EDGE);
+	tilesheet.setWrapT(GL_CLAMP_TO_EDGE);
+	tilesheet.setMinFilter(GL_NEAREST);
+	tilesheet.setMagFilter(GL_NEAREST);
+
+	map = new int[4];
+	map[0] = SLVL1;
+
+	mapSize.x = 1; mapSize.y = 1;
+	tileSize.x = 16 * 20;
+	tileSize.y = 16 * 15;
+	tilesheetSize.x = 6;
+	tilesheetSize.y = 1;
+	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
+	blockSize.x = 16 * 20;
+	blockSize.y = 16 * 15;
+
+	fin.close();
+}
+
 
 void TileMap::loadMenu() {
 	string line;
@@ -182,6 +217,8 @@ void TileMap::loadMenu() {
 	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
 	blockSize.x = 16 * 20;
 	blockSize.y = 16 * 15;
+
+	fin.close();
 }
 
 void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
@@ -277,7 +314,8 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 		if(map[y*mapSize.x + x] == GRASS1 || 
 			map[y*mapSize.x + x] == GRASS2 ||
 			map[y*mapSize.x + x] == BRIDGE1 ||
-			map[y*mapSize.x + x] == BRIDGE2)
+			map[y*mapSize.x + x] == BRIDGE2 ||
+			y > 13)
 		{
 			if(*posY - tileSize.y * y + size.y <= 4)
 			{

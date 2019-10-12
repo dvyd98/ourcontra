@@ -23,6 +23,10 @@ enum MENU_FRAMES {
 	MENU_1_PLAYER, MENU_1_PLAYER_BLINK, MENU_2_PLAYER, MENU_2_PLAYER_BLINK
 };
 
+enum LEVEL2_SUBLEVELS {
+	SLVL1, SLVL2, SLVL3, SLVL4, SLVL5, BOSS
+};
+
 struct infoEnemies {
 	int x; int y; enemyType type;
 };
@@ -60,6 +64,7 @@ private:
 	bool loadLevel(const string &levelFile);
 	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
 	void loadTileMap();
+	void loadLevel2();
 	void loadMenu();
 
 private:

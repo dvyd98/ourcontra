@@ -1,4 +1,4 @@
-TILEMAP
+LEVEL1
 205 16 							-- Size of tile map in tiles
 16 16 16 16						-- Tile size x y & block size
 images/background.png 			-- Tilesheet
@@ -18,8 +18,8 @@ images/background.png 			-- Tilesheet
 ..asasasasasasasasasasasasasasasasasasasasasasascvvvvvvbasasasasascvvvvvvbasasasasasasasasdfdfdfdfdfdfdfdfdfdfdfdfdfdfasasasasasasasdfdfdfdf++asas++++++++++asasdf++asas++++++++++++++++++++++asasasas+++++..
 ,,ererererqwqwqwerererererqwqwererererererererer,,,,,,,,ererererer,,,,,,,,ererererererererererererererqwqwqwqwqwqwqwerererererererererererqwqwqwer++qwqw++++ererer++erqwqwqwqwqw++++++++++qwqwererererqw+++..
 ,,dfdfdfdfasasasdfdfdfdfdfasasdfdfdfdfdfqwqwqwdf,,,,,,,,dfdfdfdfdf,,,,,,,,dfdfdfdfdfdfdfdfdfdfdfqwqwdfasasasasasasasdfdfdfdfdfdfdfdfdfqwdfasasasdf++asas++++dfdfqw++dfasasasasas++++++++++asasdfqwqwqwas+++..
-,2erererererererqwererqwererererererererzxzxzxer2,,,,,,2ererererer2,,,,,,2erererererererererererzxzxerererererererererererqwqwerqwqwerzxererererer++erqwqwqwererzx++erererererer++++qwqw++erererzxzxzxerqw+..
-,222222222dfdfdfasdfdfas22dfdf222222dfdfdfdfdf222,,,,,,222222222222,,,,,,22222dfdfdfdfdfdfdfdfdfdfdf22dfdfdfdfdfdfdfdfdfdfasasdfasasdfdfdfdfdfdfdf++dfasasasdfdfdf++dfdfdfdfdfdf++++asas++dfdfdfdfdfdfdfas+..
-,,,,,,,,,222222222qwqw222222222,,,,222444422222,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,2222222222222qwqwqw22222222222222qwqwqwqwqwqwerererererererererererer++qwererererqwer++ererererqwqwqw++erer++ererqwqwqwqwqwqwqwq
-,,,,,,,,,,,,,,,,,222222,,,,,,,,,,,,,,222222,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,22222222,,,,,,,,,,,,2222sasasasasdfdfdfdfdfdfdfdfdfdfdfdf++asdfdfdfdfasdf++dfdfdfdfasasas++dfdf++dfdfasasasasasasasa
+,uerererererererqwererqwererererererererzxzxzxerp,,,,,,uerererererp,,,,,,uerererererererererererzxzxerererererererererererqwqwerqwqwerzxererererer++erqwqwqwererzx++erererererer++++qwqw++erererzxzxzxerqw+..
+,jnmnmnmnidfdfdfasdfdfaslidfdflnmnmidfdfdfdfdflnk,,,,,,jnmnmnmnmnmk,,,,,,jnmnidfdfdfdfdfdfdfdfdfdfdflidfdfdfdfdfdfdfdfdfdfasasdfasasdfdfdfdfdfdfdf++dfasasasdfdfdf++dfdfdfdfdfdf++++asas++dfdfdfdfdfdfdfas+..
+,,,,,,,,,jnmnmnmnñqwqwonkjnmnmk,,,,jnñqwqwonmnk,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,jnmnmnmnmnmnñqwqwqwonmnkjnmnmnmnñqwqwqwqwqwqwerererererererererererer++qwererererqwer++ererererqwqwqw++erer++ererqwqwqwqwqwqwqwq
+,,,,,,,,,,,,,,,,,jnmnmk,,,,,,,,,,,,,,jnmnmk,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,jnmnmnmk,,,,,,,,,,,,jnmisasasasasdfdfdfdfdfdfdfdfdfdfdfdf++asdfdfdfdfasdf++dfdfdfdfasasas++dfdf++dfdfasasasasasasasa
 

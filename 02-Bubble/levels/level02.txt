@@ -1,9 +1,4 @@
-TILEMAP
-6 1 							-- Size of tile map in tiles
-256 240 256 240					-- Tile size x y & block size
+LEVEL2
 images/level2/level2tilesheet.png 			-- Tilesheet
-6 1							-- Number of tiles in tilesheet
-3				-- Number of enemies (x in tiles, y in tiles, type, lvl)
-16 5 Soldier 1
-19 5 Soldier 2
-23 5 Soldier 2
+0				-- Number of enemies (x in tiles, y in tiles, type, lvl)
+

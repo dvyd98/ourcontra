@@ -149,19 +149,22 @@ void Scene::changeToScene(int scene) {
 
 void Scene::godMode() {
 	if (Game::instance().getKey('1')) {
+		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
 		map = TileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		currentState = MENU;
 	}
 	if (Game::instance().getKey('2')) {
+		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
 		currentState = LVL1;
 		map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		initEntities();
 	}
 	if (Game::instance().getKey('3')) {
+		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
 		currentState = LVL2;
-		map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-
+		map = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	}
+	// TODO click posa flag immortal al personatge
 }
 
 void Scene::render()
@@ -176,7 +179,7 @@ void Scene::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
-	if (currentState == LVL1 || currentState == LVL2) {
+	if (currentState == LVL1/* || currentState == LVL2*/) {
 		player->render();
 		enemymanager->render();
 	}
