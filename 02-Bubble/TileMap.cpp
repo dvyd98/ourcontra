@@ -182,7 +182,7 @@ void TileMap::loadLevel2() {
 	mapSize.x = 1; mapSize.y = 1;
 	tileSize.x = 16 * 20;
 	tileSize.y = 16 * 15;
-	tilesheetSize.x = 6;
+	tilesheetSize.x = 5;
 	tilesheetSize.y = 1;
 	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
 	blockSize.x = 16 * 20;
@@ -190,7 +190,6 @@ void TileMap::loadLevel2() {
 
 	fin.close();
 }
-
 
 void TileMap::loadMenu() {
 	string line;

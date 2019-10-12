@@ -32,7 +32,8 @@ public:
 
 private:
 	void initShaders();
-	void initEntities();
+	void initEntitiesLvl1();
+	void initEntitiesLvl2();
 	void updateMenu(int deltaTime);
 	void updateLvl1(int deltaTime);
 	void updateLvl2(int deltaTime);

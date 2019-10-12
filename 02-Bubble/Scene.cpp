@@ -138,7 +138,7 @@ void Scene::changeToScene(int scene) {
 	case LVL1: {
 		// TODO animation de menu a lvl1
 		map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-		initEntities();
+		initEntitiesLvl1();
 		break;
 	}
 	case LVL2: {
@@ -157,12 +157,13 @@ void Scene::godMode() {
 		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
 		currentState = LVL1;
 		map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-		initEntities();
+		initEntitiesLvl1();
 	}
 	if (Game::instance().getKey('3')) {
 		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
 		currentState = LVL2;
 		map = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		initEntitiesLvl2();
 	}
 	// TODO click posa flag immortal al personatge
 }
@@ -179,13 +180,13 @@ void Scene::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
-	if (currentState == LVL1/* || currentState == LVL2*/) {
+	if (currentState == LVL1 || currentState == LVL2) {
 		player->render();
 		enemymanager->render();
 	}
 }
 
-void Scene::initEntities() {
+void Scene::initEntitiesLvl1() {
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
@@ -193,6 +194,17 @@ void Scene::initEntities() {
 
 	enemymanager = new EnemyManager();
 	enemymanager->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, map, player);
+
+}
+
+void Scene::initEntitiesLvl2() {
+	player = new Player();
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	player->setPosition(glm::vec2(0, 0));
+	player->setTileMap(map);
+
+	/*enemymanager = new EnemyManager();
+	enemymanager->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, map, player);*/
 
 }
 
