@@ -40,6 +40,10 @@ void Soldier::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	bJumping = false;
 	lookingTo = LOOKING_RIGHT;
 	spritesheet.loadFromFile("images/soldier.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
+	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
+	spritesheet.setMinFilter(GL_NEAREST);
+	spritesheet.setMagFilter(GL_NEAREST);
 	sprite = Sprite::createSprite(glm::ivec2(16, 32), glm::vec2(0.1f, 0.25f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(100);
 
@@ -146,6 +150,6 @@ void Soldier::update(int deltaTime)
 vector<glm::ivec2> Soldier::buildHitBox()
 {
 	glm::ivec2 lpos1 = posEnemy;
-	glm::ivec2 rpos1 = lpos1 + glm::ivec2{ 16,-32 };
+	glm::ivec2 rpos1 = lpos1 + glm::ivec2{ 16,32 };
 	return vector<glm::ivec2> {lpos1, rpos1 };
 }

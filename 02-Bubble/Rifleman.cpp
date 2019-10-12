@@ -38,6 +38,10 @@ void Rifleman::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	life = 1;
 	lookingTo = LOOKING_RIGHT;
 	spritesheet.loadFromFile("images/rifleman.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
+	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
+	spritesheet.setMinFilter(GL_NEAREST);
+	spritesheet.setMagFilter(GL_NEAREST);
 	sprite = Sprite::createSprite(glm::ivec2(32, 40), glm::vec2(0.1f, 0.20f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(100);
 
@@ -77,7 +81,7 @@ void Rifleman::update(int deltaTime)
 
 vector<glm::ivec2> Rifleman::buildHitBox()
 {
-	glm::ivec2 lpos1 = posEnemy + glm::ivec2{ 8,0 };
-	glm::ivec2 rpos1 = lpos1 + glm::ivec2{ 16,-32 };
+	glm::ivec2 lpos1 = posEnemy + glm::ivec2{ 8,8 };
+	glm::ivec2 rpos1 = lpos1 + glm::ivec2{ 16,24 };
 	return vector<glm::ivec2> {lpos1, rpos1 };
 }

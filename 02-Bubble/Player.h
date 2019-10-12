@@ -25,7 +25,10 @@ public:
 
 	glm::ivec2 getPos();
 
+	vector<glm::ivec2> buildHitBox();
+
 	int lookingTo;
+	int life;
 	Sprite *sprite;
 	
 private:

@@ -43,7 +43,7 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 	}
 	Enemy *test = new Rifleman();
 	test->init(tilemap, texProgram);
-	test->setPosition(glm::vec2(6 * map->getTileSize(), 3 * map->getTileSize()));
+	test->setPosition(glm::vec2(14 * map->getTileSize(), 1 * map->getTileSize()));
 	test->setTileMap(map);
 	enemies->push_back(test);
 }
@@ -62,7 +62,7 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 	list<Enemy*>::iterator it_enemy;
 	for (it_enemy = enemies->begin(); it_enemy != enemies->end(); ++it_enemy) {
 		(*it_enemy)->update(deltaTime);
-		if ((*it_enemy)->getType() == "rifleman") {
+		if ((*it_enemy)->getType() == "rifleman" && projlistRifleman->size() < 4) {
 			spawnProjectileRifleman(player->getPos(), *it_enemy);
 		}
 	}
@@ -141,13 +141,17 @@ void EnemyManager::spawnProjectileRifleman(glm::ivec2 position, Enemy* badguy)
 	projectile = new Projectile();
 	glm::ivec2 posEnemy = badguy->getPos();
 	glm::ivec2 newPos;
-	if (position.y < posEnemy.y) {
+	if (position.y + 30 < posEnemy.y - 40) {
 		if (position.x < posEnemy.x) newPos = glm::ivec2{ -6,-6 };
 		else newPos = glm::ivec2{ 6,-6 };
 	}
-	else {
+	else if (position.y + 30 > posEnemy.y + 40) {
 		if (position.x < posEnemy.x) newPos = glm::ivec2{ -6,6 };
 		else newPos = glm::ivec2{ 6,6 };
+	}
+	else {
+		if (position.x < posEnemy.x) newPos = glm::ivec2{ -6,0 };
+		else newPos = glm::ivec2{ 6,0 };
 	}
 	projectile->init(tilemap, texProgram, 0, newPos);
 	projectile->setPosition(glm::vec2(posEnemy.x, posEnemy.y + 26));
@@ -163,6 +167,12 @@ void EnemyManager::despawnOffScreenProjectiles()
 			it = projlist->erase(it);
 		else ++it;
 	}
+	it = projlistRifleman->begin();
+	while (it != projlistRifleman->end()) {
+		if (isOffScreen((*it)))
+			it = projlistRifleman->erase(it);
+		else ++it;
+	}
 }
 
 void EnemyManager::despawnOffScreenEnemies() {
@@ -174,10 +184,10 @@ void EnemyManager::despawnOffScreenEnemies() {
 	}
 }
 
-bool EnemyManager::areTouching(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lpos2, glm::ivec2 rpos2)
+bool EnemyManager::areTouching(glm::ivec2 obj1_left, glm::ivec2 obj1_right, glm::ivec2 obj2_left, glm::ivec2 obj2_right)
 {
-	if (lpos1.x > rpos2.x || lpos2.x > rpos1.x) return false;
-	if (lpos1.y < rpos2.y || lpos2.y < rpos1.y) return false;
+	if (obj1_left.x > obj2_right.x || obj2_left.x > obj1_right.x) return false;
+	if (obj1_left.y > obj2_right.y || obj2_left.y > obj1_right.y) return false;
 	return true;
 }
 
@@ -187,7 +197,7 @@ void EnemyManager::checkPhysics()
 	list<Enemy*>::iterator it_enemy;
 	list<Projectile>::iterator it_projec = projlist->begin();
 
-	while (it_projec != projlist->end()) {
+	while (it_projec != projlist->end()) { // our pew pew
 		if (isOffScreen((*it_projec)))
 			it_projec = projlist->erase(it_projec);
 		else {
@@ -205,6 +215,30 @@ void EnemyManager::checkPhysics()
 			if (shot) it_projec = projlist->erase(it_projec);
 			else ++it_projec;
 		}
+	}
+
+	it_projec = projlistRifleman->begin();
+	vector<glm::ivec2> boxPlayer = player->buildHitBox();
+	while (it_projec != projlistRifleman->end()) { // their pew pew
+		if (isOffScreen((*it_projec)))
+			it_projec = projlistRifleman->erase(it_projec);
+		else {
+			vector<glm::ivec2> box = it_projec->buildHitBox();
+			if (areTouching(boxPlayer[0], boxPlayer[1], box[0], box[1])) {
+				player->sprite->changeAnimation(14);
+			}
+			++it_projec;
+		}
+		
+	}
+
+	it_enemy = enemies->begin();
+	while (it_enemy != enemies->end()) {  // are we touching bad guys?
+		vector<glm::ivec2> boxEnemy = (*it_enemy)->buildHitBox();
+		if (areTouching(boxPlayer[0], boxPlayer[1], boxEnemy[0], boxEnemy[1])) {
+			player->sprite->changeAnimation(14);
+		}
+		++it_enemy;
 	}
 	
 }

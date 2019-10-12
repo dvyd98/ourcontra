@@ -29,7 +29,12 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	bJumping = false;
 	bShooting = false;
 	lookingTo = LOOKING_RIGHT;
+	life = 1;
 	spritesheet.loadFromFile("images/blueguy.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
+	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
+	spritesheet.setMinFilter(GL_NEAREST);
+	spritesheet.setMagFilter(GL_NEAREST);
 	sprite = Sprite::createSprite(glm::ivec2(32, 64), glm::vec2(0.1f, 0.1f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(100);
 	
@@ -255,10 +260,10 @@ void Player::update(int deltaTime, float left)
 			sprite->changeAnimation(STAND_LEFT);
 		else if (sprite->animation() == AIM_DOWN_WALK_RIGHT)
 			sprite->changeAnimation(STAND_RIGHT);
-		else if (sprite->animation() == AIRBONE_LEFT && !bJumping)
+		/*else if (sprite->animation() == AIRBONE_LEFT && !bJumping)
 			sprite->changeAnimation(STAND_LEFT);
 		else if (sprite->animation() == AIRBONE_RIGHT && !bJumping)
-			sprite->changeAnimation(STAND_RIGHT);
+			sprite->changeAnimation(STAND_RIGHT);*/
 
 	}
 	
@@ -315,4 +320,16 @@ glm::ivec2 Player::getPos()
 	return posPlayer;
 }
 
-
+vector<glm::ivec2> Player::buildHitBox()
+{
+	if (!bJumping) {
+		glm::ivec2 lpos1 = posPlayer + glm::ivec2{ 10,30 };
+		glm::ivec2 rpos1 = lpos1 + glm::ivec2{ 10,33 };
+		return vector<glm::ivec2> {lpos1, rpos1 };
+	}
+	else {
+		glm::ivec2 lpos1 = posPlayer + glm::ivec2{ 6,46 };
+		glm::ivec2 rpos1 = posPlayer + glm::ivec2{ 20,63 };
+		return vector<glm::ivec2> {lpos1, rpos1 };
+	}
+}
