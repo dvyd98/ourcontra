@@ -24,7 +24,8 @@ enum MENU_FRAMES {
 };
 
 enum LEVEL2_SUBLEVELS {
-	SLVL1, SLVL2, SLVL3, SLVL4, SLVL5, BOSS
+	SLVL1, SLVL3, SLVL4, SLVL5, BOSS,
+	ANIM1, ANIM2, ANIM3, ANIM4
 };
 
 struct infoEnemies {
@@ -58,7 +59,7 @@ public:
 
 	// funcions de menu
 	void toggleFrame(const glm::vec2 &minCoords, ShaderProgram &program, int frame);
-	int getMenuFrame() { return map[0]; }
+	int getFrame() { return map[0]; }
 
 private:
 	bool loadLevel(const string &levelFile);
@@ -66,6 +67,7 @@ private:
 	void loadTileMap();
 	void loadLevel2();
 	void loadMenu();
+	bool bottomIsSea(const int y, const int x) const;
 
 private:
 	GLuint vao;
