@@ -38,6 +38,7 @@ private:
 	void updateMenu(int deltaTime);
 	void updateLvl1(int deltaTime);
 	void updateLvl2(int deltaTime);
+	void lvl2AnimationDoor(int deltaTime);
 	void changeToScene(int scene);
 	void godMode();
 
@@ -53,10 +54,10 @@ private:
 
 	int currentState;
 
-	int selectDelay;
+	int selectDelay, lvl2Delay;
 	bool onePlayer;
 
-	int blinks, blinkAnimation, subLevelAnimation, subLevelAnimationFrame, lvl2Frame;
+	int blinks, blinkAnimation;
 
 	int subLvl;
 

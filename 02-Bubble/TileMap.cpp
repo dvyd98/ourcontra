@@ -344,8 +344,11 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 		}
 		if (mapSize.x == 1 && pos.y > 160)
 		{
-			*posY = 160;
-			return true;
+			if (map[0] == BOSS) {
+				if (pos.y > 180) *posY = 180;
+			}
+			else *posY = 160;
+				return true;
 		}
 	}
 	

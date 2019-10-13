@@ -20,8 +20,7 @@
 #define SELECT_DELAY 8
 #define BLINK_ANIMATION_DURATION 10
 #define BLINKS 6
-#define LVL2_ANIMATION_DURATION 50
-#define LVL2_ANIMATION_FRAME 5
+#define LVL2_ANIMATION_DELAY 8
 
 
 Scene::Scene()
@@ -53,6 +52,7 @@ void Scene::init()
 
 	currentTime = 0.0f;
 	selectDelay = SELECT_DELAY;
+	lvl2Delay = LVL2_ANIMATION_DELAY;
 	onePlayer = true;
 }
 
@@ -91,35 +91,7 @@ void Scene::update(int deltaTime)
 	case LVL1: updateLvl1(deltaTime); break;
 	case LVL2: updateLvl2(deltaTime); break;
 	case LVL2_ANIMATION: {
-		if (--subLevelAnimation == 0 && lvl2Frame-- > 0) {
-			switch (map->getFrame()) {
-			case SLVL1: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM1); break;
-			case SLVL3: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM1); break;
-			case SLVL4: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM1); break;
-			case SLVL5: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM1); break;
-			case BOSS: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM1); break;
-
-			case ANIM1: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM2); break;
-			case ANIM2: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM3); break;
-			case ANIM3: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM4); break;
-			case ANIM4: {
-				switch (++subLvl) {
-				case 0:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, SLVL1); break;
-				case 1:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, SLVL1); break;
-				case 2:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, SLVL3); break;
-				case 3:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, SLVL4); break;
-				case 4:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, SLVL5); break;
-				case 5:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, BOSS); break;
-				}
-				break;
-			}
-			}
-			subLevelAnimation = LVL2_ANIMATION_DURATION;
-		}
-		else if (lvl2Frame == 0) {
-			currentState = LVL2;
-		}
-		break;
+		lvl2AnimationDoor(deltaTime); break;
 	}
 	}
 		
@@ -154,7 +126,6 @@ void Scene::updateLvl1(int deltaTime) {
 	enemymanager->update(deltaTime, left, right, bottom, top);
 	player->update(deltaTime, left, right, bottom, top);
 	
-	
 }
 
 void Scene::updateLvl2(int deltaTime) {
@@ -163,10 +134,43 @@ void Scene::updateLvl2(int deltaTime) {
 
 	enemymanager->update(deltaTime, left, right, bottom, top);
 
-	if (Game::instance().getKey('x')) {
+	if (Game::instance().getSpecialKey(GLUT_KEY_UP)) {
 		currentState = LVL2_ANIMATION;
-		subLevelAnimation = LVL2_ANIMATION_DURATION;
-		lvl2Frame = LVL2_ANIMATION_FRAME;
+	}
+}
+
+void Scene::lvl2AnimationDoor(int deltaTime) {
+	player->update(deltaTime, left, right, bottom, top);
+	if (--lvl2Delay == 0) {
+		if (Game::instance().getSpecialKey(GLUT_KEY_UP)) {
+			switch (map->getFrame()) {
+			case SLVL1: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM1); break;
+			case SLVL3: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM1); break;
+			case SLVL4: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM1); break;
+			case SLVL5: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM1); break;
+			
+			case ANIM1: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM2); break;
+			case ANIM2: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM3); break;
+			case ANIM3: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM4); break;
+			case ANIM4: {
+				switch (++subLvl) {
+				case 0:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, SLVL1); break;
+				case 1:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, SLVL1); break;
+				case 2:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, SLVL3); break;
+				case 3:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, SLVL4); break;
+				case 4:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, SLVL5); break;
+				case 5: {
+					map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, BOSS); 
+					player->setPosition(glm::vec2(player->getPos().x, 200));
+					break;
+				}
+				}
+				currentState = LVL2;
+				break;
+			}
+			}
+		}
+		lvl2Delay = LVL2_ANIMATION_DELAY;
 	}
 }
 
@@ -206,6 +210,7 @@ void Scene::godMode() {
 	if (Game::instance().getKey('3')) {
 		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
 		currentState = LVL2;
+		subLvl = 0;
 		map = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		initEntitiesLvl2();
 	}
@@ -224,7 +229,7 @@ void Scene::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
-	if (currentState == LVL1 || currentState == LVL2) {
+	if (currentState == LVL1 || currentState == LVL2 || currentState == LVL2_ANIMATION) {
 		player->render();
 		enemymanager->render();
 	}
