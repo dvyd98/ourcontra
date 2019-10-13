@@ -11,8 +11,8 @@ enum BACKGROUND_TILES_LVL1 {
 	BLANK4, ROCK7, ROCK8, SEA1, SEA2, SEA3, SEA4, SEA5, SEA6, SEA7, SEA8, SEA9, SEA10, SEA11, BLANK5, BLANK6,
 	JUNGLE1, JUNGLE2, BLANK7, JUNGLE3, BLANK8, BLANK9, BLANK10, BLANK11, M1, M2, M3, M4, BLANK12, BLANK13, BLANK14, BLANK15,
 	JUNGLE4, JUNGLE5, BLANK16, JUGNLE6, JUNGLE7, BLANK17, BLANK18, M5, M6, M7, M8, M9, M10, BLANK19, BLANK20, BLANK21,
-	JUNLE8, JUNGLE10, BLANK22, BLANK23, BLANK24, BLANK25, BLANK26, M11, M12, M13, M14, BLANK27, M15, BLANK28, BLANK, BLANK29,
-	JUNGLE11, JUNGLE12
+	JUNGLE8, JUNGLE9, BLANK22, BLANK23, BLANK24, BLANK25, BLANK26, M11, M12, M13, M14, BLANK27, M15, BLANK28, BLANK, BLANK29,
+	JUNGLE10, JUNGLE11
 };
 
 
@@ -153,6 +153,17 @@ void TileMap::loadTileMap() {
 			case 'l': map[j*mapSize.x + i] = SEA9; break;
 			case 'ñ': map[j*mapSize.x + i] = SEA7; break;
 			case 'p': map[j*mapSize.x + i] = SEA5; break;
+			case '+': map[j*mapSize.x + i] = JUNGLE8; break;
+			case '-': map[j*mapSize.x + i] = JUNGLE9; break;
+			case '1': map[j*mapSize.x + i] = JUNGLE10; break;
+			case '2': map[j*mapSize.x + i] = JUNGLE11; break;
+			case '3': map[j*mapSize.x + i] = PALM_BOT1; break;
+			case '4': map[j*mapSize.x + i] = PALM_BOT2; break;
+			case '5': map[j*mapSize.x + i] = PALM_BOT5; break;
+			case '6': map[j*mapSize.x + i] = PALM_BOT6; break;
+			case '7': map[j*mapSize.x + i] = PALM_TOP1; break;
+			case '8': map[j*mapSize.x + i] = PALM_TOP2; break;
+			case '9': map[j*mapSize.x + i] = PALM_TOP4; break;
 			}
 		}
 		fin.get(tile);
@@ -305,7 +316,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 
 
 bool TileMap::bottomIsSea(const int x, const int y) const {
-	return (map[y*mapSize.x + x] == SEA1 || map[y*mapSize.x + x] == SEA2 || map[y*mapSize.x + x] == SEA3 || map[y*mapSize.x + x] == SEA4 || map[y*mapSize.x + x] == SEA5 || map[y*mapSize.x + x] == SEA6 || map[y*mapSize.x + x] == SEA7 || map[y*mapSize.x + x] == SEA8 || map[y*mapSize.x + x] == SEA9 || map[y*mapSize.x + x] == SEA10 || map[y*mapSize.x + x] == SEA11);
+	return y == 13 && (map[y*mapSize.x + x] == SEA1 || map[y*mapSize.x + x] == SEA2 || map[y*mapSize.x + x] == SEA3 || map[y*mapSize.x + x] == SEA4 || map[y*mapSize.x + x] == SEA5 || map[y*mapSize.x + x] == SEA6 || map[y*mapSize.x + x] == SEA7 || map[y*mapSize.x + x] == SEA8 || map[y*mapSize.x + x] == SEA9 || map[y*mapSize.x + x] == SEA10 || map[y*mapSize.x + x] == SEA11);
 }
 
 

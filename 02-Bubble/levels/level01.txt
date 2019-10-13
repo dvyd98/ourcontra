@@ -16,18 +16,18 @@ images/background.png 			-- Tilesheet
 70 7 Bridge_central
 72 7 Bridge_right
 .............................................................................................................................................................................................................
-......................................................................................+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++....
-......................................................................................++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++...
-......................................................................................+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++..
-......................................................................................+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++..
-......................................................................................qwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqw++++++++++qwqwqwqwqw++++++++++++++++++qwqw+++++++++++++++++++++++++++++++++++++++++..
-......................................................................................asasasasasasasasasasasasasasasasas++++++++++asasasasas++++++++++++++++++asas+++++++++++++++++++++++++++++++++++++++++..
-..qwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqw........qwqwqwqwqw........qwqwqwqwqwqwqwqwererererererererererererererqwqwqwqwqwqwqwerererer++qwqw++++++++++qwqwer++qwqw++++++++++++++++++++++qwqwqwqw+++++..
-..asasasasasasasasasasasasasasasasasasasasasasas........asasasasas........asasasasasasasasdfdfdfdfdfdfdfdfdfdfdfdfdfdfasasasasasasasdfdfdfdf++asas++++++++++asasdf++asas++++++++++++++++++++++asasasas+++++..
-,,ererererqwqwqwerererererqwqwererererererererer,,,,,,,,ererererer,,,,,,,,ererererererererererererererqwqwqwqwqwqwqwerererererererererererqwqwqwer++qwqw++++ererer++erqwqwqwqwqw++++++++++qwqwererererqw+++..
-,,dfdfdfdfasasasdfdfdfdfdfasasdfdfdfdfdfqwqwqwdf,,,,,,,,dfdfdfdfdf,,,,,,,,dfdfdfdfdfdfdfdfdfdfdfqwqwdfasasasasasasasdfdfdfdfdfdfdfdfdfqwdfasasasdf++asas++++dfdfqw++dfasasasasas++++++++++asasdfqwqwqwas+++..
-,uerererererererqwererqwererererererererzxzxzxerp,,,,,,uerererererp,,,,,,uerererererererererererzxzxerererererererererererqwqwerqwqwerzxererererer++erqwqwqwererzx++erererererer++++qwqw++erererzxzxzxerqw+..
-,jnmnmnmnidfdfdfasdfdfaslidfdflnmnmidfdfdfdfdflnk,,,,,,jnmnmnmnmnmk,,,,,,jnmnidfdfdfdfdfdfdfdfdfdfdflidfdfdfdfdfdfdfdfdfdfasasdfasasdfdfdfdfdfdfdf++dfasasasdfdfdf++dfdfdfdfdfdf++++asas++dfdfdfdfdfdfdfas+..
-,,,,,,,,,jnmnmnmnñqwqwonkjnmnmk,,,,jnñqwqwonmnk,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,jnmnmnmnmnmnñqwqwqwonmnkjnmnmnmnñqwqwqwqwqwqwerererererererererererer++qwererererqwer++ererererqwqwqw++erer++ererqwqwqwqwqwqwqwq
-,,,,,,,,,,,,,,,,,jnmnmk,,,,,,,,,,,,,,jnmnmk,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,jnmnmnmk,,,,,,,,,,,,jnmisasasasasdfdfdfdfdfdfdfdfdfdfdfdf++asdfdfdfdfasdf++dfdfdfdfasasas++dfdf++dfdfasasasasasasasa
+......................................................................................+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+....
+......................................................................................+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-...
+......................................................................................+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+..
+......................................................................................1212121212121212121212121212121212+-+-+-+-+-1212121212+-+-+-+-+-+-+-+-+-1212+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+..
+..7889788978897889788978897889788978897889788889........7889788889........788978897889qwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqw+-+-+-+-+-qwqwqwqwqw+-+-+-+-+-+-+-+-+-qwqw+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+..
+..3456345634563456345634563456345634563456344556........3456344556........345634563456asasasasasasasasasasasasasasasasas1212121212asasasasas+-1212+-+-+-+-+-12asas+-1212+-+-+-+-+-+-+-+-+-+-+-12121212+-+-+..
+..qwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqw........qwqwqwqwqw........qwqwqwqwqwqwqwqwererererererererererererererqwqwqwqwqwqwqwerererer+-qwqw+-+-+-+-+-qwqwer+-qwqw+-+-+-+-+-+-+-+-+-+-+-qwqwqwqw+-+-+..
+..asasasasasasasasasasasasasasasasasasasasasasas........asasasasas........asasasasasasasasdfdfdfdfdfdfdfdfdfdfdfdfdfdfasasasasasasasdfdfdfdf12asas+-1212+-+-asasdf+-asas12121212+-+-+-+-+-1212asasasas12+-+..
+,,ererererqwqwqwerererererqwqwererererererererer,,,,,,,,ererererer,,,,,,,,ererererererererererererererqwqwqwqwqwqwqwerererererererererererqwqwqwer+-qwqw+-+-ererer+-erqwqwqwqwqw+-+-+-+-+-qwqwererererqw+-+..
+,,dfdfdfdfasasasdfdfdfdfdfasasdfdfdfdfdfqwqwqwdf,,,,,,,,dfdfdfdfdf,,,,,,,,dfdfdfdfdfdfdfdfdfdfdfqwqwdfasasasasasasasdfdfdfdfdfdfdfdfdfqwdfasasasdf+-asas1212dfdfqw+-dfasasasasas+-+-1212+-asasdfqwqwqwas12+..
+,uerererererererqwererqwererererererererzxzxzxerp,,,,,,uerererererp,,,,,,uerererererererererererzxzxerererererererererererqwqwerqwqwerzxererererer+-erqwqwqwererzx+-erererererer+-+-qwqw+-erererzxzxzxerqw+..
+,jnmnmnmnidfdfdfasdfdfaslidfdflnmnmidfdfdfdfdflnk,,,,,,jnmnmnmnmnmk,,,,,,jnmnidfdfdfdfdfdfdfdfdfdfdflidfdfdfdfdfdfdfdfdfdfasasdfasasdfdfdfdfdfdfdf+-dfasasasdfdfdf+-dfdfdfdfdfdf12+-asas+-dfdfdfdfdfdfdfas1..
+,,,,,,,,,jnmnmnmnñqwqwonkjnmnmk,,,,jnñqwqwonmnk,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,jnmnmnmnmnmnñqwqwqwonmnkjnmnmnmnñqwqwqwqwqwqwerererererererererererer+-qwererererqwer+-ererererqwqwqw+-erer+-ererqwqwqwqwqwqwqwq
+,,,,,,,,,,,,,,,,,jnmnmk,,,,,,,,,,,,,,jnmnmk,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,jnmnmnmk,,,,,,,,,,,,jnmisasasasasdfdfdfdfdfdfdfdfdfdfdfdf+-asdfdfdfdfasdf+-dfdfdfdfasasas+-dfdf+-dfdfasasasasasasasa
 
