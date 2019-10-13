@@ -178,21 +178,20 @@ void TileMap::loadLevel2() {
 	tilesheet.setMinFilter(GL_NEAREST);
 	tilesheet.setMagFilter(GL_NEAREST);
 
-	map = new int[4];
+	map = new int[1];
 	map[0] = SLVL1;
 
 	mapSize.x = 1; mapSize.y = 1;
 	tileSize.x = 16 * 20;
 	tileSize.y = 16 * 15;
-	tilesheetSize.x = 6;
-	tilesheetSize.y = 1;
+	tilesheetSize.x = 5;
+	tilesheetSize.y = 2;
 	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
 	blockSize.x = 16 * 20;
 	blockSize.y = 16 * 15;
 
 	fin.close();
 }
-
 
 void TileMap::loadMenu() {
 	string line;
@@ -208,10 +207,10 @@ void TileMap::loadMenu() {
 	tilesheet.setMinFilter(GL_NEAREST);
 	tilesheet.setMagFilter(GL_NEAREST);
 
-	map = new int[4];
+	map = new int[1];
 	map[0] = MENU_1_PLAYER;
 
-	mapSize.x = 4; mapSize.y = 1;
+	mapSize.x = 1; mapSize.y = 1;
 	tileSize.x = 16 * 20;
 	tileSize.y = 16 * 15;
 	tilesheetSize.x = 4;
@@ -281,8 +280,8 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) c
 	y1 = (pos.y + size.y - 1) / tileSize.y;
 	for(int y=y0; y<=y1; y++)
 	{
-		/*if(map[y*mapSize.x+x] != 0)
-			return true;*/
+		if (mapSize.x == 1 && pos.x < 45)
+			return true;
 	}
 	
 	return false;
@@ -297,14 +296,21 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 	y1 = (pos.y + size.y - 1) / tileSize.y;
 	for(int y=y0; y<=y1; y++)
 	{
-		/*if(map[y*mapSize.x+x] != 0)
-			return true;*/
+		if(mapSize.x == 1 && pos.x > 240)
+			return true;
 	}
 	
 	return false;
 }
 
 bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY, bool bBridge) const
+
+bool TileMap::bottomIsSea(const int x, const int y) const {
+	return (map[y*mapSize.x + x] == SEA1 || map[y*mapSize.x + x] == SEA2 || map[y*mapSize.x + x] == SEA3 || map[y*mapSize.x + x] == SEA4 || map[y*mapSize.x + x] == SEA5 || map[y*mapSize.x + x] == SEA6 || map[y*mapSize.x + x] == SEA7 || map[y*mapSize.x + x] == SEA8 || map[y*mapSize.x + x] == SEA9 || map[y*mapSize.x + x] == SEA10 || map[y*mapSize.x + x] == SEA11);
+}
+
+
+bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const
 {
 	int x0, x1, y;
 	
@@ -319,12 +325,18 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 			map[y*mapSize.x + x] == BRIDGE2 ||
 			bBridge ||
 			y > 13)
+			bottomIsSea(x,y))
 		{
 			if(*posY - tileSize.y * y + size.y <= 4 || bBridge)
 			{
 				*posY = tileSize.y * y - size.y;
 				return true;
 			}
+		}
+		if (mapSize.x == 1 && pos.y > 160)
+		{
+			*posY = 160;
+			return true;
 		}
 	}
 	

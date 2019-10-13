@@ -16,7 +16,8 @@
 // It is responsible for updating and render them.
 
 enum sceneState {
-	LOADING_MENU, MENU, MENU_TO_LVL1, HOW_TO, PAUSE, CREDITS, LVL1, LVL2
+	LOADING_MENU, MENU, MENU_TO_LVL1, HOW_TO, PAUSE, CREDITS,
+	LVL1, LVL2, LVL2_ANIMATION
 };
 
 class Scene
@@ -32,7 +33,8 @@ public:
 
 private:
 	void initShaders();
-	void initEntities();
+	void initEntitiesLvl1();
+	void initEntitiesLvl2();
 	void updateMenu(int deltaTime);
 	void updateLvl1(int deltaTime);
 	void updateLvl2(int deltaTime);
@@ -54,7 +56,9 @@ private:
 	int selectDelay;
 	bool onePlayer;
 
-	int blinks, blinkAnimation;
+	int blinks, blinkAnimation, subLevelAnimation, subLevelAnimationFrame, lvl2Frame;
+
+	int subLvl;
 
 };
 
