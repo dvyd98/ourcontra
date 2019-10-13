@@ -288,7 +288,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 				posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
 				glm::ivec2 aux = posPlayer + glm::ivec2(8, 44);
 				if (jumpAngle > 90)
-					bJumping = !map->collisionMoveDown(aux, glm::ivec2(12, 20), &aux.y);
+					bJumping = !map->collisionMoveDown(aux, glm::ivec2(12, 20), &aux.y, bBridge);
 				posPlayer = aux + glm::ivec2(-8, -44);
 			}
 		}
@@ -296,7 +296,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 		{
 			posPlayer.y += FALL_STEP;
 			glm::ivec2 aux = posPlayer + glm::ivec2(10, 30);
-			if (map->collisionMoveDown(aux, glm::ivec2(10, 28), &aux.y))
+			if (map->collisionMoveDown(aux, glm::ivec2(10, 28), &aux.y, bBridge))
 			{
 				if (Game::instance().getKey(' '))
 				{
@@ -335,6 +335,11 @@ void Player::setPosition(const glm::vec2 &pos)
 glm::ivec2 Player::getPos()
 {
 	return posPlayer;
+}
+
+bool Player::isOnBridge() 
+{
+	return bBridge;
 }
 
 vector<glm::ivec2> Player::buildHitBox()

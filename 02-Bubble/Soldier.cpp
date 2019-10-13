@@ -96,7 +96,7 @@ void Soldier::update(int deltaTime)
 
 	}
 	posEnemy.y += FALL_STEP;
-	if (!map->collisionMoveDown(posEnemy, glm::ivec2(16, 26), &posEnemy.y)) {
+	if (!map->collisionMoveDown(posEnemy, glm::ivec2(16, 26), &posEnemy.y, false)) {
 		if (lookingTo == LOOKING_LEFT) {
 			lookingTo = LOOKING_RIGHT;
 			posEnemy.x += 2;
@@ -128,13 +128,13 @@ void Soldier::update(int deltaTime)
 		{
 			posEnemy.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
 			if (jumpAngle > 90)
-				bJumping = !map->collisionMoveDown(posEnemy, glm::ivec2(16,26), &posEnemy.y);
+				bJumping = !map->collisionMoveDown(posEnemy, glm::ivec2(16,26), &posEnemy.y, false);
 		}
 	}
 	else
 	{
 		posEnemy.y += FALL_STEP;
-		if (map->collisionMoveDown(posEnemy, glm::ivec2(16, 26), &posEnemy.y))
+		if (map->collisionMoveDown(posEnemy, glm::ivec2(16, 26), &posEnemy.y, false))
 		{
 			if ((rand() % 1000) == 1) // jump randomly
 			{

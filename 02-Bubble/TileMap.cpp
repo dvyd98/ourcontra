@@ -304,7 +304,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 	return false;
 }
 
-bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const
+bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY, bool bBridge) const
 {
 	int x0, x1, y;
 	
@@ -317,9 +317,10 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 			map[y*mapSize.x + x] == GRASS2 ||
 			map[y*mapSize.x + x] == BRIDGE1 ||
 			map[y*mapSize.x + x] == BRIDGE2 ||
+			bBridge ||
 			y > 13)
 		{
-			if(*posY - tileSize.y * y + size.y <= 4)
+			if(*posY - tileSize.y * y + size.y <= 4 || bBridge)
 			{
 				*posY = tileSize.y * y - size.y;
 				return true;

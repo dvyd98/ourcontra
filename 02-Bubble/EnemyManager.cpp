@@ -88,6 +88,12 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 	test->setPosition(glm::vec2(14 * map->getTileSize(), 9 * map->getTileSize()));
 	test->setTileMap(map);
 	enemies->push_back(test);
+
+	Enemy *test2 = new WallTurret();
+	test2->init(tilemap, texProgram);
+	test2->setPosition(glm::vec2(14 * map->getTileSize(), 3 * map->getTileSize()));
+	test2->setTileMap(map);
+	enemies->push_back(test2);
 }
 
 void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottomm, float topp)
@@ -283,6 +289,7 @@ void EnemyManager::checkPhysics()
 	}
 
 	it_enemy = enemies->begin();
+	player->bBridge = FALSE;
 	while (it_enemy != enemies->end()) {  // are we touching bad guys?
 		vector<glm::ivec2> boxEnemy = (*it_enemy)->buildHitBox();
 		if ((*it_enemy)->getType() != "bridge") {
@@ -291,9 +298,10 @@ void EnemyManager::checkPhysics()
 			}
 		}
 		else {
-			if (areTouchingYcoord(boxPlayer[0], boxPlayer[1], boxEnemy[0], boxEnemy[1])) {
-				(*it_enemy)->state = DEAD;
-				if (!player->isJumping() && (*it_enemy)->state == ALIVE) player->posPlayer.y -= FALL_STEP;
+			if (areTouching(boxPlayer[0], boxPlayer[1], boxEnemy[0], boxEnemy[1])) {
+				//(*it_enemy)->state = DEAD;
+				player->bBridge = TRUE;
+				if (/*!player->isJumping() && */(*it_enemy)->state == ALIVE);// player->posPlayer.y -= FALL_STEP;
 			}
 		}
 		++it_enemy;
