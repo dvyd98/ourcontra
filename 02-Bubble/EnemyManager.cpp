@@ -1,11 +1,20 @@
 #include "EnemyManager.h"
 #include "Game.h"
 
+#define JUMP_ANGLE_STEP 4
+#define JUMP_HEIGHT 96
+#define FALL_STEP 4
+#define GLUT_KEY_SPACEBAR 32
 
 enum PlayerAnims
 {
 	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, MOVE_LEFT_AIM, MOVE_RIGHT_AIM, AIM_UP_LOOK_LEFT, AIM_UP_LOOK_RIGHT, CROUCH_LOOK_LEFT,
 	CROUCH_LOOK_RIGHT, AIM_UP_WALK_RIGHT, AIM_UP_WALK_LEFT, AIM_DOWN_WALK_RIGHT, AIM_DOWN_WALK_LEFT, AIRBONE_LEFT, AIRBONE_RIGHT
+};
+
+enum BridgeAnims
+{
+	EDGE_LEFT, EDGE_RIGHT, DESTROYED_LEFT, DESTROYED_RIGHT, CENTRAL
 };
 
 enum States
@@ -34,15 +43,44 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 	projlist = new list<Projectile>();
 	projlistRifleman = new list<Projectile>();
 	for (int i = 0; i < n; ++i) {
-		switch (map->getEnemy(i).type)
+		int enemyType = map->getEnemy(i).type;
+		if (enemyType == SOLDIER)
 		{
-		case SOLDIER: {
 			Enemy *aux = new Soldier();
 			aux->init(tilemap, texProgram);
 			aux->setPosition(glm::vec2(map->getEnemy(i).x * map->getTileSize(), map->getEnemy(i).y * map->getTileSize()));
 			aux->setTileMap(map);
 			enemies->push_back(aux);
 		}
+		else if (enemyType  == BRIDGE_EDGE_LEFT)
+		{
+			Bridge *bridgeboy = new Bridge();
+			bridgeboy->init(tilemap, texProgram);
+			bridgeboy->setPosition(glm::vec2(map->getEnemy(i).x * map->getTileSize(), map->getEnemy(i).y * map->getTileSize()));
+			bridgeboy->setTileMap(map);
+			bridgeboy->bridgeType = "left";
+			bridgeboy->sprite->changeAnimation(EDGE_LEFT);
+			enemies->push_back(bridgeboy);
+		}
+		else if (enemyType == BRIDGE_EDGE_RIGHT)
+		{
+			Bridge *bridgeboy = new Bridge();
+			bridgeboy->init(tilemap, texProgram);
+			bridgeboy->setPosition(glm::vec2(map->getEnemy(i).x * map->getTileSize(), map->getEnemy(i).y * map->getTileSize()));
+			bridgeboy->setTileMap(map);
+			bridgeboy->bridgeType = "right";
+			bridgeboy->sprite->changeAnimation(EDGE_RIGHT);
+			enemies->push_back(bridgeboy);
+		}
+		else if (enemyType == BRIDGE_CENTRAL)
+		{
+			Bridge *bridgeboy = new Bridge();
+			bridgeboy->init(tilemap, texProgram);
+			bridgeboy->setPosition(glm::vec2(map->getEnemy(i).x * map->getTileSize(), map->getEnemy(i).y * map->getTileSize()));
+			bridgeboy->setTileMap(map);
+			bridgeboy->bridgeType = "central";
+			bridgeboy->sprite->changeAnimation(CENTRAL);
+			enemies->push_back(bridgeboy);
 		}
 	}
 	Enemy *test = new Rifleman();
@@ -197,6 +235,12 @@ bool EnemyManager::areTouching(glm::ivec2 obj1_left, glm::ivec2 obj1_right, glm:
 	return true;
 }
 
+bool EnemyManager::areTouchingYcoord(glm::ivec2 obj1_left, glm::ivec2 obj1_right, glm::ivec2 obj2_left, glm::ivec2 obj2_right)
+{
+	if (obj1_left.x > obj2_right.x || obj2_left.x > obj1_right.x) return false;
+	return true;
+}
+
 
 void EnemyManager::checkPhysics()
 {
@@ -212,7 +256,7 @@ void EnemyManager::checkPhysics()
 			bool shot = false;
 			while ( it_enemy != enemies->end() && !shot) {
 				vector<glm::ivec2> boxEnemy = (*it_enemy)->buildHitBox();
-				if (areTouching(box[0], box[1], boxEnemy[0], boxEnemy[1])) {
+				if ((*it_enemy)->getType() != "bridge" && areTouching(box[0], box[1], boxEnemy[0], boxEnemy[1])) {
 					if ((*it_enemy)->decreaseLife(it_projec->getDmg())) it_enemy = enemies->erase(it_enemy);
 					shot = true;
 				}
@@ -241,8 +285,16 @@ void EnemyManager::checkPhysics()
 	it_enemy = enemies->begin();
 	while (it_enemy != enemies->end()) {  // are we touching bad guys?
 		vector<glm::ivec2> boxEnemy = (*it_enemy)->buildHitBox();
-		if (areTouching(boxPlayer[0], boxPlayer[1], boxEnemy[0], boxEnemy[1])) {
-			player->state = DEAD;
+		if ((*it_enemy)->getType() != "bridge") {
+			if (areTouching(boxPlayer[0], boxPlayer[1], boxEnemy[0], boxEnemy[1])) {
+					player->state = DEAD;
+			}
+		}
+		else {
+			if (areTouchingYcoord(boxPlayer[0], boxPlayer[1], boxEnemy[0], boxEnemy[1])) {
+				(*it_enemy)->state = DEAD;
+				if (!player->isJumping() && (*it_enemy)->state == ALIVE) player->posPlayer.y -= FALL_STEP;
+			}
 		}
 		++it_enemy;
 	}

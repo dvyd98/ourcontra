@@ -3,10 +3,18 @@ LEVEL1
 16 16 16 16						-- Tile size x y & block size
 images/background.png 			-- Tilesheet
 16 16							-- Number of tiles in tilesheet
-3				-- Number of enemies (x in tiles, y in tiles, type)
+11				-- Number of enemies (x in tiles, y in tiles, type)
 16 5 Soldier
 19 5 Soldier
 23 5 Soldier
+48 7 Bridge_left
+50 7 Bridge_central
+52 7 Bridge_central
+54 7 Bridge_right
+66 7 Bridge_left
+68 7 Bridge_central
+70 7 Bridge_central
+72 7 Bridge_right
 .............................................................................................................................................................................................................
 ......................................................................................+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++....
 ......................................................................................++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++...
@@ -14,8 +22,8 @@ images/background.png 			-- Tilesheet
 ......................................................................................+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++..
 ......................................................................................qwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqw++++++++++qwqwqwqwqw++++++++++++++++++qwqw+++++++++++++++++++++++++++++++++++++++++..
 ......................................................................................asasasasasasasasasasasasasasasasas++++++++++asasasasas++++++++++++++++++asas+++++++++++++++++++++++++++++++++++++++++..
-..qwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwtytytytyqwqwqwqwqwtytytytyqwqwqwqwqwqwqwqwererererererererererererererqwqwqwqwqwqwqwerererer++qwqw++++++++++qwqwer++qwqw++++++++++++++++++++++qwqwqwqw+++++..
-..asasasasasasasasasasasasasasasasasasasasasasascvvvvvvbasasasasascvvvvvvbasasasasasasasasdfdfdfdfdfdfdfdfdfdfdfdfdfdfasasasasasasasdfdfdfdf++asas++++++++++asasdf++asas++++++++++++++++++++++asasasas+++++..
+..qwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqw........qwqwqwqwqw........qwqwqwqwqwqwqwqwererererererererererererererqwqwqwqwqwqwqwerererer++qwqw++++++++++qwqwer++qwqw++++++++++++++++++++++qwqwqwqw+++++..
+..asasasasasasasasasasasasasasasasasasasasasasas........asasasasas........asasasasasasasasdfdfdfdfdfdfdfdfdfdfdfdfdfdfasasasasasasasdfdfdfdf++asas++++++++++asasdf++asas++++++++++++++++++++++asasasas+++++..
 ,,ererererqwqwqwerererererqwqwererererererererer,,,,,,,,ererererer,,,,,,,,ererererererererererererererqwqwqwqwqwqwqwerererererererererererqwqwqwer++qwqw++++ererer++erqwqwqwqwqw++++++++++qwqwererererqw+++..
 ,,dfdfdfdfasasasdfdfdfdfdfasasdfdfdfdfdfqwqwqwdf,,,,,,,,dfdfdfdfdf,,,,,,,,dfdfdfdfdfdfdfdfdfdfdfqwqwdfasasasasasasasdfdfdfdfdfdfdfdfdfqwdfasasasdf++asas++++dfdfqw++dfasasasasas++++++++++asasdfqwqwqwas+++..
 ,uerererererererqwererqwererererererererzxzxzxerp,,,,,,uerererererp,,,,,,uerererererererererererzxzxerererererererererererqwqwerqwqwerzxererererer++erqwqwqwererzx++erererererer++++qwqw++erererzxzxzxerqw+..

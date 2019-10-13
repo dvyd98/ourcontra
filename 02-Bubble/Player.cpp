@@ -288,7 +288,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 				posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
 				glm::ivec2 aux = posPlayer + glm::ivec2(8, 44);
 				if (jumpAngle > 90)
-					bJumping = !map->collisionMoveDown(aux, glm::ivec2(12, 20), &posPlayer.y);
+					bJumping = !map->collisionMoveDown(aux, glm::ivec2(12, 20), &aux.y);
 				posPlayer = aux + glm::ivec2(-8, -44);
 			}
 		}
@@ -378,4 +378,9 @@ glm::ivec2 Player::getProjectileSpawn() {
 	else if (sprite->animation() == CROUCH_LOOK_RIGHT)
 		return glm::ivec2{ 21, 46 };
 	else return glm::ivec2{ 10, 46 };
+}
+
+bool Player::isJumping()
+{
+	return bJumping;
 }

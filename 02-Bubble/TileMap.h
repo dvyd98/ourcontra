@@ -16,7 +16,7 @@
 // method draws the whole map independently of what is visible.
 
 enum enemyType {
-	SOLDIER
+	SOLDIER, BRIDGE_EDGE_LEFT, BRIDGE_EDGE_RIGHT, BRIDGE_CENTRAL
 };
 
 enum MENU_FRAMES {

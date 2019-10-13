@@ -137,9 +137,8 @@ void Scene::updateLvl1(int deltaTime) {
 		right += PLAYER_VEL;
 		left += PLAYER_VEL;
 	}
-	player->update(deltaTime, left, right, bottom, top);
-
 	enemymanager->update(deltaTime, left, right, bottom, top);
+	player->update(deltaTime, left, right, bottom, top);
 	
 	
 }
