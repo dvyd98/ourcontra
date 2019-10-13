@@ -20,7 +20,8 @@
 #define SELECT_DELAY 8
 #define BLINK_ANIMATION_DURATION 10
 #define BLINKS 6
-#define LVL2_ANIMATION_DURATION 10
+#define LVL2_ANIMATION_DURATION 50
+#define LVL2_ANIMATION_FRAME 5
 
 
 Scene::Scene()
@@ -90,7 +91,7 @@ void Scene::update(int deltaTime)
 	case LVL1: updateLvl1(deltaTime); break;
 	case LVL2: updateLvl2(deltaTime); break;
 	case LVL2_ANIMATION: {
-		if (--subLevelAnimation == 0 && subLvl++ <= 4) {
+		if (--subLevelAnimation == 0 && lvl2Frame-- > 0) {
 			switch (map->getFrame()) {
 			case SLVL1: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM1); break;
 			case SLVL3: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM1); break;
@@ -101,10 +102,23 @@ void Scene::update(int deltaTime)
 			case ANIM1: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM2); break;
 			case ANIM2: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM3); break;
 			case ANIM3: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM4); break;
+			case ANIM4: {
+				switch (++subLvl) {
+				case 0:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, SLVL1); break;
+				case 1:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, SLVL1); break;
+				case 2:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, SLVL3); break;
+				case 3:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, SLVL4); break;
+				case 4:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, SLVL5); break;
+				case 5:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, BOSS); break;
+				}
+				break;
+			}
 			}
 			subLevelAnimation = LVL2_ANIMATION_DURATION;
 		}
-		else if (subLvl > 4) currentState = LVL2;
+		else if (lvl2Frame == 0) {
+			currentState = LVL2;
+		}
 		break;
 	}
 	}
@@ -152,6 +166,7 @@ void Scene::updateLvl2(int deltaTime) {
 	if (Game::instance().getKey('x')) {
 		currentState = LVL2_ANIMATION;
 		subLevelAnimation = LVL2_ANIMATION_DURATION;
+		lvl2Frame = LVL2_ANIMATION_FRAME;
 	}
 }
 

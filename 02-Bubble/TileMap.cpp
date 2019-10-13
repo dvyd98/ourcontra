@@ -195,8 +195,8 @@ void TileMap::loadLevel2() {
 	mapSize.x = 1; mapSize.y = 1;
 	tileSize.x = 16 * 20;
 	tileSize.y = 16 * 15;
-	tilesheetSize.x = 5;
-	tilesheetSize.y = 2;
+	tilesheetSize.x = 9;
+	tilesheetSize.y = 1;
 	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
 	blockSize.x = 16 * 20;
 	blockSize.y = 16 * 15;
@@ -351,8 +351,6 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	
 	return false;
 }
-
-// funcions menu
 
 void TileMap::toggleFrame(const glm::vec2 &minCoords, ShaderProgram &program, int frame) {
 	map[0] = frame;
