@@ -314,6 +314,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 	return false;
 }
 
+bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY, bool bBridge) const
 
 bool TileMap::bottomIsSea(const int x, const int y) const {
 	return y == 13 && (map[y*mapSize.x + x] == SEA1 || map[y*mapSize.x + x] == SEA2 || map[y*mapSize.x + x] == SEA3 || map[y*mapSize.x + x] == SEA4 || map[y*mapSize.x + x] == SEA5 || map[y*mapSize.x + x] == SEA6 || map[y*mapSize.x + x] == SEA7 || map[y*mapSize.x + x] == SEA8 || map[y*mapSize.x + x] == SEA9 || map[y*mapSize.x + x] == SEA10 || map[y*mapSize.x + x] == SEA11);
@@ -333,9 +334,11 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 			map[y*mapSize.x + x] == GRASS2 ||
 			map[y*mapSize.x + x] == BRIDGE1 ||
 			map[y*mapSize.x + x] == BRIDGE2 ||
+			bBridge ||
+			y > 13)
 			bottomIsSea(x,y))
 		{
-			if(*posY - tileSize.y * y + size.y <= 4)
+			if(*posY - tileSize.y * y + size.y <= 4 || bBridge)
 			{
 				*posY = tileSize.y * y - size.y;
 				return true;

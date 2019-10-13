@@ -27,12 +27,14 @@ public:
 	glm::ivec2 getProjectileSpawn();
 
 	bool isJumping();
+	bool isOnBridge();
 
 	vector<glm::ivec2> buildHitBox();
 
 	int lookingTo;
 	int life;
 	int state;
+	bool bBridge;
 	glm::ivec2 posPlayer;
 	Sprite *sprite;
 	
