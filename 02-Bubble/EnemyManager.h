@@ -26,6 +26,7 @@ public:
 	bool isOffScreen(Projectile &pj);
 	void spawnProjectilePlayer(glm::ivec2 position);
 	void spawnProjectileRifleman(glm::ivec2 position, Rifleman* badguy);
+	void spawnProjectileWallTurret(glm::ivec2 position, WallTurret* badguy);
 	void despawnOffScreenProjectiles();
 	void despawnOffScreenEnemies();
 	bool areTouching(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lpos2, glm::ivec2 rpos2);
@@ -39,6 +40,7 @@ public:
 	Player* player;
 	list<Projectile> *projlist;
 	list<Projectile> *projlistRifleman;
+	list<Projectile> *projlistWallTurret;
 	glm::ivec2 tilemap;
 	ShaderProgram texProgram;
 
