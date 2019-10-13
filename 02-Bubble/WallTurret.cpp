@@ -34,6 +34,7 @@ void WallTurret::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram
 	type = "wallturret";
 	state = ALIVE;
 	life = 10;
+	frameCount = 60;
 	spritesheet.loadFromFile("images/wallturret.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
 	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
@@ -94,6 +95,13 @@ void WallTurret::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram
 void WallTurret::update(int deltaTime)
 {
 	sprite->update(deltaTime);
+	if (frameCount < 30 && frameCount > 0 ) {
+		sprite->changeAnimation(OPENING);
+	}
+	else if (frameCount < 1) {
+		sprite->changeAnimation(AIM_LEFT);
+	}
+	if (frameCount > 0) --frameCount;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
 

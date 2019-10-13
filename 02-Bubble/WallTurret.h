@@ -18,6 +18,10 @@ public:
 
 	glm::ivec2 projDir;
 
+private:
+
+	int frameCount;
+
 };
 
 
