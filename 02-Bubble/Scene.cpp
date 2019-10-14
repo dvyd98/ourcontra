@@ -230,8 +230,9 @@ void Scene::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
 	if (currentState == LVL1 || currentState == LVL2 || currentState == LVL2_ANIMATION) {
-		player->render();
 		enemymanager->render();
+		player->render();
+		
 	}
 }
 
