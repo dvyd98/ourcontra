@@ -115,6 +115,7 @@ void TileMap::loadTileMap() {
 		else if (s == "Bridge_right") type = BRIDGE_EDGE_RIGHT;
 		else if (s == "Bridge_central") type = BRIDGE_CENTRAL;
 		else if (s == "Rifleman") type = RIFLE;
+		else if (s == "Turret1") type = TURRET1;
 		enemies->push_back(infoEnemies());
 		(*enemies)[i].x = x;
 		(*enemies)[i].y = y;
