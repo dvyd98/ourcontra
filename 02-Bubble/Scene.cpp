@@ -118,7 +118,7 @@ void Scene::updateLvl1(int deltaTime) {
 
 	if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) &&
 		player->getPos().x >= (right + left) / 2 &&
-		right <= (map->getMapSize().x * map->getTileSize() + 5 * map->getTileSize())) {
+		right <= (map->getMapSize().x * map->getTileSize())) {
 
 		right += PLAYER_VEL;
 		left += PLAYER_VEL;

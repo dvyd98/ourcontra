@@ -11,8 +11,13 @@ enum BACKGROUND_TILES_LVL1 {
 	BLANK4, ROCK7, ROCK8, SEA1, SEA2, SEA3, SEA4, SEA5, SEA6, SEA7, SEA8, SEA9, SEA10, SEA11, BLANK5, BLANK6,
 	JUNGLE1, JUNGLE2, BLANK7, JUNGLE3, BLANK8, BLANK9, BLANK10, BLANK11, M1, M2, M3, M4, BLANK12, BLANK13, BLANK14, BLANK15,
 	JUNGLE4, JUNGLE5, BLANK16, JUGNLE6, JUNGLE7, BLANK17, BLANK18, M5, M6, M7, M8, M9, M10, BLANK19, BLANK20, BLANK21,
-	JUNGLE8, JUNGLE9, BLANK22, BLANK23, BLANK24, BLANK25, BLANK26, M11, M12, M13, M14, BLANK27, M15, BLANK28, BLANK, BLANK29,
-	JUNGLE10, JUNGLE11
+	JUNGLE8, JUNGLE9, B1, B2, B3, BLANK25, BLANK26, M11, M12, M13, M14, BLANK27, M15, BLANK28, BLANK29, BLANK30,
+	JUNGLE10, JUNGLE11, B4, B5, BLANK91, BLANK31, BLANK32, BLANK33, BLANK34, BLANK35, BLANK36, BLANK37, BLANK38, BLANK39, BLANK40, BLANK41,
+	B6, B7, B8, B9, B10, BLANK42, BLANK43, BLANK44, BLANK45, BLANK46, BLANK47, BLANK48, BLANK49, BLANK50, BLANK51, BLANK52,
+	B11, B12, B13, B14, B15, BLANK53, BLANK54, BLANK55, BLANK56, BLANK57, BLANK58, BLANK59, BLANK60, BLANK61, BLANK62, BLANK63,
+	B16, B17, B18, BLANK64, BLANK65, BLANK66, BLANK67, BLANK68, BLANK69, BLANK70, BLANK71, BLANK72, BLANK73, BLANK74, BLANK75, BLANK76,
+	B19, B20, B21, BLANK77, BLANK78, BLANK79, BLANK80, BLANK81, BLANK82, BLANK83, BLANK84, BLANK85, BLANK86, BLANK87, BLANK88, BLANK89,
+	BLANK90, B22
 };
 
 
@@ -22,7 +27,6 @@ TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoo
 	
 	return map;
 }
-
 
 TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)
 {
@@ -35,7 +39,6 @@ TileMap::~TileMap()
 	if(map != NULL)
 		delete map;
 }
-
 
 void TileMap::render() const
 {
@@ -172,6 +175,28 @@ void TileMap::loadTileMap() {
 			case '7': map[j*mapSize.x + i] = PALM_TOP1; break;
 			case '8': map[j*mapSize.x + i] = PALM_TOP2; break;
 			case '9': map[j*mapSize.x + i] = PALM_TOP4; break;
+			case '[': map[j*mapSize.x + i] = B5; break;
+			case '|': map[j*mapSize.x + i] = B4; break;
+			case '/': map[j*mapSize.x + i] = B1; break;
+			case '_': map[j*mapSize.x + i] = B2; break;
+			case '}': map[j*mapSize.x + i] = B3; break;
+			case '*': map[j*mapSize.x + i] = B22; break;
+			case '<': map[j*mapSize.x + i] = B19; break;
+			case '>': map[j*mapSize.x + i] = B21; break;
+			case '=': map[j*mapSize.x + i] = B20; break;
+			case '!': map[j*mapSize.x + i] = B16; break;
+			case '¡': map[j*mapSize.x + i] = B17; break;
+			case '@': map[j*mapSize.x + i] = B18; break;
+			case '·': map[j*mapSize.x + i] = B11; break;
+			case '$': map[j*mapSize.x + i] = B12; break;
+			case '%': map[j*mapSize.x + i] = B13; break;
+			case '{': map[j*mapSize.x + i] = B14; break;
+			case ']': map[j*mapSize.x + i] = B15; break;
+			case '&': map[j*mapSize.x + i] = B9; break;
+			case '(': map[j*mapSize.x + i] = B10; break;
+			case ')': map[j*mapSize.x + i] = B6; break;
+			case '?': map[j*mapSize.x + i] = B7; break;
+			case '¿': map[j*mapSize.x + i] = B8; break;
 			}
 		}
 		fin.get(tile);
