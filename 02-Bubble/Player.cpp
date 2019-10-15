@@ -296,7 +296,10 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 		{
 			posPlayer.y += FALL_STEP;
 			glm::ivec2 aux = posPlayer + glm::ivec2(10, 30);
-			if (map->collisionMoveDown(aux, glm::ivec2(10, 28), &aux.y, bBridge))
+			if (Game::instance().getKey(' ') && Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
+
+			}
+			else if (map->collisionMoveDown(aux, glm::ivec2(10, 28), &aux.y, bBridge))
 			{
 				if (Game::instance().getKey(' '))
 				{
