@@ -114,7 +114,13 @@ void TileMap::loadTileMap() {
 		else if (s == "Bridge_left") type = BRIDGE_EDGE_LEFT;
 		else if (s == "Bridge_right") type = BRIDGE_EDGE_RIGHT;
 		else if (s == "Bridge_central") type = BRIDGE_CENTRAL;
-		else if (s == "Rifleman") type = RIFLE;
+		else if (s == "Rifleman") {
+			string t;
+			sstream >> t;
+			if (t == "normal") type = RIFLEMAN_NORMAL;
+			else if (t == "bush") type = RIFLEMAN_BUSH;
+			else if (t == "boss") type = RIFLEMAN_BOSS;
+		}
 		else if (s == "Turret1") type = TURRET1;
 		enemies->push_back(infoEnemies());
 		(*enemies)[i].x = x;

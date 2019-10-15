@@ -15,12 +15,12 @@ images/background.png 			-- Tilesheet
 68 7 Bridge_central
 70 7 Bridge_central
 72 7 Bridge_right
-20 11 Rifleman
-40 11 Rifleman
-80 5 Rifleman
-83 5 Rifleman --TODO bush
-98 3 Rifleman --TODO bush
-150 7 Rifleman
+20 11 Rifleman normal
+40 11 Rifleman normal
+80 5 Rifleman normal
+83 5 Rifleman bush
+98 3 Rifleman bush
+150 7 Rifleman boss
 78 9 Turret1
 104 7 Turret1
 116 7 Turret1

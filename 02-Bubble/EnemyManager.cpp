@@ -83,7 +83,7 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 			bridgeboy->sprite->changeAnimation(CENTRAL);
 			enemies->push_back(bridgeboy);
 		}
-		else if (enemyType == RIFLE)
+		else if (enemyType == RIFLEMAN_NORMAL)
 		{
 			Enemy *aux = new Rifleman();
 			aux->init(tilemap, texProgram);
