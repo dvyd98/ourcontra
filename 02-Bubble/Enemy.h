@@ -24,6 +24,7 @@ public:
 	string getType();
 	int state;
 	Sprite *sprite;
+	int frameCount;
 	
 
 protected:

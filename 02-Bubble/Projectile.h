@@ -25,8 +25,8 @@ public:
 	glm::ivec2 getPos();
 
 private:
-	glm::ivec2 tileMapDispl, posProjectile;
-	glm::vec2 newPos;
+	glm::ivec2 tileMapDispl;
+	glm::vec2 newPos, posProjectile;
 	Texture spritesheet;
 	
 	TileMap *map;

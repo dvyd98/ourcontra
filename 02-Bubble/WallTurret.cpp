@@ -99,10 +99,18 @@ void WallTurret::update(int deltaTime)
 		sprite->changeAnimation(OPENING);
 	}
 	else if (frameCount < 1) {
-		if (projDir == glm::ivec2{ -1, 0 }) sprite->changeAnimation(AIM_LEFT);
-		if (projDir == glm::ivec2{ -1, 0 }) sprite->changeAnimation(AIM_LEFT);
-		if (projDir == glm::ivec2{ -1, 0 }) sprite->changeAnimation(AIM_LEFT);
-		if (projDir == glm::ivec2{ -1, 0 }) sprite->changeAnimation(AIM_LEFT);
+		if (projDir == glm::vec2{ -1, 0 }) sprite->changeAnimation(AIM_LEFT);
+		else if (projDir == glm::vec2{ 1, 0 }) sprite->changeAnimation(AIM_RIGHT);
+		else if (projDir == glm::vec2{ 0, -1 }) sprite->changeAnimation(AIM_UP);
+		else if (projDir == glm::vec2{ 0, 1 }) sprite->changeAnimation(AIM_DOWN);
+		else if (projDir == glm::vec2{ 0.75,0.25 }) sprite->changeAnimation(AIM_DOWN_RIGHT_FAR);
+		else if (projDir == glm::vec2{ 0.75,-0.25 }) sprite->changeAnimation(AIM_UP_RIGHT_FAR);
+		else if (projDir == glm::vec2{ -0.75,0.25 }) sprite->changeAnimation(AIM_DOWN_LEFT_FAR);
+		else if (projDir == glm::vec2{ -0.75,-0.25 }) sprite->changeAnimation(AIM_UP_LEFT_FAR);
+		else if (projDir == glm::vec2{ 0.25,0.75 }) sprite->changeAnimation(AIM_DOWN_RIGHT_CLOSE);
+		else if (projDir == glm::vec2{ 0.25,-0.75 }) sprite->changeAnimation(AIM_UP_RIGHT_CLOSE);
+		else if (projDir == glm::vec2{ -0.25,0.75 }) sprite->changeAnimation(AIM_DOWN_LEFT_CLOSE);
+		else if (projDir == glm::vec2{ -0.25,-0.75 }) sprite->changeAnimation(AIM_UP_LEFT_CLOSE);
 	}
 
 	if (frameCount > 0) --frameCount;

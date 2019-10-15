@@ -130,7 +130,7 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 				Rifleman* rifleguy = dynamic_cast<Rifleman*>(*it_enemy);
 				spawnProjectileRifleman(player->getPos(), rifleguy);
 			}
-			else if ((*it_enemy)->getType() == "wallturret" && projlistWallTurret->size() < 4) {
+			else if ((*it_enemy)->getType() == "wallturret" && projlistWallTurret->size() < 4 && (*it_enemy)->frameCount < 1) {
 				WallTurret* turretboi = dynamic_cast<WallTurret*>(*it_enemy);
 				spawnProjectileWallTurret(player->getPos(), turretboi);
 			}
@@ -242,10 +242,10 @@ void EnemyManager::spawnProjectileRifleman(glm::ivec2 position, Rifleman* badguy
 void EnemyManager::spawnProjectileWallTurret(glm::ivec2 positionPlayer, WallTurret* badguy)
 {
 	glm::ivec2 posPlayer = positionPlayer + glm::ivec2{ 10, 30 };
-	glm::ivec2 posEnemy = badguy->getPos() + glm::ivec2{ 16, 16 };
+	glm::ivec2 posEnemy = badguy->getPos() + glm::ivec2{ 8,8 };
 	if (!isOffScreen(posEnemy)) {
 		glm::vec2 newPos = glm::vec2{ 1,1 };
-		if (posPlayer.y < posEnemy.y - 30) { /*  SHOOT UP  */
+		if (posPlayer.y < posEnemy.y - 10) { /*  SHOOT UP  */
 			if (posPlayer.x < posEnemy.x - 10) {
 				if (posPlayer.x >= posEnemy.x - 30) newPos = glm::vec2{ -0.25,-0.75 }; /* SHOOT SLIGHTLY LEFT */
 				else newPos = glm::vec2{ -0.75,-0.25 }; /* SHOOT VERY LEFT */
@@ -258,7 +258,7 @@ void EnemyManager::spawnProjectileWallTurret(glm::ivec2 positionPlayer, WallTurr
 				newPos = glm::ivec2{ 0,-1 };
 			}
 		}
-		else if (posPlayer.y > posEnemy.y + 30) { /*  SHOOT DOWN  */
+		else if (posPlayer.y > posEnemy.y + 10) { /*  SHOOT DOWN  */
 			if (posPlayer.x < posEnemy.x - 10) {
 				if (posPlayer.x >= posEnemy.x - 30) newPos = glm::vec2{ -0.25,0.75 }; /* SHOOT SLIGHTLY LEFT */
 				else newPos = glm::vec2{ -0.75,0.25 }; /* SHOOT VERY LEFT */

@@ -80,7 +80,7 @@ int Projectile::getDmg()
 
 vector<glm::ivec2> Projectile::buildHitBox()
 {
-	glm::ivec2 lpos1 = posProjectile + glm::ivec2{ 8,9 };
+	glm::ivec2 lpos1 = posProjectile + glm::vec2{ 8,9 };
 	glm::ivec2 rpos1 = lpos1 + glm::ivec2{ 2,2 };
 	return vector<glm::ivec2> {lpos1, rpos1 };
 }

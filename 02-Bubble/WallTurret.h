@@ -16,11 +16,11 @@ public:
 	vector<glm::ivec2> buildHitBox();
 	glm::ivec2 getProjectileSpawn();
 
-	glm::ivec2 projDir;
+	glm::vec2 projDir;
 
 private:
 
-	int frameCount;
+	
 
 };
 
