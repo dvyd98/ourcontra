@@ -99,8 +99,12 @@ void WallTurret::update(int deltaTime)
 		sprite->changeAnimation(OPENING);
 	}
 	else if (frameCount < 1) {
-		sprite->changeAnimation(AIM_LEFT);
+		if (projDir == glm::ivec2{ -1, 0 }) sprite->changeAnimation(AIM_LEFT);
+		if (projDir == glm::ivec2{ -1, 0 }) sprite->changeAnimation(AIM_LEFT);
+		if (projDir == glm::ivec2{ -1, 0 }) sprite->changeAnimation(AIM_LEFT);
+		if (projDir == glm::ivec2{ -1, 0 }) sprite->changeAnimation(AIM_LEFT);
 	}
+
 	if (frameCount > 0) --frameCount;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
