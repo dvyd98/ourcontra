@@ -22,8 +22,8 @@ public:
 		);
 	void update(int deltaTime, float left, float right, float bottom, float top);
 	void render();
-	bool isOffScreen(Enemy &pj);
-	bool isOffScreen(Projectile &pj);
+	bool isOffScreenY(Enemy &pj);
+	bool isOffScreen(glm::ivec2 pj);
 	void spawnProjectilePlayer(glm::ivec2 position);
 	void spawnProjectileRifleman(glm::ivec2 position, Rifleman* badguy);
 	void spawnProjectileWallTurret(glm::ivec2 position, WallTurret* badguy);

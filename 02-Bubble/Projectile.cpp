@@ -12,7 +12,7 @@ enum upgradeRank
 };
 
 
-void Projectile::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int speed, const glm::ivec2 projDir)
+void Projectile::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, float speed, const glm::vec2 projDir)
 {
 	rank = RANK1;
 	damage = 1;
@@ -35,7 +35,7 @@ void Projectile::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram
 
 	sprite->changeAnimation(1);
 	tileMapDispl = tileMapPos;
-	newPos = projDir * speed,
+	newPos = projDir * speed;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posProjectile.x), float(tileMapDispl.y + posProjectile.y)));
 
 }

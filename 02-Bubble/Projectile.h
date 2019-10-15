@@ -12,7 +12,7 @@ class Projectile
 {
 
 public:
-	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int speed, const glm::ivec2 projDir);
+	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, float speed, const glm::vec2 projDir);
 	void update(int deltaTime);
 	void render();
 
@@ -25,7 +25,8 @@ public:
 	glm::ivec2 getPos();
 
 private:
-	glm::ivec2 tileMapDispl, posProjectile, newPos;
+	glm::ivec2 tileMapDispl, posProjectile;
+	glm::vec2 newPos;
 	Texture spritesheet;
 	
 	TileMap *map;
