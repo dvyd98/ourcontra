@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
+    <ClInclude Include="BossTurret.h" />
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyManager.h" />
@@ -29,6 +30,7 @@
     <ClInclude Include="WallTurret.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BossTurret.cpp" />
     <ClCompile Include="Bridge.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />

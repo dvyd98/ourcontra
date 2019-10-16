@@ -110,6 +110,12 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 	test2->setPosition(glm::vec2(14 * map->getTileSize(), 3 * map->getTileSize()));
 	test2->setTileMap(map);
 	enemies->push_back(test2);
+
+	Enemy *test3 = new WallTurret();
+	test3->init(tilemap, texProgram);
+	test3->setPosition(glm::vec2(14 * map->getTileSize(), 1 * map->getTileSize()));
+	test3->setTileMap(map);
+	enemies->push_back(test3);
 }
 
 void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottomm, float topp)

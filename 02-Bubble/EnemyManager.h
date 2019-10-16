@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Bridge.h"
 #include "WallTurret.h"
+#include "BossTurret.h"
 #include "ShaderProgram.h"
 #include "TileMap.h"
 #include <glm/glm.hpp>
