@@ -12,7 +12,7 @@ enum States
 
 enum BossTurretAnims
 {
-	SHOOTING
+	IDLE, SHOOTING
 };
 
 
@@ -28,18 +28,20 @@ void BossTurret::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram
 	state = ALIVE;
 	life = 10;
 	frameCount = 60;
-	spritesheet.loadFromFile("images/WallTurret.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.loadFromFile("images/BossTurret.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
 	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
 	spritesheet.setMinFilter(GL_NEAREST);
 	spritesheet.setMagFilter(GL_NEAREST);
-	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.1f, 0.1f), &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(glm::ivec2(16*3, 16), glm::vec2(0.5f, 1.f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(100);
 
-	sprite->setAnimationSpeed(SHOOTING, 8);
+	sprite->setAnimationSpeed(IDLE, 8);
+	sprite->addKeyframe(IDLE, glm::vec2(0.0f, 0.0f));
+
+	sprite->setAnimationSpeed(SHOOTING, 2);
 	sprite->addKeyframe(SHOOTING, glm::vec2(0.0f, 0.0f));
-	sprite->addKeyframe(SHOOTING, glm::vec2(0.1f, 0.0f));
-	sprite->addKeyframe(SHOOTING, glm::vec2(0.2f, 0.0f));
+	sprite->addKeyframe(SHOOTING, glm::vec2(0.5f, 0.0f));
 
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
@@ -49,24 +51,10 @@ void BossTurret::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram
 void BossTurret::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	/*if (frameCount < 30 && frameCount > 0) {
-		sprite->changeAnimation(OPENING);
+	if (frameCount < 30) {
+		if (sprite->animation() != SHOOTING)
+			sprite->changeAnimation(SHOOTING);
 	}
-	else if (frameCount < 1) {
-		if (projDir == glm::vec2{ -1, 0 }) sprite->changeAnimation(AIM_LEFT);
-		else if (projDir == glm::vec2{ 1, 0 }) sprite->changeAnimation(AIM_RIGHT);
-		else if (projDir == glm::vec2{ 0, -1 }) sprite->changeAnimation(AIM_UP);
-		else if (projDir == glm::vec2{ 0, 1 }) sprite->changeAnimation(AIM_DOWN);
-		else if (projDir == glm::vec2{ 0.75,0.25 }) sprite->changeAnimation(AIM_DOWN_RIGHT_FAR);
-		else if (projDir == glm::vec2{ 0.75,-0.25 }) sprite->changeAnimation(AIM_UP_RIGHT_FAR);
-		else if (projDir == glm::vec2{ -0.75,0.25 }) sprite->changeAnimation(AIM_DOWN_LEFT_FAR);
-		else if (projDir == glm::vec2{ -0.75,-0.25 }) sprite->changeAnimation(AIM_UP_LEFT_FAR);
-		else if (projDir == glm::vec2{ 0.25,0.75 }) sprite->changeAnimation(AIM_DOWN_RIGHT_CLOSE);
-		else if (projDir == glm::vec2{ 0.25,-0.75 }) sprite->changeAnimation(AIM_UP_RIGHT_CLOSE);
-		else if (projDir == glm::vec2{ -0.25,0.75 }) sprite->changeAnimation(AIM_DOWN_LEFT_CLOSE);
-		else if (projDir == glm::vec2{ -0.25,-0.75 }) sprite->changeAnimation(AIM_UP_LEFT_CLOSE);
-	}*/
-
 	if (frameCount > 0) --frameCount;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
