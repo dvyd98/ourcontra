@@ -7,6 +7,7 @@
 #include "Bridge.h"
 #include "WallTurret.h"
 #include "BossTurret.h"
+#include "Cannon.h"
 #include "ShaderProgram.h"
 #include "TileMap.h"
 #include <glm/glm.hpp>
@@ -28,11 +29,11 @@ public:
 	void spawnProjectilePlayer(glm::ivec2 position);
 	void spawnProjectileRifleman(glm::ivec2 position, Rifleman* badguy);
 	void spawnProjectileWallTurret(glm::ivec2 position, WallTurret* badguy);
+	void spawnProjectileCannon(glm::ivec2 position, Cannon* badguy);
 	void despawnOffScreenProjectiles();
 	void despawnOffScreenEnemies();
 	bool areTouching(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lpos2, glm::ivec2 rpos2);
 	bool areTouchingYcoord(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lpos2, glm::ivec2 rpos2);
-	vector<glm::ivec2> buildHitBox(Enemy &badguy);
 	void checkPhysics();
 
 	list<Enemy*> *enemies;
@@ -42,6 +43,7 @@ public:
 	list<Projectile> *projlist;
 	list<Projectile> *projlistRifleman;
 	list<Projectile> *projlistWallTurret;
+	list<Projectile> *projlistCannon;
 	glm::ivec2 tilemap;
 	ShaderProgram texProgram;
 

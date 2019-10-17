@@ -14,6 +14,7 @@
     <ClInclude Include="AnimKeyframes.h" />
     <ClInclude Include="BossTurret.h" />
     <ClInclude Include="Bridge.h" />
+    <ClInclude Include="Cannon.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="Game.h" />
@@ -32,6 +33,7 @@
   <ItemGroup>
     <ClCompile Include="BossTurret.cpp" />
     <ClCompile Include="Bridge.cpp" />
+    <ClCompile Include="Cannon.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="Game.cpp" />

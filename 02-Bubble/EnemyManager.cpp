@@ -43,6 +43,7 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 	projlist = new list<Projectile>();
 	projlistRifleman = new list<Projectile>();
 	projlistWallTurret = new list<Projectile>();
+	projlistCannon = new list<Projectile>();
 	for (int i = 0; i < n; ++i) {
 		int enemyType = map->getEnemy(i).type;
 		if (enemyType == SOLDIER)
@@ -99,11 +100,6 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 			enemies->push_back(aux);
 		}
 	}
-	Enemy *test = new Rifleman();
-	test->init(tilemap, texProgram);
-	test->setPosition(glm::vec2(14 * map->getTileSize(), 9 * map->getTileSize()));
-	test->setTileMap(map);
-	enemies->push_back(test);
 
 	Enemy *test2 = new WallTurret();
 	test2->init(tilemap, texProgram);
@@ -116,6 +112,14 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 	test3->setPosition(glm::vec2(14 * map->getTileSize(), 1 * map->getTileSize()));
 	test3->setTileMap(map);
 	enemies->push_back(test3);
+
+	Enemy *test = new Cannon();
+	test->init(tilemap, texProgram);
+	test->setPosition(glm::vec2(25 * map->getTileSize(), 9 * map->getTileSize()));
+	test->setTileMap(map);
+	enemies->push_back(test);
+
+
 }
 
 void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottomm, float topp)
@@ -131,14 +135,19 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 
 	list<Enemy*>::iterator it_enemy;
 	for (it_enemy = enemies->begin(); it_enemy != enemies->end(); ++it_enemy) {
-		if (!isOffScreen((*it_enemy)->getPos())) {
+		vector <glm::ivec2> box = (*it_enemy)->buildHitBox();
+		if (!isOffScreen(box[0]) || !isOffScreen(box[1])) {
 			if ((*it_enemy)->getType() == "rifleman" && projlistRifleman->size() < 4 && (rand() % 2)) {
 				Rifleman* rifleguy = dynamic_cast<Rifleman*>(*it_enemy);
 				spawnProjectileRifleman(player->getPos(), rifleguy);
 			}
-			else if ((*it_enemy)->getType() == "wallturret" && projlistWallTurret->size() < 4 && (*it_enemy)->frameCount < 1) {
+			else if ((*it_enemy)->getType() == "wallturret" && projlistWallTurret->size() < 1 && (*it_enemy)->frameCount < 1 && (rand() % 2)) {
 				WallTurret* turretboi = dynamic_cast<WallTurret*>(*it_enemy);
 				spawnProjectileWallTurret(player->getPos(), turretboi);
+			}
+			else if ((*it_enemy)->getType() == "cannon" && projlistCannon->size() < 4 && (*it_enemy)->frameCount < 1 && (rand() % 2)) {
+				Cannon* turretboi = dynamic_cast<Cannon*>(*it_enemy);
+				spawnProjectileCannon(player->getPos(), turretboi);
 			}
 			(*it_enemy)->update(deltaTime);
 		}
@@ -157,6 +166,9 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 	for (it = projlistWallTurret->begin(); it != projlistWallTurret->end(); ++it) {
 		it->update(deltaTime);
 	}
+	for (it = projlistCannon->begin(); it != projlistCannon->end(); ++it) {
+		it->update(deltaTime);
+	}
 }
 
 void EnemyManager::render()
@@ -173,6 +185,9 @@ void EnemyManager::render()
 		it->render();
 	}
 	for (it = projlistWallTurret->begin(); it != projlistWallTurret->end(); ++it) {
+		it->render();
+	}
+	for (it = projlistCannon->begin(); it != projlistCannon->end(); ++it) {
 		it->render();
 	}
 }
@@ -291,6 +306,38 @@ void EnemyManager::spawnProjectileWallTurret(glm::ivec2 positionPlayer, WallTurr
 	}
 }
 
+void EnemyManager::spawnProjectileCannon(glm::ivec2 positionPlayer, Cannon* badguy)
+{
+	glm::ivec2 posPlayer = positionPlayer + glm::ivec2{ 10, 30 };
+	glm::ivec2 posEnemy = badguy->getPos() + glm::ivec2{ 8,8 };
+	if (!isOffScreen(posEnemy)) {
+		glm::vec2 newPos = glm::vec2{ 1,1 };
+		if (posPlayer.y < posEnemy.y - 10) { /*  SHOOT UP  */
+			if (posPlayer.x < posEnemy.x - 10) {
+				if (posPlayer.x >= posEnemy.x - 30) newPos = glm::vec2{ -0.25,-0.75 }; /* SHOOT SLIGHTLY LEFT */
+				else newPos = glm::vec2{ -0.75,-0.25 }; /* SHOOT VERY LEFT */
+			}
+			else if (posPlayer.x > posEnemy.x + 10) {
+				if (posPlayer.x < posEnemy.x + 30) newPos = glm::vec2{ 0.25,-0.75 }; /* SHOOT SLIGHTLY RIGHT */
+				else newPos = glm::vec2{ 0.75,-0.25 }; /* SHOOT VERY RIGHT */
+			}
+			else {
+				newPos = glm::ivec2{ 0,-1 };
+			}
+		}
+		else { /*  ===  */
+			if (posPlayer.x < posEnemy.x) newPos = glm::ivec2{ -1,0 };
+		}
+		badguy->projDir = newPos;
+		projectile = new Projectile();
+		projectile->init(tilemap, texProgram, 2, newPos);
+		projectile->sprite->changeAnimation(0);
+		projectile->setPosition(posEnemy + badguy->getProjectileSpawn());
+		projectile->setTileMap(map);
+		projlistCannon->push_back(*(projectile));
+	}
+}
+
 void EnemyManager::despawnOffScreenProjectiles()
 {
 	list<Projectile>::iterator it = projlist->begin();
@@ -309,6 +356,12 @@ void EnemyManager::despawnOffScreenProjectiles()
 	while (it != projlistWallTurret->end()) {
 		if (isOffScreen((it->getPos())))
 			it = projlistWallTurret->erase(it);
+		else ++it;
+	}
+	it = projlistCannon->begin();
+	while (it != projlistCannon->end()) {
+		if (isOffScreen((it->getPos())))
+			it = projlistCannon->erase(it);
 		else ++it;
 	}
 }
@@ -380,6 +433,20 @@ void EnemyManager::checkPhysics()
 	while (it_projec != projlistWallTurret->end()) { // their pew pew
 		if (isOffScreen((it_projec->getPos())))
 			it_projec = projlistWallTurret->erase(it_projec);
+		else {
+			vector<glm::ivec2> box = it_projec->buildHitBox();
+			if (areTouching(boxPlayer[0], boxPlayer[1], box[0], box[1])) {
+				player->state = DEAD;
+			}
+			++it_projec;
+		}
+
+	}
+
+	it_projec = projlistCannon->begin();
+	while (it_projec != projlistCannon->end()) { // their pew pew
+		if (isOffScreen((it_projec->getPos())))
+			it_projec = projlistCannon->erase(it_projec);
 		else {
 			vector<glm::ivec2> box = it_projec->buildHitBox();
 			if (areTouching(boxPlayer[0], boxPlayer[1], box[0], box[1])) {
