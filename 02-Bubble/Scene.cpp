@@ -138,9 +138,10 @@ void Scene::updateLvl1(int deltaTime) {
 	enemymanager->update(deltaTime, left, right, bottom, top);
 	life->update(deltaTime, left, right, bottom, top, player->life);
 
-	if (player->life <= 0) currentState = LOADING_MENU;
-	
-	
+	if (player->life <= 0) {
+		currentState = LOADING_MENU;
+		changeToScene(LOADING_MENU);
+	}
 }
 
 void Scene::updateLvl2(int deltaTime) {
@@ -154,7 +155,10 @@ void Scene::updateLvl2(int deltaTime) {
 	if (Game::instance().getSpecialKey(GLUT_KEY_UP)) {
 		currentState = LVL2_ANIMATION;
 	}
-	else if (player->life <= 0) currentState = LOADING_MENU;
+	else if (player->life <= 0) {
+		currentState = LOADING_MENU;
+		changeToScene(LOADING_MENU);
+	}
 }
 
 void Scene::lvl2AnimationDoor(int deltaTime) {
