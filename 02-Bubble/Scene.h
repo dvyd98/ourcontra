@@ -7,6 +7,7 @@
 #include "ShaderProgram.h"
 #include "TileMap.h"
 #include "Player.h"
+#include "Life.h"
 #include "Soldier.h"
 #include "Projectile.h"
 #include "EnemyManager.h"
@@ -45,6 +46,7 @@ private:
 private:
 	TileMap *map;
 	Player *player;
+	Life *life;
 	EnemyManager *enemymanager;
 	ShaderProgram texProgram;
 	float currentTime;

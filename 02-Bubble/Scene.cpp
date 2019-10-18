@@ -125,6 +125,9 @@ void Scene::updateLvl1(int deltaTime) {
 	}
 	player->update(deltaTime, left, right, bottom, top);
 	enemymanager->update(deltaTime, left, right, bottom, top);
+	life->update(deltaTime, left, right, bottom, top, player->life);
+
+	if (player->life <= 0) currentState = LOADING_MENU;
 	
 	
 }
@@ -135,9 +138,12 @@ void Scene::updateLvl2(int deltaTime) {
 
 	enemymanager->update(deltaTime, left, right, bottom, top);
 
+	life->update(deltaTime, left, right, bottom, top, player->life);
+
 	if (Game::instance().getSpecialKey(GLUT_KEY_UP)) {
 		currentState = LVL2_ANIMATION;
 	}
+	else if (player->life <= 0) currentState = LOADING_MENU;
 }
 
 void Scene::lvl2AnimationDoor(int deltaTime) {
@@ -233,12 +239,18 @@ void Scene::render()
 	if (currentState == LVL1 || currentState == LVL2 || currentState == LVL2_ANIMATION) {
 		enemymanager->render();
 		player->render();
+		life->render();
 		
 	}
 }
 
 void Scene::initEntitiesLvl1() {
 	player = new Player();
+	life = new Life();
+	life->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	life->setPosition(glm::vec2(3 * map->getTileSize(), 0 * map->getTileSize()));
+	life->setTileMap(map);
+
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(3 * map->getTileSize(), 0 * map->getTileSize()));
 	player->setTileMap(map);
@@ -250,6 +262,11 @@ void Scene::initEntitiesLvl1() {
 
 void Scene::initEntitiesLvl2() {
 	player = new Player();
+	life = new Life();
+	life->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	life->setPosition(glm::vec2(3 * map->getTileSize(), 0 * map->getTileSize()));
+	life->setTileMap(map);
+
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(128, 124));
 	player->setTileMap(map);
