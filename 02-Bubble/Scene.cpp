@@ -201,6 +201,8 @@ void Scene::changeToScene(int scene) {
 	switch (currentState) {
 	case LOADING_MENU : {
 		map = TileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		left = -float(SCREEN_WIDTH - 1) / 2;
+		right = 0;
 		break;
 	}
 	case LVL1: {
