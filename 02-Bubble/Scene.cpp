@@ -189,7 +189,8 @@ void Scene::lvl2AnimationDoor(int deltaTime) {
 void Scene::changeToScene(int scene) {
 	currentState = scene;
 	switch (currentState) {
-	case MENU: {
+	case LOADING_MENU : {
+		map = TileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		break;
 	}
 	case LVL1: {
