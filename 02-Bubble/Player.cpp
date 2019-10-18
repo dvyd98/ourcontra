@@ -315,6 +315,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 		posPlayer.y = top + 20;
 		posPlayer.x = left + 20;
 		state = ALIVE;
+		life -= 1;
 	}
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
