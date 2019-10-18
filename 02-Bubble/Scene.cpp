@@ -18,6 +18,7 @@
 #define INIT_PLAYER_Y_TILES 3
 
 #define SELECT_DELAY 8
+#define PAUSE_DELAY 6
 #define BLINK_ANIMATION_DURATION 10
 #define BLINKS 6
 #define LVL2_ANIMATION_DELAY 8
@@ -53,7 +54,9 @@ void Scene::init()
 	currentTime = 0.0f;
 	selectDelay = SELECT_DELAY;
 	lvl2Delay = LVL2_ANIMATION_DELAY;
+	pauseDelay = PAUSE_DELAY;
 	onePlayer = true;
+	paused = false;
 }
 
 void Scene::update(int deltaTime)
@@ -63,37 +66,45 @@ void Scene::update(int deltaTime)
 	// godmode shortcuts
 	godMode();
 
-	// updates segons la scene
-	switch (currentState)
-	{
-	case LOADING_MENU: {
-		if (left < 0) {
-			left += 2;
-			right += 2;
-		}
-		else currentState = MENU;
-		break;
+	if (--pauseDelay == 0) {
+		if (Game::instance().getKey('p')) paused = !paused;
+		pauseDelay = PAUSE_DELAY;
 	}
-	case MENU: updateMenu(deltaTime); break;
-	case MENU_TO_LVL1: {
-		if (--blinkAnimation == 0 && blinks-- > 0) {
-			switch (map->getFrame()) {
-			case MENU_1_PLAYER: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_1_PLAYER_BLINK); break;
-			case MENU_1_PLAYER_BLINK: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_1_PLAYER); break;
-			case MENU_2_PLAYER: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_2_PLAYER_BLINK); break;
-			case MENU_2_PLAYER_BLINK: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_2_PLAYER); break;
+
+	if (!paused) {
+		// updates segons la scene
+		switch (currentState)
+		{
+		case LOADING_MENU: {
+			if (left < 0) {
+				left += 2;
+				right += 2;
 			}
-			blinkAnimation = BLINK_ANIMATION_DURATION;
+			else currentState = MENU;
+			break;
 		}
-		else if (blinks == 0) changeToScene(LVL1);
-		break;
+		case MENU: updateMenu(deltaTime); break;
+		case MENU_TO_LVL1: {
+			if (--blinkAnimation == 0 && blinks-- > 0) {
+				switch (map->getFrame()) {
+				case MENU_1_PLAYER: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_1_PLAYER_BLINK); break;
+				case MENU_1_PLAYER_BLINK: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_1_PLAYER); break;
+				case MENU_2_PLAYER: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_2_PLAYER_BLINK); break;
+				case MENU_2_PLAYER_BLINK: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_2_PLAYER); break;
+				}
+				blinkAnimation = BLINK_ANIMATION_DURATION;
+			}
+			else if (blinks == 0) changeToScene(LVL1);
+			break;
+		}
+		case LVL1: updateLvl1(deltaTime); break;
+		case LVL2: updateLvl2(deltaTime); break;
+		case LVL2_ANIMATION: {
+			lvl2AnimationDoor(deltaTime); break;
+		}
+		}
 	}
-	case LVL1: updateLvl1(deltaTime); break;
-	case LVL2: updateLvl2(deltaTime); break;
-	case LVL2_ANIMATION: {
-		lvl2AnimationDoor(deltaTime); break;
-	}
-	}
+
 		
 }
 
