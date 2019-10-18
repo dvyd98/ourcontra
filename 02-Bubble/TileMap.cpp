@@ -71,6 +71,7 @@ bool TileMap::loadLevel(const string &levelFile)
 	if (typeScene == "LEVEL1") loadTileMap();
 	if (typeScene == "LEVEL2") loadLevel2();
 	if (typeScene == "MENU") loadMenu();
+	if (typeScene == "GAMEOVER") loadGameover();
 	
 	return true;
 }
@@ -266,6 +267,36 @@ void TileMap::loadMenu() {
 
 	fin.close();
 }
+
+void TileMap::loadGameover() {
+	string line;
+	stringstream sstream;
+	string tilesheetFile;
+
+	getline(fin, line);
+	sstream.str(line);
+	sstream >> tilesheetFile;
+	tilesheet.loadFromFile(tilesheetFile, TEXTURE_PIXEL_FORMAT_RGBA);
+	tilesheet.setWrapS(GL_CLAMP_TO_EDGE);
+	tilesheet.setWrapT(GL_CLAMP_TO_EDGE);
+	tilesheet.setMinFilter(GL_NEAREST);
+	tilesheet.setMagFilter(GL_NEAREST);
+
+	map = new int[1];
+	map[0] = GAMEOVER_CONTINUE;
+
+	mapSize.x = 1; mapSize.y = 1;
+	tileSize.x = 16 * 20;
+	tileSize.y = 16 * 15;
+	tilesheetSize.x = 4;
+	tilesheetSize.y = 1;
+	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
+	blockSize.x = 16 * 20;
+	blockSize.y = 16 * 15;
+
+	fin.close();
+}
+
 
 void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 {

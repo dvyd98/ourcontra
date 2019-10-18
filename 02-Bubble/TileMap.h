@@ -24,6 +24,10 @@ enum MENU_FRAMES {
 	MENU_1_PLAYER, MENU_1_PLAYER_BLINK, MENU_2_PLAYER, MENU_2_PLAYER_BLINK
 };
 
+enum GAMEOVER_FRAMES {
+	GAMEOVER_CONTINUE, GAMEOVER_CONTINUE_BLINK, GAMEOVER_END, GAMEOVER_END_BLINK
+};
+
 enum LEVEL2_SUBLEVELS {
 	SLVL1, SLVL3, SLVL4, SLVL5, BOSS,
 	ANIM1, ANIM2, ANIM3, ANIM4
@@ -68,6 +72,7 @@ private:
 	void loadTileMap();
 	void loadLevel2();
 	void loadMenu();
+	void loadGameover();
 	bool bottomIsSea(const int y, const int x) const;
 
 private:

@@ -17,8 +17,8 @@
 // It is responsible for updating and render them.
 
 enum sceneState {
-	LOADING_MENU, MENU, MENU_TO_LVL1, HOW_TO, PAUSE, CREDITS,
-	LVL1, LVL2, LVL2_ANIMATION
+	LOADING_MENU, MENU, MENU_TO_LVL1, HOW_TO, CREDITS,
+	LVL1, LVL2, LVL2_ANIMATION, GAMEOVER, GAMEOVER_ANIMATION
 };
 
 class Scene
@@ -39,6 +39,7 @@ private:
 	void updateMenu(int deltaTime);
 	void updateLvl1(int deltaTime);
 	void updateLvl2(int deltaTime);
+	void updateGameover(int deltaTime);
 	void lvl2AnimationDoor(int deltaTime);
 	void changeToScene(int scene);
 	void godMode();

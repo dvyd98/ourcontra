@@ -102,6 +102,23 @@ void Scene::update(int deltaTime)
 		case LVL2_ANIMATION: {
 			lvl2AnimationDoor(deltaTime); break;
 		}
+		case GAMEOVER: updateGameover(deltaTime); break; 
+		case GAMEOVER_ANIMATION: {
+			if (--blinkAnimation == 0 && blinks-- > 0) {
+				switch (map->getFrame()) {
+				case GAMEOVER_CONTINUE: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, GAMEOVER_CONTINUE_BLINK); break;
+				case GAMEOVER_CONTINUE_BLINK: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, GAMEOVER_CONTINUE); break;
+				case GAMEOVER_END: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, GAMEOVER_END_BLINK); break;
+				case GAMEOVER_END_BLINK: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, GAMEOVER_END); break;
+				}
+				blinkAnimation = BLINK_ANIMATION_DURATION;
+			}
+			else if (blinks == 0) {
+				if (map->getFrame() == GAMEOVER_CONTINUE || map->getFrame() == GAMEOVER_CONTINUE_BLINK) changeToScene(LOADING_MENU);
+				else changeToScene(CREDITS);
+			}
+			break;
+		}
 		}
 	}
 
@@ -139,13 +156,12 @@ void Scene::updateLvl1(int deltaTime) {
 	life->update(deltaTime, left, right, bottom, top, player->life);
 
 	if (player->life <= 0) {
-		currentState = LOADING_MENU;
-		changeToScene(LOADING_MENU);
+		currentState = GAMEOVER;
+		changeToScene(GAMEOVER);
 	}
 }
 
 void Scene::updateLvl2(int deltaTime) {
-	left = 0; right = float(SCREEN_WIDTH - 1) / 2;
 	player->update(deltaTime, left, right, bottom, top);
 
 	enemymanager->update(deltaTime, left, right, bottom, top);
@@ -156,8 +172,23 @@ void Scene::updateLvl2(int deltaTime) {
 		currentState = LVL2_ANIMATION;
 	}
 	else if (player->life <= 0) {
-		currentState = LOADING_MENU;
-		changeToScene(LOADING_MENU);
+		currentState = GAMEOVER;
+		changeToScene(GAMEOVER);
+	}
+}
+
+void Scene::updateGameover(int deltaTime) {
+	if (--selectDelay == 0) {
+		if (Game::instance().getKey(','))
+			map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram,
+			((map->getFrame() == GAMEOVER_CONTINUE) ? GAMEOVER_END : GAMEOVER_CONTINUE));
+		// start game with enter
+		if (Game::instance().getKey('.')) {
+			currentState = GAMEOVER_ANIMATION;
+			blinks = BLINKS;
+			blinkAnimation = BLINK_ANIMATION_DURATION;
+		}
+		selectDelay = SELECT_DELAY;
 	}
 }
 
@@ -214,7 +245,15 @@ void Scene::changeToScene(int scene) {
 	case LVL2: {
 		map = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		subLvl = 0;
+		left = 0;
+		right = float(SCREEN_WIDTH - 1) / 2;
 		initEntitiesLvl2();
+		break;
+	}
+	case GAMEOVER: {
+		map = TileMap::createTileMap("levels/gameover.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		left = 0;
+		right = float(SCREEN_WIDTH - 1) / 2;
 		break;
 	}
 	}
@@ -238,6 +277,11 @@ void Scene::godMode() {
 		subLvl = 0;
 		map = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		initEntitiesLvl2();
+	}
+	if (Game::instance().getKey('0')) {
+		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
+		map = TileMap::createTileMap("levels/gameover.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		currentState = GAMEOVER;
 	}
 	// TODO click posa flag immortal al personatge
 }
