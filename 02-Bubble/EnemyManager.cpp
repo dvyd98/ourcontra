@@ -99,6 +99,13 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 			aux->setTileMap(map);
 			enemies->push_back(aux);
 		}
+		else if (enemyType == BOSS_TURRET) {
+			Enemy *aux = new BossTurret();
+			aux->init(tilemap, texProgram);
+			aux->setPosition(glm::vec2(map->getEnemy(i).x * map->getTileSize(), map->getEnemy(i).y * map->getTileSize()));
+			aux->setTileMap(map);
+			enemies->push_back(aux);
+		}
 	}
 
 	Enemy *test2 = new WallTurret();
