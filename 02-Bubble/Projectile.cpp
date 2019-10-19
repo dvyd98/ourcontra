@@ -8,7 +8,7 @@
 
 enum upgradeRank
 {
-	RIFLEMAN, RANK1, RANK2, RANK3, FLAMETHROWER
+	RIFLEMAN, RANK1, SPREAD
 };
 
 
@@ -30,8 +30,8 @@ void Projectile::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram
 	sprite->setAnimationSpeed(RANK1, 8);
 	sprite->addKeyframe(RANK1, glm::vec2(0.0f, 0.0f));
 
-	sprite->setAnimationSpeed(RANK2, 8);
-	sprite->addKeyframe(RANK2, glm::vec2(0.0f, 0.1f));
+	sprite->setAnimationSpeed(SPREAD, 8);
+	sprite->addKeyframe(SPREAD, glm::vec2(0.0f, 0.1f));
 
 	sprite->changeAnimation(1);
 	tileMapDispl = tileMapPos;

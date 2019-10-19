@@ -24,6 +24,9 @@ public:
 	Sprite *sprite;
 	glm::ivec2 getPos();
 
+	int rank;
+	int damage;
+
 private:
 	glm::ivec2 tileMapDispl;
 	glm::vec2 newPos, posProjectile;
@@ -31,8 +34,6 @@ private:
 	
 	TileMap *map;
 	int direction;
-	int rank;
-	int damage;
 
 };
 

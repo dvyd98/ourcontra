@@ -8,6 +8,8 @@
 #include "WallTurret.h"
 #include "BossTurret.h"
 #include "Cannon.h"
+#include "UpgradeBox.h"
+#include "GunUpgrade.h"
 #include "ShaderProgram.h"
 #include "TileMap.h"
 #include <glm/glm.hpp>
@@ -27,6 +29,7 @@ public:
 	bool isOffScreenY(Enemy &pj);
 	bool isOffScreen(glm::ivec2 pj);
 	void spawnProjectilePlayer(glm::ivec2 position);
+	void spawnProjectileSPREADPlayer(glm::ivec2 position);
 	void spawnProjectileRifleman(glm::ivec2 position, Rifleman* badguy);
 	void spawnProjectileWallTurret(glm::ivec2 position, WallTurret* badguy);
 	void spawnProjectileCannon(glm::ivec2 position, Cannon* badguy);

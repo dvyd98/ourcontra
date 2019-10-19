@@ -22,6 +22,11 @@ enum States
 	ALIVE, DEAD, DYING, SPECIAL_BRIDGE_STATE
 };
 
+enum upgradeRank
+{
+	RIFLEMAN, RANK1, SPREAD
+};
+
 EnemyManager::EnemyManager()
 {
 }
@@ -108,17 +113,12 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 		}
 	}
 
-	Enemy *test2 = new WallTurret();
+	Enemy *test2 = new GunUpgrade();
 	test2->init(tilemap, texProgram);
 	test2->setPosition(glm::vec2(14 * map->getTileSize(), 3 * map->getTileSize()));
 	test2->setTileMap(map);
 	enemies->push_back(test2);
 
-	Enemy *test3 = new BossTurret();
-	test3->init(tilemap, texProgram);
-	test3->setPosition(glm::vec2(14 * map->getTileSize(), 1 * map->getTileSize()));
-	test3->setTileMap(map);
-	enemies->push_back(test3);
 
 	Enemy *test = new Cannon();
 	test->init(tilemap, texProgram);
@@ -161,8 +161,14 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 		}
 	}
 	if (Game::instance().getKey('a')) {
-		if (projlist->size() < 4)
-			spawnProjectilePlayer(player->getPos());
+		if (player->projectile == RANK1) {
+			if (projlist->size() < 4)
+				spawnProjectilePlayer(player->getPos());
+		}
+		else if (player->projectile == SPREAD) {
+			if (projlist->size() < 10)
+				spawnProjectileSPREADPlayer(player->getPos());
+		}
 	}
 	list<Projectile>::iterator it;
 	for (it = projlist->begin(); it != projlist->end(); ++it) {
@@ -237,6 +243,140 @@ void EnemyManager::spawnProjectilePlayer(glm::ivec2 position)
 	}
 
 	projectile->init(tilemap, texProgram, 6, newPos);
+	projectile->setPosition(position + player->getProjectileSpawn());
+	projectile->setTileMap(map);
+	projlist->push_back(*(projectile));
+}
+
+void EnemyManager::spawnProjectileSPREADPlayer(glm::ivec2 position)
+{
+	glm::vec2 newPos;
+	glm::vec2 newPos2;
+	glm::vec2 newPos3;
+	glm::vec2 newPos4;
+	glm::vec2 newPos5;
+	int dir = player->sprite->animation();
+	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_UP)) {
+		newPos = glm::vec2{ -1,-1 };
+		newPos2 = glm::vec2{ -1,-1 };
+		newPos3 = glm::vec2{ -1,-1 };
+		newPos4 = glm::vec2{ -1,-1 };
+		newPos5 = glm::vec2{ -1,-1 };
+	}
+	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_UP)) {
+		newPos = glm::vec2{ 1,-1 };
+		newPos2 = glm::vec2{ 1,-1 };
+		newPos3 = glm::vec2{ 1,-1 };
+		newPos4 = glm::vec2{ 1,-1 };
+		newPos5 = glm::vec2{ 1,-1 };
+
+	}
+	else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
+		newPos = glm::vec2{ -1,1 };
+		newPos2 = glm::vec2{ -1,1 };
+		newPos3 = glm::vec2{ -1,1 };
+		newPos4 = glm::vec2{ -1,1 };
+		newPos5 = glm::vec2{ -1,1 };
+	}
+	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
+		newPos = glm::vec2{ 1,1 };
+		newPos2 = glm::vec2{ 1,1 };
+		newPos3 = glm::vec2{ 1,1 };
+		newPos4 = glm::vec2{ 1,1 };
+		newPos5 = glm::vec2{ 1,1 };
+	}
+	else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT)) {
+		newPos = glm::vec2{ -1,0 };
+		newPos2 = glm::vec2{ -1,0 };
+		newPos3 = glm::vec2{ -1,0 };
+		newPos4 = glm::vec2{ -1,0 };
+		newPos5 = glm::vec2{ -1,0 };
+	}
+	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) {
+		newPos = glm::vec2{ 1,0 };
+		newPos2 = glm::vec2{ 1,0 };
+		newPos3 = glm::vec2{ 1,0 };
+		newPos4 = glm::vec2{ 1,0 };
+		newPos5 = glm::vec2{ 1,0 };
+	}
+	else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) {
+		newPos = glm::vec2{ 0,-1 };
+		newPos2 = glm::vec2{ 0,-1 };
+		newPos3 = glm::vec2{ 0,-1 };
+		newPos4 = glm::vec2{ 0,-1 };
+		newPos5 = glm::vec2{ 0,-1 };
+	}
+	else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
+		if (dir == CROUCH_LOOK_LEFT) {
+			newPos = glm::vec2{ -1,0 };
+			newPos2 = glm::vec2{ -1,0 };
+			newPos3 = glm::vec2{ -1,0 };
+			newPos4 = glm::vec2{ -1,0 };
+			newPos5 = glm::vec2{ -1,0 };
+		}
+		else if (dir == CROUCH_LOOK_RIGHT) {
+			newPos = glm::vec2{ 1,0 };
+			newPos2 = glm::vec2{ 1,0 };
+			newPos3 = glm::vec2{ 1,0 };
+			newPos4 = glm::vec2{ 1,0 };
+			newPos5 = glm::vec2{ 1,0 };
+		}
+		else {
+			newPos = glm::vec2{ 0, 1 };
+			newPos2 = glm::vec2{ 0, 1 };
+			newPos3 = glm::vec2{ 0, 1 };
+			newPos4 = glm::vec2{ 0, 1 };
+			newPos5 = glm::vec2{ 0, 1 };
+		}
+	}
+	else {
+		if (dir == STAND_LEFT || dir == AIRBONE_LEFT) {
+			newPos = glm::vec2{ -1,0 };
+			newPos2 = glm::vec2{ -1,0 };
+			newPos3 = glm::vec2{ -1,0 };
+			newPos4 = glm::vec2{ -1,0 };
+			newPos5 = glm::vec2{ -1,0 };
+		}
+		else if (dir == STAND_RIGHT || dir == AIRBONE_RIGHT) {
+			newPos = glm::vec2{ 1,0 };
+			newPos2 = glm::vec2{ 1,0.15 };
+			newPos3 = glm::vec2{ 1,0.30 };
+			newPos4 = glm::vec2{ 1,-0.15 };
+			newPos5 = glm::vec2{ 1,-0.30 };
+		}
+	}
+
+	projectile = new Projectile();
+	projectile->init(tilemap, texProgram, 6, newPos);
+	projectile->sprite->changeAnimation(SPREAD);
+	projectile->setPosition(position + player->getProjectileSpawn());
+	projectile->setTileMap(map);
+	projlist->push_back(*(projectile));
+
+	projectile = new Projectile();
+	projectile->init(tilemap, texProgram, 6, newPos2);
+	projectile->sprite->changeAnimation(SPREAD);
+	projectile->setPosition(position + player->getProjectileSpawn());
+	projectile->setTileMap(map);
+	projlist->push_back(*(projectile));
+
+	projectile = new Projectile();
+	projectile->init(tilemap, texProgram, 6, newPos3);
+	projectile->sprite->changeAnimation(SPREAD);
+	projectile->setPosition(position + player->getProjectileSpawn());
+	projectile->setTileMap(map);
+	projlist->push_back(*(projectile));
+
+	projectile = new Projectile();
+	projectile->init(tilemap, texProgram, 6, newPos4);
+	projectile->sprite->changeAnimation(SPREAD);
+	projectile->setPosition(position + player->getProjectileSpawn());
+	projectile->setTileMap(map);
+	projlist->push_back(*(projectile));
+
+	projectile = new Projectile();
+	projectile->init(tilemap, texProgram, 6, newPos5);
+	projectile->sprite->changeAnimation(SPREAD);
 	projectile->setPosition(position + player->getProjectileSpawn());
 	projectile->setTileMap(map);
 	projlist->push_back(*(projectile));
@@ -415,7 +555,7 @@ void EnemyManager::checkPhysics()
 			bool shot = false;
 			while ( it_enemy != enemies->end() && !shot) {
 				vector<glm::ivec2> boxEnemy = (*it_enemy)->buildHitBox();
-				if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() != "bridge" && areTouching(box[0], box[1], boxEnemy[0], boxEnemy[1])) {
+				if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() != "bridge" && (*it_enemy)->getType() != "gunupgrade" && areTouching(box[0], box[1], boxEnemy[0], boxEnemy[1])) {
 					if ((*it_enemy)->decreaseLife(it_projec->getDmg())) (*it_enemy)->state = DYING;
 					shot = true;
 				}
@@ -473,18 +613,24 @@ void EnemyManager::checkPhysics()
 	player->bBridge = FALSE;
 	while (it_enemy != enemies->end()) {  // are we touching bad guys?
 		vector<glm::ivec2> boxEnemy = (*it_enemy)->buildHitBox();
-		if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() != "bridge") {
+		if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() != "bridge" && (*it_enemy)->getType() != "upgradebox" && (*it_enemy)->getType() != "gunupgrade") {
 			if (areTouching(boxPlayer[0], boxPlayer[1], boxEnemy[0], boxEnemy[1])) {
 					player->state = DEAD;
 			}
 		}
-		else {
+		else if ((*it_enemy)->getType() == "bridge"){
 			if (areTouching(boxPlayer[0], boxPlayer[1], boxEnemy[0], boxEnemy[1])) {
 				if ((*it_enemy)->state != DEAD && (*it_enemy)->state != DYING) {
 					(*it_enemy)->state = SPECIAL_BRIDGE_STATE;
 					player->bBridge = TRUE;
 					if (/*!player->isJumping() && */(*it_enemy)->state == ALIVE);// player->posPlayer.y -= FALL_STEP;
 				}
+			}
+		}
+		else if ((*it_enemy)->getType() == "gunupgrade") {
+			if (areTouching(boxPlayer[0], boxPlayer[1], boxEnemy[0], boxEnemy[1])) {
+				(*it_enemy)->state = DYING;
+				player->projectile = SPREAD;
 			}
 		}
 		++it_enemy;
