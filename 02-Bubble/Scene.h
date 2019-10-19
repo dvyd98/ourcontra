@@ -11,6 +11,7 @@
 #include "Soldier.h"
 #include "Projectile.h"
 #include "EnemyManager.h"
+#include "Text.h"
 
 
 // Scene contains all the entities of our game.
@@ -65,6 +66,9 @@ private:
 	int subLvl;
 
 	bool paused;
+
+	int score1, score2;
+	Text score1Text, score2Text;
 
 };
 

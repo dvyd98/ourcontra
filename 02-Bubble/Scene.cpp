@@ -57,6 +57,11 @@ void Scene::init()
 	pauseDelay = PAUSE_DELAY;
 	onePlayer = true;
 	paused = false;
+
+	score1 = score2 = 0;
+
+	if (!score1Text.init("fonts/OpenSans-Regular.ttf"))
+		cout << "Error al carregar font" << endl;
 }
 
 void Scene::update(int deltaTime)
@@ -303,6 +308,12 @@ void Scene::render()
 		player->render();
 		life->render();
 		
+	}
+
+	if (currentState == GAMEOVER) {
+		score1Text.render(std::to_string(score1), glm::vec2(100, 100), 32, glm::vec4(1, 1, 1, 1));
+		score1Text.render("TEST", glm::vec2(100, 100), 32, glm::vec4(1, 1, 1, 1));
+
 	}
 }
 
