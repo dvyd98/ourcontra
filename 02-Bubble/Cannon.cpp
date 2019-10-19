@@ -18,7 +18,7 @@ enum States
 
 enum CannonAnims
 {
-	CLOSED, OPENING_FIRST, OPENING_SECOND, OPENING_LAST, AIM_UP_LEFT_CLOSE, AIM_UP_LEFT_FAR, AIM_LEFT
+	CLOSED, OPENING_FIRST, OPENING_SECOND, OPENING_LAST, AIM_UP_LEFT_CLOSE, AIM_UP_LEFT_FAR, AIM_LEFT, ANIM_DYING, ANIM_DEAD
 };
 
 
@@ -34,6 +34,7 @@ void Cannon::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	state = ALIVE;
 	life = 10;
 	frameCount = 30;
+	lastKeyframe = 0;
 	spritesheet.loadFromFile("images/cannon.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
 	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
@@ -69,6 +70,15 @@ void Cannon::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(AIM_LEFT, glm::vec2(0.1f, 0.3f));
 	sprite->addKeyframe(AIM_LEFT, glm::vec2(0.2f, 0.3f));
 
+	sprite->setAnimationSpeed(ANIM_DYING, 6);
+	sprite->addKeyframe(ANIM_DYING, glm::vec2(0.0f, 0.4f));
+	sprite->addKeyframe(ANIM_DYING, glm::vec2(0.1f, 0.4f));
+	sprite->addKeyframe(ANIM_DYING, glm::vec2(0.2f, 0.4f));
+	sprite->addKeyframe(ANIM_DYING, glm::vec2(0.3f, 0.4f));
+
+	sprite->setAnimationSpeed(ANIM_DEAD, 1);
+	sprite->addKeyframe(ANIM_DEAD, glm::vec2(0.9f, 0.8f));
+
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
@@ -77,22 +87,32 @@ void Cannon::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 void Cannon::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	if (frameCount <= 30 && frameCount > 20) {
-		sprite->changeAnimation(OPENING_FIRST);
-	}
-	else if (frameCount < 20 && frameCount >= 10) {
-		sprite->changeAnimation(OPENING_SECOND);
-	}
-	else if (frameCount > 0) {
-		sprite->changeAnimation(OPENING_LAST);
-	}
-	else if (frameCount < 1) {
-		if (projDir == glm::vec2{ -1, 0 } && sprite->animation() != AIM_LEFT) sprite->changeAnimation(AIM_LEFT);
-		else if (projDir == glm::vec2{ -0.75,-0.25 } && sprite->animation() != AIM_UP_LEFT_FAR) sprite->changeAnimation(AIM_UP_LEFT_FAR);
-		else if (projDir == glm::vec2{ -0.25,-0.75 } && sprite->animation() != AIM_UP_LEFT_CLOSE) sprite->changeAnimation(AIM_UP_LEFT_CLOSE);
-	}
+	if (state == ALIVE) {
+		if (frameCount <= 30 && frameCount > 20) {
+			sprite->changeAnimation(OPENING_FIRST);
+		}
+		else if (frameCount < 20 && frameCount >= 10) {
+			sprite->changeAnimation(OPENING_SECOND);
+		}
+		else if (frameCount > 0) {
+			sprite->changeAnimation(OPENING_LAST);
+		}
+		else if (frameCount < 1) {
+			if (projDir == glm::vec2{ -1, 0 } && sprite->animation() != AIM_LEFT) sprite->changeAnimation(AIM_LEFT);
+			else if (projDir == glm::vec2{ -0.75,-0.25 } && sprite->animation() != AIM_UP_LEFT_FAR) sprite->changeAnimation(AIM_UP_LEFT_FAR);
+			else if (projDir == glm::vec2{ -0.25,-0.75 } && sprite->animation() != AIM_UP_LEFT_CLOSE) sprite->changeAnimation(AIM_UP_LEFT_CLOSE);
+		}
 
-	if (frameCount > 0) --frameCount;
+		if (frameCount > 0) --frameCount;
+	}
+	else if (state == DYING) {
+		if (sprite->animation() != ANIM_DYING) sprite->changeAnimation(ANIM_DYING);
+		else if (lastKeyframe != 0 && sprite->keyframe() == 0) {
+			state = DEAD;
+			sprite->changeAnimation(ANIM_DEAD);
+		}
+		lastKeyframe = sprite->keyframe();
+	}
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
 

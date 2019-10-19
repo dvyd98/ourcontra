@@ -28,6 +28,11 @@ enum LookingTo
 	LOOKING_LEFT, LOOKING_RIGHT
 };
 
+enum upgradeRank
+{
+	RIFLEMAN, RANK1, SPREAD
+};
+
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
@@ -36,6 +41,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	lookingTo = LOOKING_RIGHT;
 	life = 2;
 	state = ALIVE;
+	projectile = RANK1;
 	spritesheet.loadFromFile("images/blueguy.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
 	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);

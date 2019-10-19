@@ -25,6 +25,7 @@ public:
 	int state;
 	Sprite *sprite;
 	int frameCount;
+	int lastKeyframe;
 	
 
 protected:
