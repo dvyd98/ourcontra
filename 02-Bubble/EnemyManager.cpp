@@ -19,7 +19,7 @@ enum BridgeAnims
 
 enum States
 {
-	ALIVE, DEAD, DYING
+	ALIVE, DEAD, DYING, SPECIAL_BRIDGE_STATE
 };
 
 EnemyManager::EnemyManager()
@@ -137,6 +137,7 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 	top = topp;
 
 	despawnOffScreenEnemies();
+	despawnDeadEnemies();
 
 	checkPhysics(); // coctel
 
@@ -144,15 +145,15 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 	for (it_enemy = enemies->begin(); it_enemy != enemies->end(); ++it_enemy) {
 		vector <glm::ivec2> box = (*it_enemy)->buildHitBox();
 		if (!isOffScreen(box[0]) || !isOffScreen(box[1])) {
-			if ((*it_enemy)->getType() == "rifleman" && projlistRifleman->size() < 4 && (rand() % 2)) {
+			if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() == "rifleman" && projlistRifleman->size() < 4 && (rand() % 2)) {
 				Rifleman* rifleguy = dynamic_cast<Rifleman*>(*it_enemy);
 				spawnProjectileRifleman(player->getPos(), rifleguy);
 			}
-			else if ((*it_enemy)->getType() == "wallturret" && projlistWallTurret->size() < 1 && (*it_enemy)->frameCount < 1 && (rand() % 2)) {
+			else if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() == "wallturret" && projlistWallTurret->size() < 1 && (*it_enemy)->frameCount < 1 && (rand() % 2)) {
 				WallTurret* turretboi = dynamic_cast<WallTurret*>(*it_enemy);
 				spawnProjectileWallTurret(player->getPos(), turretboi);
 			}
-			else if ((*it_enemy)->getType() == "cannon" && projlistCannon->size() < 4 && (*it_enemy)->frameCount < 1 && (rand() % 2)) {
+			else if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() == "cannon" && projlistCannon->size() < 4 && (*it_enemy)->frameCount < 1 && (rand() % 2)) {
 				Cannon* turretboi = dynamic_cast<Cannon*>(*it_enemy);
 				spawnProjectileCannon(player->getPos(), turretboi);
 			}
@@ -318,30 +319,25 @@ void EnemyManager::spawnProjectileCannon(glm::ivec2 positionPlayer, Cannon* badg
 	glm::ivec2 posPlayer = positionPlayer + glm::ivec2{ 10, 30 };
 	glm::ivec2 posEnemy = badguy->getPos() + glm::ivec2{ 8,8 };
 	if (!isOffScreen(posEnemy)) {
-		glm::vec2 newPos = glm::vec2{ 1,1 };
+		glm::vec2 newPos = glm::vec2{ 99,99 };
 		if (posPlayer.y < posEnemy.y - 10) { /*  SHOOT UP  */
 			if (posPlayer.x < posEnemy.x - 10) {
 				if (posPlayer.x >= posEnemy.x - 30) newPos = glm::vec2{ -0.25,-0.75 }; /* SHOOT SLIGHTLY LEFT */
 				else newPos = glm::vec2{ -0.75,-0.25 }; /* SHOOT VERY LEFT */
 			}
-			else if (posPlayer.x > posEnemy.x + 10) {
-				if (posPlayer.x < posEnemy.x + 30) newPos = glm::vec2{ 0.25,-0.75 }; /* SHOOT SLIGHTLY RIGHT */
-				else newPos = glm::vec2{ 0.75,-0.25 }; /* SHOOT VERY RIGHT */
-			}
-			else {
-				newPos = glm::ivec2{ 0,-1 };
-			}
 		}
 		else { /*  ===  */
 			if (posPlayer.x < posEnemy.x) newPos = glm::ivec2{ -1,0 };
 		}
-		badguy->projDir = newPos;
-		projectile = new Projectile();
-		projectile->init(tilemap, texProgram, 2, newPos);
-		projectile->sprite->changeAnimation(0);
-		projectile->setPosition(posEnemy + badguy->getProjectileSpawn());
-		projectile->setTileMap(map);
-		projlistCannon->push_back(*(projectile));
+		if (newPos != glm::vec2{ 99,99 }) {
+			badguy->projDir = newPos;
+			projectile = new Projectile();
+			projectile->init(tilemap, texProgram, 2, newPos);
+			projectile->sprite->changeAnimation(0);
+			projectile->setPosition(posEnemy + badguy->getProjectileSpawn());
+			projectile->setTileMap(map);
+			projlistCannon->push_back(*(projectile));
+		}
 	}
 }
 
@@ -382,6 +378,15 @@ void EnemyManager::despawnOffScreenEnemies() {
 	}
 }
 
+void EnemyManager::despawnDeadEnemies() {
+	list<Enemy*>::iterator it = enemies->begin();
+	while (it != enemies->end()) {
+		if ((*it)->state == DEAD && (*it)->getType() != "bridge")
+			it = enemies->erase(it);
+		else ++it;
+	}
+}
+
 bool EnemyManager::areTouching(glm::ivec2 obj1_left, glm::ivec2 obj1_right, glm::ivec2 obj2_left, glm::ivec2 obj2_right)
 {
 	if (obj1_left.x > obj2_right.x || obj2_left.x > obj1_right.x) return false;
@@ -410,8 +415,8 @@ void EnemyManager::checkPhysics()
 			bool shot = false;
 			while ( it_enemy != enemies->end() && !shot) {
 				vector<glm::ivec2> boxEnemy = (*it_enemy)->buildHitBox();
-				if ((*it_enemy)->getType() != "bridge" && areTouching(box[0], box[1], boxEnemy[0], boxEnemy[1])) {
-					if ((*it_enemy)->decreaseLife(it_projec->getDmg())) it_enemy = enemies->erase(it_enemy);
+				if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() != "bridge" && areTouching(box[0], box[1], boxEnemy[0], boxEnemy[1])) {
+					if ((*it_enemy)->decreaseLife(it_projec->getDmg())) (*it_enemy)->state = DYING;
 					shot = true;
 				}
 				else ++it_enemy;
@@ -468,16 +473,18 @@ void EnemyManager::checkPhysics()
 	player->bBridge = FALSE;
 	while (it_enemy != enemies->end()) {  // are we touching bad guys?
 		vector<glm::ivec2> boxEnemy = (*it_enemy)->buildHitBox();
-		if ((*it_enemy)->getType() != "bridge") {
+		if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() != "bridge") {
 			if (areTouching(boxPlayer[0], boxPlayer[1], boxEnemy[0], boxEnemy[1])) {
 					player->state = DEAD;
 			}
 		}
 		else {
 			if (areTouching(boxPlayer[0], boxPlayer[1], boxEnemy[0], boxEnemy[1])) {
-				//(*it_enemy)->state = DEAD;
-				player->bBridge = TRUE;
-				if (/*!player->isJumping() && */(*it_enemy)->state == ALIVE);// player->posPlayer.y -= FALL_STEP;
+				if ((*it_enemy)->state != DEAD && (*it_enemy)->state != DYING) {
+					(*it_enemy)->state = SPECIAL_BRIDGE_STATE;
+					player->bBridge = TRUE;
+					if (/*!player->isJumping() && */(*it_enemy)->state == ALIVE);// player->posPlayer.y -= FALL_STEP;
+				}
 			}
 		}
 		++it_enemy;

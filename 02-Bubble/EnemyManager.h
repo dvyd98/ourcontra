@@ -32,6 +32,7 @@ public:
 	void spawnProjectileCannon(glm::ivec2 position, Cannon* badguy);
 	void despawnOffScreenProjectiles();
 	void despawnOffScreenEnemies();
+	void despawnDeadEnemies();
 	bool areTouching(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lpos2, glm::ivec2 rpos2);
 	bool areTouchingYcoord(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lpos2, glm::ivec2 rpos2);
 	void checkPhysics();
