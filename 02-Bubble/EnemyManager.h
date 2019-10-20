@@ -24,8 +24,12 @@ public:
 	~EnemyManager();
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, TileMap *tileMap, Player *p1
 		);
+	void initLvl2(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, TileMap *tileMap, Player *p1
+	);
 	void update(int deltaTime, float left, float right, float bottom, float top);
+	void updateLvl2(int deltaTime, float left, float right, float bottom, float top);
 	void render();
+	void renderLvl2();
 	bool isOffScreenY(Enemy &pj);
 	bool isOffScreen(glm::ivec2 pj);
 	void spawnProjectilePlayer(glm::ivec2 position);
@@ -40,6 +44,8 @@ public:
 	bool areTouching(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lpos2, glm::ivec2 rpos2);
 	bool areTouchingYcoord(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lpos2, glm::ivec2 rpos2);
 	void checkPhysics();
+	void setSublvl(int x) { sublvl = x; }
+	int getSublvl() { return sublvl; }
 
 	list<Enemy*> *enemies;
 	TileMap *map;
@@ -55,6 +61,7 @@ public:
 
 private:
 	float left, right, bottom, top;
+	int sublvl;
 };
 
 #endif

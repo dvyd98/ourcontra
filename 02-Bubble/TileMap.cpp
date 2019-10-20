@@ -125,7 +125,7 @@ void TileMap::loadTileMap() {
 			else if (t == "bush") type = RIFLEMAN_BUSH;
 			else if (t == "boss") type = RIFLEMAN_BOSS;
 		}
-		else if (s == "Turret1") type = TURRET1;
+		else if (s == "WallTurret") type = WALLTURRET;
 		else if (s == "BossTurret") type = BOSS_TURRET;
 		else if (s == "Cannon") type = CANNON;
 		enemies->push_back(infoEnemies());
@@ -237,6 +237,27 @@ void TileMap::loadLevel2() {
 	blockSize.x = 16 * 20;
 	blockSize.y = 16 * 15;
 
+	getline(fin, line);
+	sstream.str(line);
+	sstream >> numEnemies;
+
+
+	enemies = new vector<infoEnemies>();
+	for (int i = 0; i < numEnemies; ++i) {
+		string s;
+		int x = NULL, y = NULL, sublvl = NULL;
+		enemyType type = SOLDIER;
+		getline(fin, line);
+		sstream.clear();
+		sstream.str(line);
+		sstream >> x >> y >> s >> sublvl;
+		if (s == "WallTurret") type = WALLTURRET;
+		enemies->push_back(infoEnemies());
+		(*enemies)[i].x = x;
+		(*enemies)[i].y = y;
+		(*enemies)[i].type = type;
+		(*enemies)[i].sublvl = sublvl;
+	}
 	fin.close();
 }
 

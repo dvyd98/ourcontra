@@ -17,7 +17,7 @@
 
 enum enemyType {
 	SOLDIER, BRIDGE_EDGE_LEFT, BRIDGE_EDGE_RIGHT, BRIDGE_CENTRAL,
-	RIFLEMAN_NORMAL, RIFLEMAN_BUSH, TURRET1, TURRET2, BOSS_TURRET, RIFLEMAN_BOSS, CANNON
+	RIFLEMAN_NORMAL, RIFLEMAN_BUSH, WALLTURRET, CANNON, BOSS_TURRET, RIFLEMAN_BOSS
 };
 
 enum MENU_FRAMES {
@@ -34,7 +34,7 @@ enum LEVEL2_SUBLEVELS {
 };
 
 struct infoEnemies {
-	int x; int y; enemyType type;
+	int x; int y; enemyType type; int sublvl;
 };
 
 class TileMap

@@ -98,7 +98,7 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 			aux->setTileMap(map);
 			enemies->push_back(aux);
 		}
-		else if (enemyType == TURRET1) {
+		else if (enemyType == WALLTURRET) {
 			Enemy *aux = new WallTurret();
 			aux->init(tilemap, texProgram);
 			aux->setPosition(glm::vec2(map->getEnemy(i).x * map->getTileSize(), map->getEnemy(i).y * map->getTileSize()));
@@ -135,6 +135,30 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 	enemies->push_back(test2);
 
 
+}
+
+void EnemyManager::initLvl2(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, TileMap *tileMap, Player *p1
+)
+{
+	texProgram = shaderProgram;
+	tilemap = tileMapPos;
+	map = tileMap;
+	player = p1;
+	sublvl = 0;
+	int n = map->getNumEnemies();
+	enemies = new list<Enemy*>();
+	projlist = new list<Projectile>();
+	projlistWallTurret = new list<Projectile>();
+	for (int i = 0; i < n; ++i) {
+		int enemyType = map->getEnemy(i).type;
+		if (enemyType == WALLTURRET) {
+			Enemy *aux = new WallTurret();
+			aux->init(tilemap, texProgram);
+			aux->setPosition(glm::vec2(map->getEnemy(i).x * map->getTileSize(), map->getEnemy(i).y * map->getTileSize()));
+			aux->setTileMap(map);
+			enemies->push_back(aux);
+		}
+	}
 }
 
 void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottomm, float topp)
@@ -200,6 +224,15 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 	}
 }
 
+void EnemyManager::updateLvl2(int deltaTime, float leftt, float rightt, float bottomm, float topp)
+{
+	left = leftt;
+	right = rightt;
+	bottom = bottomm;
+	top = topp;
+}
+
+
 void EnemyManager::render()
 {
 	list<Enemy*>::iterator it_enemy;
@@ -223,6 +256,12 @@ void EnemyManager::render()
 		it->render();
 	}
 }
+
+void EnemyManager::renderLvl2()
+{
+
+}
+
 
 bool EnemyManager::isOffScreen(glm::ivec2 pj)
 {

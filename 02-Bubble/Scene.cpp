@@ -169,7 +169,7 @@ void Scene::updateLvl1(int deltaTime) {
 void Scene::updateLvl2(int deltaTime) {
 	player->update(deltaTime, left, right, bottom, top);
 
-	enemymanager->update(deltaTime, left, right, bottom, top);
+	enemymanager->updateLvl2(deltaTime, left, right, bottom, top);
 
 	life->update(deltaTime, left, right, bottom, top, player->life);
 
@@ -211,7 +211,8 @@ void Scene::lvl2AnimationDoor(int deltaTime) {
 			case ANIM2: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM3); break;
 			case ANIM3: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM4); break;
 			case ANIM4: {
-				switch (++subLvl) {
+				enemymanager->setSublvl(enemymanager->getSublvl() + 1);
+				switch (enemymanager->getSublvl()) {
 				case 0:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, SLVL1); break;
 				case 1:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, SLVL1); break;
 				case 2:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, SLVL3); break;
@@ -249,10 +250,9 @@ void Scene::changeToScene(int scene) {
 	}
 	case LVL2: {
 		map = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-		subLvl = 0;
+		initEntitiesLvl2();
 		left = 0;
 		right = float(SCREEN_WIDTH - 1) / 2;
-		initEntitiesLvl2();
 		break;
 	}
 	case GAMEOVER: {
@@ -279,9 +279,8 @@ void Scene::godMode() {
 	if (Game::instance().getKey('3')) {
 		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
 		currentState = LVL2;
-		subLvl = 0;
+		initEntitiesLvl2();		
 		map = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-		initEntitiesLvl2();
 	}
 	if (Game::instance().getKey('0')) {
 		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
@@ -304,7 +303,8 @@ void Scene::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
 	if (currentState == LVL1 || currentState == LVL2 || currentState == LVL2_ANIMATION) {
-		enemymanager->render();
+		if (currentState == LVL1) enemymanager->render();
+		else enemymanager->renderLvl2();
 		player->render();
 		life->render();
 		
@@ -345,8 +345,7 @@ void Scene::initEntitiesLvl2() {
 	player->setTileMap(map);
 
 	enemymanager = new EnemyManager();
-	enemymanager->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, map, player);
-
+	enemymanager->initLvl2(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, map, player);
 }
 
 void Scene::initShaders()

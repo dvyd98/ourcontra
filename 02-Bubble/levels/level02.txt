@@ -1,4 +1,5 @@
 LEVEL2
-images/level2/level2tilesheet.png 			-- Tilesheet
-0				-- Number of enemies (x in tiles, y in tiles, type, lvl)
-
+images/level2/level2tilesheet2.png 			-- Tilesheet
+2				-- Number of enemies (x in tiles, y in tiles, type, lvl)
+8 4 WallTurret 0
+8 10 WallTurret 1
