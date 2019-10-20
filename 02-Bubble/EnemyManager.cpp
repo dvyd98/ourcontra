@@ -129,6 +129,12 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 	test2->setTileMap(map);
 	enemies->push_back(test2);
 
+	Enemy *test3 = new UpgradeBox();
+	test3->init(tilemap, texProgram);
+	test3->setPosition(glm::vec2(14 * map->getTileSize(), 9 * map->getTileSize()));
+	test3->setTileMap(map);
+	enemies->push_back(test3);
+
 
 	Enemy *test = new BossTurret();
 	test->init(tilemap, texProgram);
@@ -273,7 +279,8 @@ bool EnemyManager::isOffScreen(glm::ivec2 pj)
 
 bool EnemyManager::isOffScreenY(Enemy &pj)
 {
-	if (pj.getPos().y < top || pj.getPos().y > bottom) return true;
+	vector <glm::ivec2> box = pj.buildHitBox();
+	if ((box[0].y < top || box[0].y > bottom) && (box[1].y < top || box[1].y > bottom)) return true;
 	return false;
 }
 
@@ -297,8 +304,8 @@ void EnemyManager::spawnProjectilePlayer(glm::ivec2 position)
 		else newPos = glm::ivec2{ 0, 1 };
 	}
 	else {
-		if (dir == STAND_LEFT || dir == AIRBONE_LEFT || dir == SWIM_AIM_LEFT) newPos = glm::ivec2{ -1,0 };
-		else if (dir == STAND_RIGHT || dir == AIRBONE_RIGHT || dir == SWIM_AIM_RIGHT) newPos = glm::ivec2{ 1,0 };
+		if (dir == STAND_LEFT || dir == AIRBONE_LEFT || dir == SWIM_AIM_LEFT || dir ==DROPPED) newPos = glm::ivec2{ -1,0 };
+		else if (dir == STAND_RIGHT || dir == AIRBONE_RIGHT || dir == SWIM_AIM_RIGHT || dir == DROPPED) newPos = glm::ivec2{ 1,0 };
 	}
 
 	projectile->init(tilemap, texProgram, 6, newPos);
@@ -389,14 +396,14 @@ void EnemyManager::spawnProjectileSPREADPlayer(glm::ivec2 position)
 		}
 	}
 	else {
-		if (dir == STAND_LEFT || dir == AIRBONE_LEFT) {
+		if (dir == STAND_LEFT || dir == AIRBONE_LEFT || dir == SWIM_AIM_LEFT || dir == DROPPED) {
 			newPos = glm::vec2{ -1,0 };
 			newPos2 = glm::vec2{ -1,0.15 };
 			newPos3 = glm::vec2{ -1,0.30 };
 			newPos4 = glm::vec2{ -1,-0.15 };
 			newPos5 = glm::vec2{ -1,-0.30 };
 		}
-		else if (dir == STAND_RIGHT || dir == AIRBONE_RIGHT) {
+		else if (dir == STAND_RIGHT || dir == AIRBONE_RIGHT || dir == SWIM_AIM_RIGHT || dir == DROPPED) {
 			newPos = glm::vec2{ 1,0 };
 			newPos2 = glm::vec2{ 1,0.15 };
 			newPos3 = glm::vec2{ 1,0.30 };
@@ -668,7 +675,16 @@ void EnemyManager::checkPhysics()
 			while ( it_enemy != enemies->end() && !shot) {
 				vector<glm::ivec2> boxEnemy = (*it_enemy)->buildHitBox();
 				if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() != "bridge" && (*it_enemy)->getType() != "gunupgrade" && areTouching(box[0], box[1], boxEnemy[0], boxEnemy[1])) {
-					if ((*it_enemy)->decreaseLife(it_projec->getDmg())) (*it_enemy)->state = DYING;
+					if ((*it_enemy)->decreaseLife(it_projec->getDmg())) {
+						(*it_enemy)->state = DYING;
+						if ((*it_enemy)->getType() == "upgradebox") {
+							Enemy *pew = new GunUpgrade();
+							pew->init(tilemap, texProgram);
+							pew->setPosition((*it_enemy)->getPos());
+							pew->setTileMap(map);
+							enemies->push_back(pew);
+						}
+					}
 					shot = true;
 				}
 				else ++it_enemy;

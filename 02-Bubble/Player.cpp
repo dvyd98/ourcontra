@@ -395,6 +395,12 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 			posPlayer = aux + glm::ivec2(-10, -30);
 		}
 	}
+	else if (state == DEAD) {
+		posPlayer.y = top + 20;
+		posPlayer.x = left + 20;
+		state = ALIVE;
+		life -= 1;
+	}
 	if (bWater) {
 		if (justLanded) {
 			justLanded = false;
@@ -405,12 +411,6 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 			LandedFrame -= 1;
 			sprite->changeAnimation(DROPPED);
 		}
-	}
-	else if (state == DEAD) {
-		posPlayer.y = top + 20;
-		posPlayer.x = left + 20;
-		state = ALIVE;
-		life -= 1;
 	}
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }

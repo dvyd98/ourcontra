@@ -17,6 +17,8 @@ public:
 
 	glm::vec2 projDir;
 
+	bool first;
+
 private:
 
 
