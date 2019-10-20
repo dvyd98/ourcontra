@@ -348,7 +348,7 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 // Method collisionMoveDown also corrects Y coordinate if the box is
 // already intersecting a tile below.
 
-bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const
+bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const
 {
 	int x, y0, y1;
 	
@@ -359,12 +359,18 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) c
 	{
 		if (mapSize.x == 1 && pos.x < 45)
 			return true;
+		else if (map[y*mapSize.x + x] == GRASS1 || map[y*mapSize.x + x] == GRASS2) {
+			if (*posY - tileSize.y * y + size.y <= 16)
+			{
+				*posY = tileSize.y * y - size.y;
+			}
+		}
 	}
 	
 	return false;
 }
 
-bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const
+bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const
 {
 	int x, y0, y1;
 	
@@ -375,6 +381,12 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 	{
 		if(mapSize.x == 1 && pos.x > 240)
 			return true;
+		else if (map[y*mapSize.x + x] == GRASS1 || map[y*mapSize.x + x] == GRASS2) {
+			if (*posY - tileSize.y * y + size.y <= 16)
+			{
+				*posY = tileSize.y * y - size.y;
+			}
+		}
 	}
 	
 	return false;
@@ -382,7 +394,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 
 
 bool TileMap::bottomIsSea(const int x, const int y) const {
-	return y > 13 && (map[y*mapSize.x + x] == BLUE || map[y*mapSize.x + x] == SEA1 || map[y*mapSize.x + x] == SEA2 || map[y*mapSize.x + x] == SEA3 || map[y*mapSize.x + x] == SEA4 || map[y*mapSize.x + x] == SEA5 || map[y*mapSize.x + x] == SEA6 || map[y*mapSize.x + x] == SEA7 || map[y*mapSize.x + x] == SEA8 || map[y*mapSize.x + x] == SEA9 || map[y*mapSize.x + x] == SEA10 || map[y*mapSize.x + x] == SEA11);
+	return (map[y*mapSize.x + x] == BLUE || map[y*mapSize.x + x] == SEA1 || map[y*mapSize.x + x] == SEA2 || map[y*mapSize.x + x] == SEA3 || map[y*mapSize.x + x] == SEA4 || map[y*mapSize.x + x] == SEA5 || map[y*mapSize.x + x] == SEA6 || map[y*mapSize.x + x] == SEA7 || map[y*mapSize.x + x] == SEA8 || map[y*mapSize.x + x] == SEA9 || map[y*mapSize.x + x] == SEA10 || map[y*mapSize.x + x] == SEA11);
 }
 
 
@@ -399,8 +411,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 			map[y*mapSize.x + x] == GRASS2 ||
 			map[y*mapSize.x + x] == BRIDGE1 ||
 			map[y*mapSize.x + x] == BRIDGE2 ||
-			bBridge ||
-			bottomIsSea(x,y))
+			bBridge || y > 13)
 		{
 			if(*posY - tileSize.y * y + size.y <= 4 || bBridge)
 			{
@@ -421,7 +432,23 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	return false;
 }
 
+bool TileMap::isSwimming(const glm::ivec2 &pos, const glm::ivec2 &size) {
+	int x0, x1, y;
+
+	x0 = pos.x / tileSize.x;
+	x1 = (pos.x + size.x - 1) / tileSize.x;
+	y = (pos.y + size.y - 1) / tileSize.y;
+	bool b = false;
+	for (int x = x0; x <= x1; x++)
+	{
+		if (bottomIsSea(x, y)) b = true;
+		else b = false;
+	}
+	return b;
+}
+
 void TileMap::toggleFrame(const glm::vec2 &minCoords, ShaderProgram &program, int frame) {
 	map[0] = frame;
 	prepareArrays(minCoords, program);
 }
+

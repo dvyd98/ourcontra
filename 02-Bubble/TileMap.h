@@ -58,13 +58,15 @@ public:
 
 	infoEnemies getEnemy(int i) { return (*enemies)[i]; }
 
-	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
-	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
+	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
+	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY, bool bBridge) const;
 
 	// funcions de menu
 	void toggleFrame(const glm::vec2 &minCoords, ShaderProgram &program, int frame);
 	int getFrame() { return map[0]; }
+
+	bool isSwimming(const glm::ivec2 &pos, const glm::ivec2 &size);
 
 private:
 	bool loadLevel(const string &levelFile);

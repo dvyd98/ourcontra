@@ -28,6 +28,7 @@ public:
 
 	bool isJumping();
 	bool isOnBridge();
+	bool isOnWater();
 
 	vector<glm::ivec2> buildHitBox();
 

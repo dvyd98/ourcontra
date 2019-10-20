@@ -158,7 +158,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 				sprite->changeAnimation(AIM_UP_WALK_LEFT);
 			posPlayer.x -= 2;
 			lookingTo = LOOKING_LEFT;
-			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)) || posPlayer.x - 2 <= left)
+			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58), &posPlayer.y) || posPlayer.x - 2 <= left)
 			{
 				posPlayer.x += 2;
 				sprite->changeAnimation(STAND_LEFT);
@@ -170,7 +170,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 				sprite->changeAnimation(AIM_UP_WALK_RIGHT);
 			posPlayer.x += 2;
 			lookingTo = LOOKING_RIGHT;
-			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)))
+			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58), &posPlayer.y))
 			{
 				posPlayer.x -= 2;
 				sprite->changeAnimation(STAND_RIGHT);
@@ -182,7 +182,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 				sprite->changeAnimation(AIM_DOWN_WALK_LEFT);
 			posPlayer.x -= 2;
 			lookingTo = LOOKING_LEFT;
-			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)) || posPlayer.x - 2 <= left)
+			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58), &posPlayer.y) || posPlayer.x - 2 <= left)
 			{
 				posPlayer.x += 2;
 				sprite->changeAnimation(STAND_LEFT);
@@ -194,7 +194,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 				sprite->changeAnimation(AIM_DOWN_WALK_RIGHT);
 			posPlayer.x += 2;
 			lookingTo = LOOKING_RIGHT;
-			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)))
+			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58), &posPlayer.y))
 			{
 				posPlayer.x -= 2;
 				sprite->changeAnimation(STAND_RIGHT);
@@ -209,7 +209,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 					sprite->changeAnimation(MOVE_LEFT);
 			posPlayer.x -= 2;
 			lookingTo = LOOKING_LEFT;
-			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58)) || posPlayer.x - 2 <= left)
+			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58), &posPlayer.y) || posPlayer.x - 2 <= left)
 			{
 				posPlayer.x += 2;
 				if (bJumping) {
@@ -228,7 +228,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 					sprite->changeAnimation(MOVE_RIGHT);
 			posPlayer.x += 2;
 			lookingTo = LOOKING_RIGHT;
-			if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 58)))
+			if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 58), &posPlayer.y))
 			{
 				posPlayer.x -= 2;
 				sprite->changeAnimation(STAND_RIGHT);
@@ -302,16 +302,20 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 		{
 			posPlayer.y += FALL_STEP;
 			glm::ivec2 aux = posPlayer + glm::ivec2(10, 30);
-			if (Game::instance().getKey(' ') && Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
-
-			}
+			if (Game::instance().getKey(' ') && Game::instance().getSpecialKey(GLUT_KEY_DOWN) && aux.y < 180);
 			else if (map->collisionMoveDown(aux, glm::ivec2(10, 28), &aux.y, bBridge))
 			{
-				if (Game::instance().getKey(' '))
+				if (map->isSwimming(aux, glm::ivec2(10, 28)))
 				{
-					bJumping = true;
-					jumpAngle = 0;
-					startY = posPlayer.y;
+					sprite->changeAnimation(AIRBONE_RIGHT);
+				}
+				else {
+					if (Game::instance().getKey(' '))
+					{
+						bJumping = true;
+						jumpAngle = 0;
+						startY = posPlayer.y;
+					}
 				}
 			}
 			posPlayer = aux + glm::ivec2(-10, -30);
