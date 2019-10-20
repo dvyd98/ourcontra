@@ -9,7 +9,9 @@
 enum PlayerAnims
 {
 	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, MOVE_LEFT_AIM, MOVE_RIGHT_AIM, AIM_UP_LOOK_LEFT, AIM_UP_LOOK_RIGHT, CROUCH_LOOK_LEFT,
-	CROUCH_LOOK_RIGHT, AIM_UP_WALK_RIGHT, AIM_UP_WALK_LEFT, AIM_DOWN_WALK_RIGHT, AIM_DOWN_WALK_LEFT, AIRBONE_LEFT, AIRBONE_RIGHT
+	CROUCH_LOOK_RIGHT, AIM_UP_WALK_RIGHT, AIM_UP_WALK_LEFT, AIM_DOWN_WALK_RIGHT, AIM_DOWN_WALK_LEFT, AIRBONE_LEFT, AIRBONE_RIGHT,
+	DROPPED, UNDERWATER, SWIM_LEFT, SWIM_RIGHT, SWIM_AIM_LEFT, SWIM_AIM_RIGHT, SWIM_AIM_UPRIGHT, SWIM_AIM_UPLEFT, SWIM_AIM_UP_LOOK_LEFT, SWIM_AIM_UP_LOOK_RIGHT,
+	ANIM_DYING, ANIM_DEAD
 };
 
 enum BridgeAnims
@@ -295,8 +297,8 @@ void EnemyManager::spawnProjectilePlayer(glm::ivec2 position)
 		else newPos = glm::ivec2{ 0, 1 };
 	}
 	else {
-		if (dir == STAND_LEFT || dir == AIRBONE_LEFT) newPos = glm::ivec2{ -1,0 };
-		else if (dir == STAND_RIGHT || dir == AIRBONE_RIGHT) newPos = glm::ivec2{ 1,0 };
+		if (dir == STAND_LEFT || dir == AIRBONE_LEFT || dir == SWIM_AIM_LEFT) newPos = glm::ivec2{ -1,0 };
+		else if (dir == STAND_RIGHT || dir == AIRBONE_RIGHT || dir == SWIM_AIM_RIGHT) newPos = glm::ivec2{ 1,0 };
 	}
 
 	projectile->init(tilemap, texProgram, 6, newPos);
@@ -315,84 +317,84 @@ void EnemyManager::spawnProjectileSPREADPlayer(glm::ivec2 position)
 	int dir = player->sprite->animation();
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_UP)) {
 		newPos = glm::vec2{ -1,-1 };
-		newPos2 = glm::vec2{ -1,-1 };
-		newPos3 = glm::vec2{ -1,-1 };
-		newPos4 = glm::vec2{ -1,-1 };
-		newPos5 = glm::vec2{ -1,-1 };
+		newPos2 = glm::vec2{ -0.85,-1.15 };
+		newPos3 = glm::vec2{ -0.70,-1.30 };
+		newPos4 = glm::vec2{ -1.15,-0.85 };
+		newPos5 = glm::vec2{ -1.30,-0.70 };
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_UP)) {
 		newPos = glm::vec2{ 1,-1 };
-		newPos2 = glm::vec2{ 1,-1 };
-		newPos3 = glm::vec2{ 1,-1 };
-		newPos4 = glm::vec2{ 1,-1 };
-		newPos5 = glm::vec2{ 1,-1 };
+		newPos2 = glm::vec2{ 0.85,-1.15 };
+		newPos3 = glm::vec2{ 0.70,-1.30 };
+		newPos4 = glm::vec2{ 1.15,-0.85 };
+		newPos5 = glm::vec2{ 1.30,-0.70 };
 
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
 		newPos = glm::vec2{ -1,1 };
-		newPos2 = glm::vec2{ -1,1 };
-		newPos3 = glm::vec2{ -1,1 };
-		newPos4 = glm::vec2{ -1,1 };
-		newPos5 = glm::vec2{ -1,1 };
+		newPos2 = glm::vec2{ -0.85,1.15 };
+		newPos3 = glm::vec2{ -0.70,1.30 };
+		newPos4 = glm::vec2{ -1.15,0.85 };
+		newPos5 = glm::vec2{ -1.30,0.70 };
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
 		newPos = glm::vec2{ 1,1 };
-		newPos2 = glm::vec2{ 1,1 };
-		newPos3 = glm::vec2{ 1,1 };
-		newPos4 = glm::vec2{ 1,1 };
-		newPos5 = glm::vec2{ 1,1 };
+		newPos2 = glm::vec2{ 0.85,1.15 };
+		newPos3 = glm::vec2{ 0.70,1.30 };
+		newPos4 = glm::vec2{ 1.15,0.85 };
+		newPos5 = glm::vec2{ 1.30,0.70 };
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT)) {
 		newPos = glm::vec2{ -1,0 };
-		newPos2 = glm::vec2{ -1,0 };
-		newPos3 = glm::vec2{ -1,0 };
-		newPos4 = glm::vec2{ -1,0 };
-		newPos5 = glm::vec2{ -1,0 };
+		newPos2 = glm::vec2{ -1,0.15 };
+		newPos3 = glm::vec2{ -1,0.30 };
+		newPos4 = glm::vec2{ -1,-0.15 };
+		newPos5 = glm::vec2{ -1,-0.30 };
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) {
 		newPos = glm::vec2{ 1,0 };
-		newPos2 = glm::vec2{ 1,0 };
-		newPos3 = glm::vec2{ 1,0 };
-		newPos4 = glm::vec2{ 1,0 };
-		newPos5 = glm::vec2{ 1,0 };
+		newPos2 = glm::vec2{ 1,0.15 };
+		newPos3 = glm::vec2{ 1,0.30 };
+		newPos4 = glm::vec2{ 1,-0.15 };
+		newPos5 = glm::vec2{ 1,-0.30 };
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) {
 		newPos = glm::vec2{ 0,-1 };
-		newPos2 = glm::vec2{ 0,-1 };
-		newPos3 = glm::vec2{ 0,-1 };
-		newPos4 = glm::vec2{ 0,-1 };
-		newPos5 = glm::vec2{ 0,-1 };
+		newPos2 = glm::vec2{ 0.15,-1 };
+		newPos3 = glm::vec2{ 0.30,-1 };
+		newPos4 = glm::vec2{ -0.15,-1 };
+		newPos5 = glm::vec2{ -0.30,-1 };
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
 		if (dir == CROUCH_LOOK_LEFT) {
 			newPos = glm::vec2{ -1,0 };
-			newPos2 = glm::vec2{ -1,0 };
-			newPos3 = glm::vec2{ -1,0 };
-			newPos4 = glm::vec2{ -1,0 };
-			newPos5 = glm::vec2{ -1,0 };
+			newPos2 = glm::vec2{ -1,0.15 };
+			newPos3 = glm::vec2{ -1,0.30 };
+			newPos4 = glm::vec2{ -1,-0.15 };
+			newPos5 = glm::vec2{ -1,-0.30 };
 		}
 		else if (dir == CROUCH_LOOK_RIGHT) {
 			newPos = glm::vec2{ 1,0 };
-			newPos2 = glm::vec2{ 1,0 };
-			newPos3 = glm::vec2{ 1,0 };
-			newPos4 = glm::vec2{ 1,0 };
-			newPos5 = glm::vec2{ 1,0 };
+			newPos2 = glm::vec2{ 1,0.15 };
+			newPos3 = glm::vec2{ 1,0.30 };
+			newPos4 = glm::vec2{ 1,-0.15 };
+			newPos5 = glm::vec2{ 1,-0.30 };
 		}
 		else {
 			newPos = glm::vec2{ 0, 1 };
-			newPos2 = glm::vec2{ 0, 1 };
-			newPos3 = glm::vec2{ 0, 1 };
-			newPos4 = glm::vec2{ 0, 1 };
-			newPos5 = glm::vec2{ 0, 1 };
+			newPos2 = glm::vec2{ 0.15, 1 };
+			newPos3 = glm::vec2{ 0.30, 1 };
+			newPos4 = glm::vec2{ -0.15, 1 };
+			newPos5 = glm::vec2{ -0.30, 1 };
 		}
 	}
 	else {
 		if (dir == STAND_LEFT || dir == AIRBONE_LEFT) {
 			newPos = glm::vec2{ -1,0 };
-			newPos2 = glm::vec2{ -1,0 };
-			newPos3 = glm::vec2{ -1,0 };
-			newPos4 = glm::vec2{ -1,0 };
-			newPos5 = glm::vec2{ -1,0 };
+			newPos2 = glm::vec2{ -1,0.15 };
+			newPos3 = glm::vec2{ -1,0.30 };
+			newPos4 = glm::vec2{ -1,-0.15 };
+			newPos5 = glm::vec2{ -1,-0.30 };
 		}
 		else if (dir == STAND_RIGHT || dir == AIRBONE_RIGHT) {
 			newPos = glm::vec2{ 1,0 };
