@@ -127,6 +127,7 @@ void TileMap::loadTileMap() {
 		}
 		else if (s == "Turret1") type = TURRET1;
 		else if (s == "BossTurret") type = BOSS_TURRET;
+		else if (s == "Cannon") type = CANNON;
 		enemies->push_back(infoEnemies());
 		(*enemies)[i].x = x;
 		(*enemies)[i].y = y;

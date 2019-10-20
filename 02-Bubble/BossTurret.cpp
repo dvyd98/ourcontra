@@ -24,7 +24,7 @@ BossTurret::BossTurret()
 
 void BossTurret::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
-	type = "BossTurret";
+	type = "bossturret";
 	state = ALIVE;
 	life = 10;
 	frameCount = 60;

@@ -32,6 +32,7 @@ public:
 	void spawnProjectileSPREADPlayer(glm::ivec2 position);
 	void spawnProjectileRifleman(glm::ivec2 position, Rifleman* badguy);
 	void spawnProjectileWallTurret(glm::ivec2 position, WallTurret* badguy);
+	void spawnProjectileBossTurret(glm::ivec2 position, BossTurret* badguy);
 	void spawnProjectileCannon(glm::ivec2 position, Cannon* badguy);
 	void despawnOffScreenProjectiles();
 	void despawnOffScreenEnemies();
@@ -47,6 +48,7 @@ public:
 	list<Projectile> *projlist;
 	list<Projectile> *projlistRifleman;
 	list<Projectile> *projlistWallTurret;
+	list<Projectile> *projlistBossTurret;
 	list<Projectile> *projlistCannon;
 	glm::ivec2 tilemap;
 	ShaderProgram texProgram;
