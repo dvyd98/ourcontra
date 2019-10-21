@@ -279,8 +279,8 @@ void Scene::godMode() {
 	if (Game::instance().getKey('3')) {
 		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
 		currentState = LVL2;
-		initEntitiesLvl2();		
 		map = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		initEntitiesLvl2();		
 	}
 	if (Game::instance().getKey('0')) {
 		left = 0; right = float(SCREEN_WIDTH - 1) / 2;

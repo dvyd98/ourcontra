@@ -162,15 +162,15 @@ void EnemyManager::initLvl2(const glm::ivec2 &tileMapPos, ShaderProgram &shaderP
 	sublvl = 0;
 	int n = map->getNumEnemies();
 	enemies = new list<Enemy*>();
-	projlist = new list<Projectile>();
 	projlistWallTurret = new list<Projectile>();
 	for (int i = 0; i < n; ++i) {
 		int enemyType = map->getEnemy(i).type;
 		if (enemyType == WALLTURRET) {
 			Enemy *aux = new WallTurret();
 			aux->init(tilemap, texProgram);
-			aux->setPosition(glm::vec2(map->getEnemy(i).x * map->getTileSize(), map->getEnemy(i).y * map->getTileSize()));
+			aux->setPosition(glm::vec2(map->getEnemy(i).x * 16, map->getEnemy(i).y *16));
 			aux->setTileMap(map);
+			aux->setSublvl(map->getEnemy(i).sublvl);
 			enemies->push_back(aux);
 		}
 	}
@@ -276,7 +276,11 @@ void EnemyManager::render()
 
 void EnemyManager::renderLvl2()
 {
-
+	list<Enemy*>::iterator it_enemy;
+	for (it_enemy = enemies->begin(); it_enemy != enemies->end(); ++it_enemy) {
+		//if ((*it_enemy)->getSublvl() == sublvl) 
+			(*it_enemy)->render();
+	}
 }
 
 
