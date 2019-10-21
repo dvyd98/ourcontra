@@ -162,7 +162,6 @@ void EnemyManager::initLvl2(const glm::ivec2 &tileMapPos, ShaderProgram &shaderP
 	sublvl = 0;
 	int n = map->getNumEnemies();
 	enemies = new list<Enemy*>();
-	projlist = new list<Projectile>();
 	projlistWallTurret = new list<Projectile>();
 	for (int i = 0; i < n; ++i) {
 		int enemyType = map->getEnemy(i).type;
