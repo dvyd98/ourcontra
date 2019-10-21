@@ -311,8 +311,8 @@ void Scene::render()
 	}
 
 	if (currentState == GAMEOVER) {
-		score1Text.render(std::to_string(score1), glm::vec2(100, 100), 32, glm::vec4(1, 1, 1, 1));
-		score1Text.render("TEST", glm::vec2(100, 100), 32, glm::vec4(1, 1, 1, 1));
+		score1Text.render(std::to_string(score1), glm::vec2(10, 10), 32, glm::vec4(1, 1, 1, 1));
+		score1Text.render("TEST", glm::vec2(10, 10), 32, glm::vec4(1, 1, 1, 1));
 
 	}
 }

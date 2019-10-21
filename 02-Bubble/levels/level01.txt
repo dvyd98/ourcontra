@@ -26,8 +26,8 @@ images/background.png 			-- Tilesheet
 116 7 WallTurret
 188 11 WallTurret
 196 11 WallTurret
-203 9 BossTurret
-203 10 BossCore
+203 8 BossTurret
+203 9 BossCore
 130 9 Cannon
 138 3 Cannon
 174 7 Cannon
@@ -35,13 +35,13 @@ images/background.png 			-- Tilesheet
 ......................................................................................+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+.........
 ......................................................................................+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-........
 ......................................................................................+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+.......
-......................................................................................1212121212121212121212121212121212+-+-+-+-+-1212121212+-+-+-+-+-+-+-+-+-1212+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+.......
-..7889788978897889788978897889788978897889788889........7889788889........788978897889qwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqw+-+-+-+-+-qwqwqwqwqw+-+-+-+-+-+-+-+-+-qwqw+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+)?¿&(((
-..3456345634563456345634563456345634563456344556........3456344556........345634563456asasasasasasasasasasasasasasasasas1212121212asasasasas+-1212+-+-+-+-+-12asas+-1212+-+-+-+-+-+-+-+-+-+-+-12121212+-+-+·$%{]]]
-..qwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqw........qwqwqwqwqw........qwqwqwqwqwqwqwqwererererererererererererererqwqwqwqwqwqwqwerererer+-qwqw+-+-+-+-+-qwqwer+-qwqw+-+-+-+-+-+-+-+-+-+-+-qwqwqwqw+-+-+!¡@|[[[
-..asasasasasasasasasasasasasasasasasasasasasasas........asasasasas........asasasasasasasasdfdfdfdfdfdfdfdfdfdfdfdfdfdfasasasasasasasdfdfdfdf12asas+-1212+-+-asasdf+-asas12121212+-+-+-+-+-1212asasasas12+-+<=>|[[[
-,,ererererqwqwqwerererererqwqwererererererererer,,,,,,,,ererererer,,,,,,,,ererererererererererererererqwqwqwqwqwqwqwerererererererererererqwqwqwer+-qwqw+-+-ererer+-erqwqwqwqwqw+-+-+-+-+-qwqwererererqw+-+.*.|[[[
-,,dfdfdfdfasasasdfdfdfdfdfasasdfdfdfdfdfqwqwqwdf,,,,,,,,dfdfdfdfdf,,,,,,,,dfdfdfdfdfdfdfdfdfdfdfqwqwdfasasasasasasasdfdfdfdfdfdfdfdfdfqwdfasasasdf+-asas1212dfdfqw+-dfasasasasas+-+-1212+-asasdfqwqwqwas12+.../___
+......................................................................................1212121212121212121212121212121212+-+-+-+-+-1212121212+-+-+-+-+-+-+-+-+-1212+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+)?¿&(((
+..7889788978897889788978897889788978897889788889........7889788889........788978897889qwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqw+-+-+-+-+-qwqwqwqwqw+-+-+-+-+-+-+-+-+-qwqw+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+·$%{]]]
+..3456345634563456345634563456345634563456344556........3456344556........345634563456asasasasasasasasasasasasasasasasas1212121212asasasasas+-1212+-+-+-+-+-12asas+-1212+-+-+-+-+-+-+-+-+-+-+-12121212+-+-+!¡@|[[[
+..qwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqwqw........qwqwqwqwqw........qwqwqwqwqwqwqwqwererererererererererererererqwqwqwqwqwqwqwerererer+-qwqw+-+-+-+-+-qwqwer+-qwqw+-+-+-+-+-+-+-+-+-+-+-qwqwqwqw+-+-+<=>|[[[
+..asasasasasasasasasasasasasasasasasasasasasasas........asasasasas........asasasasasasasasdfdfdfdfdfdfdfdfdfdfdfdfdfdfasasasasasasasdfdfdfdf12asas+-1212+-+-asasdf+-asas12121212+-+-+-+-+-1212asasasas12+-+.*.|[[[
+,,ererererqwqwqwerererererqwqwererererererererer,,,,,,,,ererererer,,,,,,,,ererererererererererererererqwqwqwqwqwqwqwerererererererererererqwqwqwer+-qwqw+-+-ererer+-erqwqwqwqwqw+-+-+-+-+-qwqwererererqw+-+.../___
+,,dfdfdfdfasasasdfdfdfdfdfasasdfdfdfdfdfqwqwqwdf,,,,,,,,dfdfdfdfdf,,,,,,,,dfdfdfdfdfdfdfdfdfdfdfqwqwdfasasasasasasasdfdfdfdfdfdfdfdfdfqwdfasasasdf+-asas1212dfdfqw+-dfasasasasas+-+-1212+-asasdfqwqwqwas12+...|[[[
 ,uerererererererqwererqwererererererererzxzxzxerp,,,,,,uerererererp,,,,,,uerererererererererererzxzxerererererererererererqwqwerqwqwerzxererererer+-erqwqwqwererzx+-erererererer+-+-qwqw+-erererzxzxzxerqw+...|[[[
 ,jnmnmnmnidfdfdfasdfdfaslidfdflnmnmidfdfdfdfdflnk,,,,,,jnmnmnmnmnmk,,,,,,jnmnidfdfdfdfdfdfdfdfdfdfdflidfdfdfdfdfdfdfdfdfdfasasdfasasdfdfdfdfdfdfdf+-dfasasasdfdfdf+-dfdfdfdfdfdf12+-asas+-dfdfdfdfdfdfdfas1...|[[[
 ,,,,,,,,,jnmnmnmnñqwqwonkjnmnmk,,,,jnñqwqwonmnk,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,jnmnmnmnmnmnñqwqwqwonmnkjnmnmnmnñqwqwqwqwqwqwerererererererererererer+-qwererererqwer+-ererererqwqwqw+-erer+-ererqwqwqwqwqwqwqwq/}[[[
