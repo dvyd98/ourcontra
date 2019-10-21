@@ -1,4 +1,4 @@
-#include "BossTurret.h"
+#include "BossCore.h"
 #include "Game.h"
 #include <cmath>
 #include <iostream>
@@ -10,44 +10,46 @@ enum States
 	ALIVE, DEAD, DYING
 };
 
-enum BossTurretAnims
+enum BossCoreAnims
 {
-	IDLE, SHOOTING, ANIM_DYING, ANIM_DEAD
+	ANIM_ALIVE, ANIM_DYING, ANIM_DEAD
 };
 
 
 
-BossTurret::BossTurret()
+BossCore::BossCore()
 {
 }
 
 
-void BossTurret::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
+void BossCore::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
-	type = "bossturret";
+	type = "bosscore";
 	state = ALIVE;
-	life = 30;
+	life = 10;
 	frameCount = 60;
-	spritesheet.loadFromFile("images/BossTurret.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.loadFromFile("images/BossCore.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
 	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
 	spritesheet.setMinFilter(GL_NEAREST);
 	spritesheet.setMagFilter(GL_NEAREST);
-	sprite = Sprite::createSprite(glm::ivec2(48, 32), glm::vec2(0.1f, 0.1f), &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(glm::ivec2(110, 64), glm::vec2(0.1f, 0.1f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(100);
 
-	sprite->setAnimationSpeed(IDLE, 8);
-	sprite->addKeyframe(IDLE, glm::vec2(0.0f, 0.0f));
-
-	sprite->setAnimationSpeed(SHOOTING, 2);
-	sprite->addKeyframe(SHOOTING, glm::vec2(0.0f, 0.0f));
-	sprite->addKeyframe(SHOOTING, glm::vec2(0.1f, 0.0f));
+	sprite->setAnimationSpeed(ANIM_ALIVE, 6);
+	sprite->addKeyframe(ANIM_ALIVE, glm::vec2(0.0f, 0.0f));
+	sprite->addKeyframe(ANIM_ALIVE, glm::vec2(0.1f, 0.0f));
+	sprite->addKeyframe(ANIM_ALIVE, glm::vec2(0.2f, 0.0f));
 
 	sprite->setAnimationSpeed(ANIM_DYING, 6);
 	sprite->addKeyframe(ANIM_DYING, glm::vec2(0.0f, 0.2f));
 	sprite->addKeyframe(ANIM_DYING, glm::vec2(0.1f, 0.2f));
 	sprite->addKeyframe(ANIM_DYING, glm::vec2(0.2f, 0.2f));
 	sprite->addKeyframe(ANIM_DYING, glm::vec2(0.3f, 0.2f));
+	sprite->addKeyframe(ANIM_DYING, glm::vec2(0.4f, 0.2f));
+	sprite->addKeyframe(ANIM_DYING, glm::vec2(0.5f, 0.2f));
+	sprite->addKeyframe(ANIM_DYING, glm::vec2(0.6f, 0.2f));
+	sprite->addKeyframe(ANIM_DYING, glm::vec2(0.7f, 0.2f));
 
 	sprite->setAnimationSpeed(ANIM_DEAD, 1);
 	sprite->addKeyframe(ANIM_DEAD, glm::vec2(0.0f, 0.1f));
@@ -57,15 +59,11 @@ void BossTurret::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
 
-void BossTurret::update(int deltaTime)
+void BossCore::update(int deltaTime)
 {
 	sprite->update(deltaTime);
 	if (state == ALIVE) {
-		if (frameCount < 30) {
-			if (sprite->animation() != SHOOTING)
-				sprite->changeAnimation(SHOOTING);
-		}
-		if (frameCount > 0) --frameCount;
+
 	}
 	else if (state == DYING) {
 		if (sprite->animation() != ANIM_DYING && sprite->animation() != ANIM_DEAD) sprite->changeAnimation(ANIM_DYING);
@@ -77,14 +75,10 @@ void BossTurret::update(int deltaTime)
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
 
-vector<glm::ivec2> BossTurret::buildHitBox()
+vector<glm::ivec2> BossCore::buildHitBox()
 {
-	glm::ivec2 lpos1 = posEnemy;
-	glm::ivec2 rpos1 = lpos1 + glm::ivec2{ 48,16 };
+	glm::ivec2 lpos1 = posEnemy + glm::ivec2{ 7, 14 };
+	glm::ivec2 rpos1 = lpos1 + glm::ivec2{ 24, 34 };
 	return vector<glm::ivec2> {lpos1, rpos1 };
 }
 
-glm::ivec2 BossTurret::getProjectileSpawn()
-{
-	return glm::ivec2{ 0,0 };
-}

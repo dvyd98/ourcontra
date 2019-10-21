@@ -10,6 +10,7 @@
 #include "Cannon.h"
 #include "UpgradeBox.h"
 #include "GunUpgrade.h"
+#include "BossCore.h"
 #include "ShaderProgram.h"
 #include "TileMap.h"
 #include <glm/glm.hpp>
@@ -50,11 +51,12 @@ public:
 	list<Enemy*> *enemies;
 	TileMap *map;
 	Projectile *projectile;
+	ProjectileBoss *projectileBoss;
 	Player* player;
 	list<Projectile> *projlist;
 	list<Projectile> *projlistRifleman;
 	list<Projectile> *projlistWallTurret;
-	list<Projectile> *projlistBossTurret;
+	list<ProjectileBoss> *projlistBossTurret;
 	list<Projectile> *projlistCannon;
 	glm::ivec2 tilemap;
 	ShaderProgram texProgram;
