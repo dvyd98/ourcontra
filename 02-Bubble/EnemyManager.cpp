@@ -156,6 +156,7 @@ void EnemyManager::initLvl2(const glm::ivec2 &tileMapPos, ShaderProgram &shaderP
 			aux->init(tilemap, texProgram);
 			aux->setPosition(glm::vec2(map->getEnemy(i).x * map->getTileSize(), map->getEnemy(i).y * map->getTileSize()));
 			aux->setTileMap(map);
+			aux->setSublvl(map->getEnemy(i).sublvl);
 			enemies->push_back(aux);
 		}
 	}
@@ -259,7 +260,10 @@ void EnemyManager::render()
 
 void EnemyManager::renderLvl2()
 {
-
+	list<Enemy*>::iterator it_enemy;
+	for (it_enemy = enemies->begin(); it_enemy != enemies->end(); ++it_enemy) {
+		if ((*it_enemy)->getSublvl() == sublvl) (*it_enemy)->render();
+	}
 }
 
 
