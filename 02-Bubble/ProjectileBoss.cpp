@@ -1,4 +1,4 @@
-#include "Projectile.h"
+#include "ProjectileBoss.h"
 #include <cmath>
 #include <iostream>
 #include <GL/glew.h>
@@ -12,10 +12,12 @@ enum upgradeRank
 };
 
 
-void Projectile::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, float speed, const glm::vec2 projDir)
+void ProjectileBoss::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, float speed, const glm::vec2 projDir)
 {
 	rank = RANK1;
 	damage = 1;
+	peak = false;
+	loop = 0;
 	spritesheet.loadFromFile("images/projectile.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
 	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
@@ -31,63 +33,62 @@ void Projectile::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram
 	sprite->addKeyframe(RANK1, glm::vec2(0.0f, 0.0f));
 
 	sprite->setAnimationSpeed(SPREAD, 8);
-	sprite->addKeyframe(SPREAD, glm::vec2(0.0f, 0.1f));
+	sprite->addKeyframe(SPREAD, glm::vec2(0.0f, 0.2f));
 
-	sprite->changeAnimation(1);
+	sprite->changeAnimation(2);
 	tileMapDispl = tileMapPos;
 	newPos = projDir * speed;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posProjectile.x), float(tileMapDispl.y + posProjectile.y)));
 
 }
 
-void Projectile::update(int deltaTime)
+void ProjectileBoss::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	posProjectile += newPos;
+	if (loop > 30) peak = true;
+	if (!peak) {
+		posProjectile += glm::vec2(-1, -1);
+		loop += 1;
+	}
+	else
+		posProjectile += glm::vec2(-1, 1);
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posProjectile.x), float(tileMapDispl.y + posProjectile.y)));
 }
 
-void Projectile::render()
+void ProjectileBoss::render()
 {
 	sprite->render();
 }
 
-void Projectile::setTileMap(TileMap *tileMap)
+void ProjectileBoss::setTileMap(TileMap *tileMap)
 {
 	map = tileMap;
 }
 
-void Projectile::setPosition(const glm::vec2 &pos)
+void ProjectileBoss::setPosition(const glm::vec2 &pos)
 {
 	posProjectile = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posProjectile.x), float(tileMapDispl.y + posProjectile.y)));
 }
 
-glm::ivec2 Projectile::getPos()
+glm::ivec2 ProjectileBoss::getPos()
 {
 	return posProjectile;
 }
 
-int Projectile::getRank()
+int ProjectileBoss::getRank()
 {
 	return rank;
 }
 
-int Projectile::getDmg()
+int ProjectileBoss::getDmg()
 {
 	return damage;
 }
 
-vector<glm::ivec2> Projectile::buildHitBox()
+vector<glm::ivec2> ProjectileBoss::buildHitBox()
 {
-	if (rank == RANK1 || rank == RIFLEMAN) {
-		glm::ivec2 lpos1 = posProjectile + glm::vec2{ 8,9 };
-		glm::ivec2 rpos1 = lpos1 + glm::ivec2{ 2,2 };
-		return vector<glm::ivec2> {lpos1, rpos1 };
-	}
-	else {
-		glm::ivec2 lpos1 = posProjectile + glm::vec2{ 6,5 };
-		glm::ivec2 rpos1 = lpos1 + glm::ivec2{ 5,5 };
-		return vector<glm::ivec2> {lpos1, rpos1 };
-	}
+	glm::ivec2 lpos1 = posProjectile + glm::vec2{ 5,5 };
+	glm::ivec2 rpos1 = lpos1 + glm::ivec2{ 8,8 };
+	return vector<glm::ivec2> {lpos1, rpos1 };
 }

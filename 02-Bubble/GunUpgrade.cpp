@@ -5,8 +5,8 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 
-#define JUMP_ANGLE_STEP 4
-#define JUMP_HEIGHT 96
+#define JUMP_ANGLE_STEP 1
+#define JUMP_HEIGHT 20
 #define FALL_STEP 4
 #define GLUT_KEY_SPACEBAR 32
 #define PLAYER_VEL 2
@@ -32,6 +32,8 @@ void GunUpgrade::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram
 	state = ALIVE;
 	life = 10;
 	lastKeyframe = 0;
+	bJumping = false;
+	first = true;
 	spritesheet.loadFromFile("images/gunupgrade.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
 	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
@@ -56,6 +58,37 @@ void GunUpgrade::update(int deltaTime)
 	sprite->update(deltaTime);
 	if (state == ALIVE) {
 
+		if (bJumping)
+		{
+			jumpAngle += JUMP_ANGLE_STEP;
+			if (jumpAngle == 180)
+			{
+				bJumping = false;
+				posEnemy.y = startY;
+			}
+			else
+			{
+				posEnemy.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
+				if (jumpAngle > 90)
+					bJumping = !map->collisionMoveDown(posEnemy, glm::ivec2(12, 20), &posEnemy.y, false);
+			}
+		}
+		else
+		{
+			posEnemy.y += FALL_STEP;
+			if (first || map->collisionMoveDown(posEnemy, glm::ivec2(10, 28), &posEnemy.y, false))
+			{
+
+					if (first)
+					{
+						bJumping = true;
+						first = false;
+						jumpAngle = 0;
+						startY = posEnemy.y;
+					}
+				
+			}
+		}
 	}
 	else if (state == DYING) {
 		state == DEAD;

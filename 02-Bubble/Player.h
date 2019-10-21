@@ -35,8 +35,11 @@ public:
 	int lookingTo;
 	int life;
 	int state;
+	int LandedFrame;
 	int projectile;
 	bool bBridge;
+	bool bWater;
+	bool justLanded;
 	glm::ivec2 posPlayer;
 	Sprite *sprite;
 	
