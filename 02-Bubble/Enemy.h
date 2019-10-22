@@ -23,6 +23,7 @@ public:
 	glm::ivec2 getPos();
 	string getType();
 	int state;
+	bool hurt;
 	Sprite *sprite;
 	int frameCount;
 	int lastKeyframe;

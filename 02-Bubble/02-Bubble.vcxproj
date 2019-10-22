@@ -12,6 +12,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
+    <ClInclude Include="Boss2Core.h" />
+    <ClInclude Include="Boss2Final.h" />
+    <ClInclude Include="Boss2Turret.h" />
     <ClInclude Include="BossCore.h" />
     <ClInclude Include="BossTurret.h" />
     <ClInclude Include="Bridge.h" />
@@ -24,6 +27,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="ProjectileBoss.h" />
+    <ClInclude Include="ProjectileBoss2.h" />
     <ClInclude Include="Rifleman.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
@@ -38,6 +42,9 @@
     <ClInclude Include="WallTurret.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Boss2Core.cpp" />
+    <ClCompile Include="Boss2Final.cpp" />
+    <ClCompile Include="Boss2Turret.cpp" />
     <ClCompile Include="BossCore.cpp" />
     <ClCompile Include="BossTurret.cpp" />
     <ClCompile Include="Bridge.cpp" />
@@ -51,6 +58,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ProjectileBoss.cpp" />
+    <ClCompile Include="ProjectileBoss2.cpp" />
     <ClCompile Include="Rifleman.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />

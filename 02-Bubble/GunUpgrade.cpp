@@ -91,7 +91,7 @@ void GunUpgrade::update(int deltaTime)
 		}
 	}
 	else if (state == DYING) {
-		state == DEAD;
+		state = DEAD;
 		sprite->changeAnimation(ANIM_DEAD);
 	}
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));

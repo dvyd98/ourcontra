@@ -26,6 +26,10 @@
     <ClCompile Include="WallTurret.cpp" />
     <ClCompile Include="BossCore.cpp" />
     <ClCompile Include="ProjectileBoss.cpp" />
+    <ClCompile Include="Boss2Turret.cpp" />
+    <ClCompile Include="Boss2Core.cpp" />
+    <ClCompile Include="Boss2Final.cpp" />
+    <ClCompile Include="ProjectileBoss2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
@@ -53,5 +57,9 @@
     <ClInclude Include="WallTurret.h" />
     <ClInclude Include="BossCore.h" />
     <ClInclude Include="ProjectileBoss.h" />
+    <ClInclude Include="Boss2Turret.h" />
+    <ClInclude Include="Boss2Core.h" />
+    <ClInclude Include="Boss2Final.h" />
+    <ClInclude Include="ProjectileBoss2.h" />
   </ItemGroup>
 </Project>
