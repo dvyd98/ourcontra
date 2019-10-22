@@ -54,9 +54,11 @@ public:
 	bool areTouching(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lpos2, glm::ivec2 rpos2);
 	bool areTouchingYcoord(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lpos2, glm::ivec2 rpos2);
 	void checkPhysics();
+	void checkPhysicsLevel2();
 	void setSublvl(int x) { sublvl = x; }
 	int getSublvl() { return sublvl; }
 
+	bool coreDestroyed;
 	list<Enemy*> *enemies;
 	TileMap *map;
 	Projectile *projectile;

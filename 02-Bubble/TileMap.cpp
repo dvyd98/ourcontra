@@ -129,6 +129,8 @@ void TileMap::loadTileMap() {
 		else if (s == "BossTurret") type = BOSS_TURRET;
 		else if (s == "BossCore") type = BOSS_CORE;
 		else if (s == "Cannon") type = CANNON;
+
+		
 		enemies->push_back(infoEnemies());
 		(*enemies)[i].x = x;
 		(*enemies)[i].y = y;
@@ -253,6 +255,13 @@ void TileMap::loadLevel2() {
 		sstream.str(line);
 		sstream >> x >> y >> s >> sublvl;
 		if (s == "WallTurret") type = WALLTURRET;
+		else if (s == "level2turret") type = LEVEL2_TURRET;
+		else if (s == "level2core") type = LEVEL2_CORE;
+		else if (s == "level2laser") type = LEVEL2_LASER;
+		else if (s == "level2solier") type = LEVEL2_SOLDIER;
+		else if (s == "level2bosscore") type = LEVEL2_BOSSCORE;
+		else if (s == "level2bossturret") type = LEVEL2_BOSSTURRET;
+		else if (s == "level2bossfinal") type = LEVEL2_BOSSFINAL;
 		enemies->push_back(infoEnemies());
 		(*enemies)[i].x = x;
 		(*enemies)[i].y = y;
