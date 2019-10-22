@@ -185,7 +185,7 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 
 	despawnOffScreenEnemies();
 	despawnDeadEnemies();
-
+	didthePlayerFuckingFall();
 	checkPhysics(); // coctel
 
 	list<Enemy*>::iterator it_enemy;
@@ -630,6 +630,11 @@ void EnemyManager::despawnOffScreenEnemies() {
 		it = enemies->erase(it);
 	else ++it;
 	}
+}
+
+void EnemyManager::didthePlayerFuckingFall() {
+	vector <glm::ivec2> box = player->buildHitBox();
+	if (box[0].y > bottom) player->state = DEAD;
 }
 
 void EnemyManager::despawnDeadEnemies() {

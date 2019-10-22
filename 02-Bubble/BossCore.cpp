@@ -33,7 +33,7 @@ void BossCore::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
 	spritesheet.setMinFilter(GL_NEAREST);
 	spritesheet.setMagFilter(GL_NEAREST);
-	sprite = Sprite::createSprite(glm::ivec2(110, 64), glm::vec2(0.1f, 0.1f), &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(glm::ivec2(112, 64), glm::vec2(0.1f, 0.1f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(100);
 
 	sprite->setAnimationSpeed(ANIM_ALIVE, 6);
