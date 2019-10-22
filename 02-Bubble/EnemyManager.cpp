@@ -53,6 +53,7 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 	projlistBossTurret = new list<ProjectileBoss>();
 	projlistCannon = new list<Projectile>();
 	projlistBoss2Final = new list<ProjectileBoss2>();
+	projlistLevel2Turret = new list<Projectile>();
 	for (int i = 0; i < n; ++i) {
 		int enemyType = map->getEnemy(i).type;
 		if (enemyType == SOLDIER)
@@ -131,7 +132,7 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 		}
 	}
 
-	Enemy *test = new Boss2Final();
+	Enemy *test = new Level2Turret();
 	test->init(tilemap, texProgram);
 	test->setPosition(glm::vec2(14 * map->getTileSize(), 3 * map->getTileSize()));
 	test->setTileMap(map);
@@ -160,6 +161,7 @@ void EnemyManager::initLvl2(const glm::ivec2 &tileMapPos, ShaderProgram &shaderP
 	projlistWallTurret = new list<Projectile>();
 	projlistBoss2Turret = new list<Projectile>();
 	projlistBoss2Final = new list<ProjectileBoss2>();
+	projlistLevel2Turret = new list<Projectile>();
 	for (int i = 0; i < n; ++i) {
 		int enemyType = map->getEnemy(i).type;
 		if (enemyType == WALLTURRET) {
@@ -209,6 +211,10 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 				Boss2Final* turretboi = dynamic_cast<Boss2Final*>(*it_enemy);
 				spawnProjectileBoss2Final(player->getPos(), turretboi);
 			}
+			else if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() == "level2turret" && projlistLevel2Turret->size() < 3) {
+				Level2Turret* turretboi = dynamic_cast<Level2Turret*>(*it_enemy);
+				spawnProjectileLevel2Turret(player->getPos(), turretboi);
+			}
 			(*it_enemy)->update(deltaTime);
 		}
 	}
@@ -232,6 +238,11 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 	for (it = projlistWallTurret->begin(); it != projlistWallTurret->end(); ++it) {
 		it->update(deltaTime);
 	}
+
+
+	for (it = projlistLevel2Turret->begin(); it != projlistLevel2Turret->end(); ++it) {
+		it->update(deltaTime);
+	}
 	list<ProjectileBoss>::iterator it_boss;
 	for (it_boss = projlistBossTurret->begin(); it_boss != projlistBossTurret->end(); ++it_boss) {
 		it_boss->update(deltaTime);
@@ -253,7 +264,7 @@ void EnemyManager::updateLvl2(int deltaTime, float leftt, float rightt, float bo
 	top = topp;
 
 	despawnDeadEnemies();
-	checkPhysics(); // coctel
+	//checkPhysics(); // coctel
 
 	list<Enemy*>::iterator it_enemy;
 	for (it_enemy = enemies->begin(); it_enemy != enemies->end(); ++it_enemy) {
@@ -297,6 +308,12 @@ void EnemyManager::render()
 		it->render();
 	}
 	for (it = projlistWallTurret->begin(); it != projlistWallTurret->end(); ++it) {
+		it->render();
+	}
+
+
+
+	for (it = projlistLevel2Turret->begin(); it != projlistLevel2Turret->end(); ++it) {
 		it->render();
 	}
 	list<ProjectileBoss>::iterator it_boss;
@@ -669,6 +686,22 @@ void EnemyManager::spawnProjectileBoss2Final(glm::ivec2 positionPlayer, Boss2Fin
 	}
 }
 
+void EnemyManager::spawnProjectileLevel2Turret(glm::ivec2 positionPlayer, Level2Turret* badguy)
+{
+	glm::ivec2 posPlayer = positionPlayer + glm::ivec2{ 10, 30 };
+	glm::ivec2 posEnemy = badguy->getPos() + glm::ivec2{ 8,8 };
+	if (!isOffScreen(posEnemy) && badguy->isOpen == true) {
+		glm::vec2 newPos = glm::vec2{ 0,1 };
+		badguy->projDir = newPos;
+		projectile = new Projectile();
+		projectile->init(tilemap, texProgram, 2, newPos);
+		projectile->sprite->changeAnimation(0);
+		projectile->setPosition(posEnemy + badguy->getProjectileSpawn());
+		projectile->setTileMap(map);
+		projlistLevel2Turret->push_back(*(projectile));
+
+	}
+}
 
 void EnemyManager::spawnProjectileCannon(glm::ivec2 positionPlayer, Cannon* badguy)
 {
@@ -890,6 +923,20 @@ void EnemyManager::checkPhysics()
 	while (it_projec != projlistCannon->end()) { // their pew pew
 		if (isOffScreen((it_projec->getPos())))
 			it_projec = projlistCannon->erase(it_projec);
+		else {
+			vector<glm::ivec2> box = it_projec->buildHitBox();
+			if (areTouching(boxPlayer[0], boxPlayer[1], box[0], box[1])) {
+				//player->state = DEAD;
+			}
+			++it_projec;
+		}
+
+	}
+
+	it_projec = projlistLevel2Turret->begin();
+	while (it_projec != projlistLevel2Turret->end()) { // their pew pew
+		if (isOffScreen((it_projec->getPos())))
+			it_projec = projlistLevel2Turret->erase(it_projec);
 		else {
 			vector<glm::ivec2> box = it_projec->buildHitBox();
 			if (areTouching(boxPlayer[0], boxPlayer[1], box[0], box[1])) {

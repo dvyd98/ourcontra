@@ -23,6 +23,8 @@
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GunUpgrade.h" />
+    <ClInclude Include="Level2Core.h" />
+    <ClInclude Include="Level2Turret.h" />
     <ClInclude Include="Life.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
@@ -53,6 +55,8 @@
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GunUpgrade.cpp" />
+    <ClCompile Include="Level2Core.cpp" />
+    <ClCompile Include="Level2Turret.cpp" />
     <ClCompile Include="Life.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />

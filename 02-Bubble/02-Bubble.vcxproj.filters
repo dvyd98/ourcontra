@@ -30,6 +30,8 @@
     <ClCompile Include="Boss2Core.cpp" />
     <ClCompile Include="Boss2Final.cpp" />
     <ClCompile Include="ProjectileBoss2.cpp" />
+    <ClCompile Include="Level2Core.cpp" />
+    <ClCompile Include="Level2Turret.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
@@ -61,5 +63,7 @@
     <ClInclude Include="Boss2Core.h" />
     <ClInclude Include="Boss2Final.h" />
     <ClInclude Include="ProjectileBoss2.h" />
+    <ClInclude Include="Level2Core.h" />
+    <ClInclude Include="Level2Turret.h" />
   </ItemGroup>
 </Project>
