@@ -23,9 +23,11 @@ public:
 	glm::ivec2 getPos();
 	string getType();
 	int state;
+	bool hurt;
 	Sprite *sprite;
 	int frameCount;
 	int lastKeyframe;
+	int sublvl;
 	int getSublvl() { return sublvl; }
 	void setSublvl(int x) { sublvl = x; }
 
@@ -33,7 +35,6 @@ protected:
 	int life;
 	
 	string type;
-	int sublvl;
 	bool bJumping;
 	int lookingTo;
 	glm::ivec2 tileMapDispl, posEnemy;

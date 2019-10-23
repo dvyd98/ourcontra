@@ -11,6 +11,11 @@
 #include "UpgradeBox.h"
 #include "GunUpgrade.h"
 #include "BossCore.h"
+#include "Boss2Turret.h"
+#include "Boss2Core.h"
+#include "Boss2Final.h"
+#include "Level2Core.h"
+#include "Level2Turret.h"
 #include "ShaderProgram.h"
 #include "TileMap.h"
 #include <glm/glm.hpp>
@@ -37,26 +42,36 @@ public:
 	void spawnProjectileSPREADPlayer(glm::ivec2 position);
 	void spawnProjectileRifleman(glm::ivec2 position, Rifleman* badguy);
 	void spawnProjectileWallTurret(glm::ivec2 position, WallTurret* badguy);
+	void spawnProjectileLevel2Turret(glm::ivec2 positionPlayer, Level2Turret* badguy);
 	void spawnProjectileBossTurret(glm::ivec2 position, BossTurret* badguy);
+	void spawnProjectileBoss2Turret(glm::ivec2 positionPlayer, Boss2Turret* badguy);
+	void spawnProjectileBoss2Final(glm::ivec2 positionPlayer, Boss2Final* badguy);
 	void spawnProjectileCannon(glm::ivec2 position, Cannon* badguy);
 	void despawnOffScreenProjectiles();
 	void despawnOffScreenEnemies();
+	void didthePlayerFuckingFall();
 	void despawnDeadEnemies();
 	bool areTouching(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lpos2, glm::ivec2 rpos2);
 	bool areTouchingYcoord(glm::ivec2 lpos1, glm::ivec2 rpos1, glm::ivec2 lpos2, glm::ivec2 rpos2);
 	void checkPhysics();
+	void checkPhysicsLevel2();
 	void setSublvl(int x) { sublvl = x; }
 	int getSublvl() { return sublvl; }
 
+	bool coreDestroyed;
 	list<Enemy*> *enemies;
 	TileMap *map;
 	Projectile *projectile;
 	ProjectileBoss *projectileBoss;
+	ProjectileBoss2 *projectileBoss2;
 	Player* player;
 	list<Projectile> *projlist;
 	list<Projectile> *projlistRifleman;
 	list<Projectile> *projlistWallTurret;
 	list<ProjectileBoss> *projlistBossTurret;
+	list<Projectile> *projlistBoss2Turret;
+	list<Projectile> *projlistLevel2Turret;
+	list<ProjectileBoss2> *projlistBoss2Final;
 	list<Projectile> *projlistCannon;
 	glm::ivec2 tilemap;
 	ShaderProgram texProgram;
