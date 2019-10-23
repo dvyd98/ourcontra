@@ -26,6 +26,7 @@
     <ClCompile Include="WallTurret.cpp" />
     <ClCompile Include="BossCore.cpp" />
     <ClCompile Include="ProjectileBoss.cpp" />
+    <ClCompile Include="Audio.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
@@ -53,5 +54,6 @@
     <ClInclude Include="WallTurret.h" />
     <ClInclude Include="BossCore.h" />
     <ClInclude Include="ProjectileBoss.h" />
+    <ClInclude Include="Audio.h" />
   </ItemGroup>
 </Project>

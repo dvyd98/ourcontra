@@ -6,6 +6,7 @@
 #include "Game.h"
 #include "Player.h"
 #include "Soldier.h"
+#include "Windows.h"
 
 #include <GL/glew.h>
 #include <GL/glut.h>
@@ -23,6 +24,7 @@
 #define BLINKS 6
 #define LVL2_ANIMATION_DELAY 8
 
+#pragma comment(lib, "irrKlang.lib") // link with irrKlang.dll
 
 Scene::Scene()
 {
@@ -36,6 +38,8 @@ Scene::~Scene()
 		delete map;
 	if(player != NULL)
 		delete player;
+	if (audiomanager != NULL)
+		delete audiomanager;
 }
 
 
@@ -61,7 +65,10 @@ void Scene::init()
 	score1 = score2 = 0;
 
 	if (!score1Text.init("fonts/OpenSans-Regular.ttf"))
-		cout << "Error al carregar font" << endl;
+		_RPT0(0, "falla el init");
+	
+	audiomanager = new Audio();
+	audiomanager->play(TITLE);
 }
 
 void Scene::update(int deltaTime)
@@ -312,7 +319,7 @@ void Scene::render()
 
 	if (currentState == GAMEOVER) {
 		score1Text.render(std::to_string(score1), glm::vec2(10, 10), 32, glm::vec4(1, 1, 1, 1));
-		score1Text.render("TEST", glm::vec2(10, 10), 32, glm::vec4(1, 1, 1, 1));
+		score1Text.render('s', glm::vec2(10, 10), 32, glm::vec4(1, 1, 1, 1));
 
 	}
 }
