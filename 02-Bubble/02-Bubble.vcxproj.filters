@@ -26,12 +26,14 @@
     <ClCompile Include="WallTurret.cpp" />
     <ClCompile Include="BossCore.cpp" />
     <ClCompile Include="ProjectileBoss.cpp" />
+    <ClCompile Include="Audio.cpp" />
     <ClCompile Include="Boss2Turret.cpp" />
     <ClCompile Include="Boss2Core.cpp" />
     <ClCompile Include="Boss2Final.cpp" />
     <ClCompile Include="ProjectileBoss2.cpp" />
     <ClCompile Include="Level2Core.cpp" />
     <ClCompile Include="Level2Turret.cpp" />
+>>>>>>> 49a8a0bb04a0a5a3cb9b7c80f61ca57c0e709111
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
@@ -59,6 +61,7 @@
     <ClInclude Include="WallTurret.h" />
     <ClInclude Include="BossCore.h" />
     <ClInclude Include="ProjectileBoss.h" />
+    <ClInclude Include="Audio.h" />
     <ClInclude Include="Boss2Turret.h" />
     <ClInclude Include="Boss2Core.h" />
     <ClInclude Include="Boss2Final.h" />

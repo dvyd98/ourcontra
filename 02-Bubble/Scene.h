@@ -12,6 +12,7 @@
 #include "Projectile.h"
 #include "EnemyManager.h"
 #include "Text.h"
+#include "Audio.h"
 
 
 // Scene contains all the entities of our game.
@@ -70,6 +71,7 @@ private:
 	int score1, score2;
 	Text score1Text, score2Text;
 
+	Audio *audiomanager;
 };
 
 
