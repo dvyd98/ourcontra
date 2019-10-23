@@ -1,5 +1,22 @@
 LEVEL2
 images/level2/level2tilesheet2.png 			-- Tilesheet
-2				-- Number of enemies (x in tiles, y in tiles, type, lvl)
+19				-- Number of enemies (x in tiles, y in tiles, type, lvl)
 9 6 level2core 0
-10 8 WallTurret 1
+7 6 level2core 1
+11 6 level2turret 1
+7 6 level2turret 2
+11 6 level2turret 2
+9 6 level2core 2
+9 6 level2core 3
+9 5 level2turret 3
+7 6 level2turret 4
+11 6 level2turret 4
+9 4 level2turret 4
+9 5 level2core 4
+6 5 level2bossturret 5
+9 5 level2bosscore 5
+12 5 level2bossturret 5
+6 8 level2bosscore 5
+9 8 level2bosscore 5
+12 8 level2bosscore 5
+9 2 level2bossfinal 5

@@ -305,7 +305,7 @@ void Scene::render()
 	map->render();
 	if (currentState == LVL1 || currentState == LVL2 || currentState == LVL2_ANIMATION) {
 		if (currentState == LVL1) enemymanager->render();
-		else enemymanager->renderLvl2();
+		if (currentState == LVL2) enemymanager->renderLvl2();
 		player->render();
 		life->render();
 		

@@ -17,7 +17,8 @@ public:
 
 	glm::vec2 projDir;
 
-	bool isOpen;
+	bool hasShot;
+	int projCd;
 
 private:
 

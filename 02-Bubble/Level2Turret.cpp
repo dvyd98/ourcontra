@@ -27,8 +27,10 @@ void Level2Turret::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 	type = "level2turret";
 	state = ALIVE;
 	life = 30;
-	frameCount = 150;
+	frameCount = 50;
 	isOpen = false;
+	hasShot = false;
+	projCd = 60;
 	spritesheet.loadFromFile("images/Level2Turret.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
 	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
@@ -78,6 +80,14 @@ void Level2Turret::update(int deltaTime)
 				isOpen = true;
 			}
 		}
+		if (hasShot) {
+			if (projCd > 0) --projCd;
+			else if (projCd == 0) {
+				hasShot = false;
+				projCd = 60;
+			}
+		}
+		
 		if (frameCount > 0) --frameCount;
 	}
 	else if (state == DYING) {

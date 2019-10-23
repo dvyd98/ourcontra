@@ -28,6 +28,7 @@ void Level2Core::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram
 	state = ALIVE;
 	life = 30;
 	frameCount = 150;
+	isOpen = false;
 	spritesheet.loadFromFile("images/Level2Core.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
 	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
@@ -72,7 +73,10 @@ void Level2Core::update(int deltaTime)
 			if (sprite->animation() != OPENING) sprite->changeAnimation(OPENING);
 		}
 		else if (frameCount < 1) {
-			if (sprite->animation() != OPEN) sprite->changeAnimation(OPEN);
+			if (sprite->animation() != OPEN) {
+				sprite->changeAnimation(OPEN);
+				isOpen = true;
+			}
 		}
 		if (frameCount > 0) --frameCount;
 	}

@@ -38,6 +38,8 @@ public:
 	void renderLvl2();
 	bool isOffScreenY(Enemy &pj);
 	bool isOffScreen(glm::ivec2 pj);
+	bool isOffScreenLevel2(glm::ivec2 pj);
+	bool isOffScreenLevel2Enemy(glm::ivec2 pj);
 	void spawnProjectilePlayer(glm::ivec2 position);
 	void spawnProjectileSPREADPlayer(glm::ivec2 position);
 	void spawnProjectileRifleman(glm::ivec2 position, Rifleman* badguy);
@@ -79,6 +81,7 @@ public:
 private:
 	float left, right, bottom, top;
 	int sublvl;
+	int nDestroyed;
 };
 
 #endif

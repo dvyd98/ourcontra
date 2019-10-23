@@ -24,6 +24,7 @@ public:
 	string getType();
 	int state;
 	bool hurt;
+	bool isOpen = true;
 	Sprite *sprite;
 	int frameCount;
 	int lastKeyframe;
