@@ -16,6 +16,7 @@
 #include "Boss2Final.h"
 #include "Level2Core.h"
 #include "Level2Turret.h"
+#include "GreenSoldier.h"
 #include "ShaderProgram.h"
 #include "TileMap.h"
 #include <glm/glm.hpp>
@@ -48,7 +49,9 @@ public:
 	void spawnProjectileBossTurret(glm::ivec2 position, BossTurret* badguy);
 	void spawnProjectileBoss2Turret(glm::ivec2 positionPlayer, Boss2Turret* badguy);
 	void spawnProjectileBoss2Final(glm::ivec2 positionPlayer, Boss2Final* badguy);
+	void spawnProjectileGreenSoldier(glm::ivec2 position, GreenSoldier* badguy);
 	void spawnProjectileCannon(glm::ivec2 position, Cannon* badguy);
+	void spawnGreenSoldiers();
 	void despawnOffScreenProjectiles();
 	void despawnOffScreenEnemies();
 	void didthePlayerFuckingFall();
@@ -74,6 +77,7 @@ public:
 	list<Projectile> *projlistBoss2Turret;
 	list<Projectile> *projlistLevel2Turret;
 	list<ProjectileBoss2> *projlistBoss2Final;
+	list<Projectile> *projlistGreenSoldier;
 	list<Projectile> *projlistCannon;
 	glm::ivec2 tilemap;
 	ShaderProgram texProgram;
@@ -82,6 +86,7 @@ private:
 	float left, right, bottom, top;
 	int sublvl;
 	int nDestroyed;
+	int soldierCd;
 };
 
 #endif

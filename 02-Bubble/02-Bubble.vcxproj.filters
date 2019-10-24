@@ -1,6 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="Audio.cpp" />
+    <ClCompile Include="Boss2Core.cpp" />
+    <ClCompile Include="Boss2Final.cpp" />
+    <ClCompile Include="Boss2Turret.cpp" />
+    <ClCompile Include="BossCore.cpp" />
     <ClCompile Include="BossTurret.cpp" />
     <ClCompile Include="Bridge.cpp" />
     <ClCompile Include="Cannon.cpp" />
@@ -8,10 +13,14 @@
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GunUpgrade.cpp" />
+    <ClCompile Include="Level2Core.cpp" />
+    <ClCompile Include="Level2Turret.cpp" />
     <ClCompile Include="Life.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="ProjectileBoss.cpp" />
+    <ClCompile Include="ProjectileBoss2.cpp" />
     <ClCompile Include="Rifleman.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -24,19 +33,15 @@
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="UpgradeBox.cpp" />
     <ClCompile Include="WallTurret.cpp" />
-    <ClCompile Include="BossCore.cpp" />
-    <ClCompile Include="ProjectileBoss.cpp" />
-    <ClCompile Include="Audio.cpp" />
-    <ClCompile Include="Boss2Turret.cpp" />
-    <ClCompile Include="Boss2Core.cpp" />
-    <ClCompile Include="Boss2Final.cpp" />
-    <ClCompile Include="ProjectileBoss2.cpp" />
-    <ClCompile Include="Level2Core.cpp" />
-    <ClCompile Include="Level2Turret.cpp" />
->>>>>>> 49a8a0bb04a0a5a3cb9b7c80f61ca57c0e709111
+    <ClCompile Include="GreenSoldier.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
+    <ClInclude Include="Audio.h" />
+    <ClInclude Include="Boss2Core.h" />
+    <ClInclude Include="Boss2Final.h" />
+    <ClInclude Include="Boss2Turret.h" />
+    <ClInclude Include="BossCore.h" />
     <ClInclude Include="BossTurret.h" />
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Cannon.h" />
@@ -44,9 +49,13 @@
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GunUpgrade.h" />
+    <ClInclude Include="Level2Core.h" />
+    <ClInclude Include="Level2Turret.h" />
     <ClInclude Include="Life.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
+    <ClInclude Include="ProjectileBoss.h" />
+    <ClInclude Include="ProjectileBoss2.h" />
     <ClInclude Include="Rifleman.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
@@ -59,14 +68,6 @@
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="UpgradeBox.h" />
     <ClInclude Include="WallTurret.h" />
-    <ClInclude Include="BossCore.h" />
-    <ClInclude Include="ProjectileBoss.h" />
-    <ClInclude Include="Audio.h" />
-    <ClInclude Include="Boss2Turret.h" />
-    <ClInclude Include="Boss2Core.h" />
-    <ClInclude Include="Boss2Final.h" />
-    <ClInclude Include="ProjectileBoss2.h" />
-    <ClInclude Include="Level2Core.h" />
-    <ClInclude Include="Level2Turret.h" />
+    <ClInclude Include="GreenSoldier.h" />
   </ItemGroup>
 </Project>

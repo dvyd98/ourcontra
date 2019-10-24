@@ -156,6 +156,7 @@ void EnemyManager::initLvl2(const glm::ivec2 &tileMapPos, ShaderProgram &shaderP
 	player = p1;
 	sublvl = 0;
 	nDestroyed = 0;
+	soldierCd = 45;
 	coreDestroyed = false;
 	int n = map->getNumEnemies();
 	enemies = new list<Enemy*>();
@@ -164,6 +165,7 @@ void EnemyManager::initLvl2(const glm::ivec2 &tileMapPos, ShaderProgram &shaderP
 	projlistBoss2Turret = new list<Projectile>();
 	projlistBoss2Final = new list<ProjectileBoss2>();
 	projlistLevel2Turret = new list<Projectile>();
+	projlistGreenSoldier = new list<Projectile>();
 	for (int i = 0; i < n; ++i) {
 		int enemyType = map->getEnemy(i).type;
 		if (enemyType == WALLTURRET) {
@@ -326,6 +328,11 @@ void EnemyManager::updateLvl2(int deltaTime, float leftt, float rightt, float bo
 	bottom = bottomm;
 	top = topp;
 
+	if (soldierCd > 0) --soldierCd;
+	else if (sublvl < 5) {
+		spawnGreenSoldiers();
+		soldierCd = 120;
+	}
 	despawnDeadEnemies();
 	checkPhysicsLevel2(); // coctel
 
@@ -333,7 +340,7 @@ void EnemyManager::updateLvl2(int deltaTime, float leftt, float rightt, float bo
 	for (it_enemy = enemies->begin(); it_enemy != enemies->end(); ++it_enemy) {
 		vector <glm::ivec2> box = (*it_enemy)->buildHitBox();
 		if (!isOffScreen(box[0]) || !isOffScreen(box[1])) {
-			if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() == "boss2turret" && projlistBoss2Turret->size() < 3 && (*it_enemy)->sublvl == sublvl) {
+			if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() == "boss2turret" && (*it_enemy)->sublvl == sublvl) {
 				Boss2Turret* turretboi = dynamic_cast<Boss2Turret*>(*it_enemy);
 				spawnProjectileBoss2Turret(player->getPos(), turretboi);
 			}
@@ -344,6 +351,10 @@ void EnemyManager::updateLvl2(int deltaTime, float leftt, float rightt, float bo
 			else if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() == "boss2final" && nDestroyed >= 4) {
 				Boss2Final* turretboi = dynamic_cast<Boss2Final*>(*it_enemy);
 				spawnProjectileBoss2Final(player->getPos(), turretboi);
+			}
+			else if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() == "greensoldier" && (*it_enemy)->sublvl == sublvl) {
+				GreenSoldier* turretboi = dynamic_cast<GreenSoldier*>(*it_enemy);
+				spawnProjectileGreenSoldier(player->getPos(), turretboi);
 			}
 			if ((*it_enemy)->sublvl == sublvl) {
 				if ((*it_enemy)->getType() == "boss2final") {
@@ -771,23 +782,9 @@ void EnemyManager::spawnProjectileBoss2Final(glm::ivec2 positionPlayer, Boss2Fin
 	if (!isOffScreen(posEnemy) && badguy->hasShot == false) {
 		badguy->hasShot = true;
 		glm::vec2 newPos = glm::vec2{ 1,1 };
-		if (posPlayer.y > posEnemy.y + 10) { /*  SHOOT DOWN  */
-			if (posPlayer.x < posEnemy.x - 10) {
-				if (posPlayer.x >= posEnemy.x - 30) newPos = glm::vec2{ -0.25,0.75 }; /* SHOOT SLIGHTLY LEFT */
-				else newPos = glm::vec2{ -0.75,0.25 }; /* SHOOT VERY LEFT */
-			}
-			else if (posPlayer.x > posEnemy.x + 10) {
-				if (posPlayer.x < posEnemy.x + 30) newPos = glm::vec2{ 0.25,0.75 }; /* SHOOT SLIGHTLY RIGHT */
-				else newPos = glm::vec2{ 0.75,0.25 }; /* SHOOT VERY RIGHT */
-			}
-			else {
-				newPos = glm::ivec2{ 0,1 };
-			}
-		}
-		else { /*  ===  */
-			if (posPlayer.x < posEnemy.x) newPos = glm::ivec2{ -1,0 };
-			else newPos = glm::ivec2{ 1,0 };
-		}
+		glm::vec2 vec = posPlayer - posEnemy;
+		float magnitude = sqrt(vec.x * vec.x + vec.y * vec.y);
+		newPos = glm::vec2{ vec.x / magnitude, vec.y / magnitude };
 		badguy->projDir = newPos;
 		projectileBoss2 = new ProjectileBoss2();
 		projectileBoss2->init(tilemap, texProgram, 2, newPos);
@@ -797,13 +794,33 @@ void EnemyManager::spawnProjectileBoss2Final(glm::ivec2 positionPlayer, Boss2Fin
 	}
 }
 
+void EnemyManager::spawnGreenSoldiers()
+{
+	GreenSoldier *aux = new GreenSoldier();
+	aux->init(tilemap, texProgram);
+	aux->setTileMap(map);
+	aux->sublvl = sublvl;
+	if (rand() % 2) {
+		aux->left = true;
+		aux->setPosition(glm::vec2(115, 96));
+	}
+	else {
+		aux->left = false;
+		aux->setPosition(glm::vec2(182, 96));
+	}
+	enemies->push_back(aux);
+}
+
 void EnemyManager::spawnProjectileLevel2Turret(glm::ivec2 positionPlayer, Level2Turret* badguy)
 {
 	glm::ivec2 posPlayer = positionPlayer + glm::ivec2{ 10, 30 };
 	glm::ivec2 posEnemy = badguy->getPos() + glm::ivec2{ 8,8 };
 	if (!isOffScreen(posEnemy) && badguy->isOpen == true && badguy->hasShot == false) {
 		badguy->hasShot = true;
-		glm::vec2 newPos = glm::vec2{ 0,1 };
+		glm::vec2 newPos = glm::vec2{ 1,1 };
+		glm::vec2 vec = posPlayer - posEnemy;
+		float magnitude = sqrt(vec.x * vec.x + vec.y * vec.y);
+		newPos = glm::vec2{ vec.x / magnitude, vec.y / magnitude };
 		badguy->projDir = newPos;
 		projectile = new Projectile();
 		projectile->init(tilemap, texProgram, 2, newPos);
@@ -842,6 +859,27 @@ void EnemyManager::spawnProjectileCannon(glm::ivec2 positionPlayer, Cannon* badg
 	}
 }
 
+void EnemyManager::spawnProjectileGreenSoldier(glm::ivec2 position, GreenSoldier* badguy)
+{
+	glm::ivec2 posPlayer = position + glm::ivec2{ 10, 30 };
+	glm::ivec2 posEnemy = badguy->getPos() + glm::ivec2{ 8,8 };
+	if (!isOffScreen(posEnemy) && badguy->isOpen == true && badguy->hasShot == false) {
+		badguy->hasShot = true;
+		badguy->move = false;
+		glm::vec2 newPos = glm::vec2{ 1,1 };
+		glm::vec2 vec = posPlayer - posEnemy;
+		float magnitude = sqrt(vec.x * vec.x + vec.y * vec.y);
+		newPos = glm::vec2{ vec.x / magnitude, vec.y / magnitude };
+		badguy->projDir = newPos;
+		projectile = new Projectile();
+		projectile->init(tilemap, texProgram, 2, newPos);
+		projectile->sprite->changeAnimation(0);
+		projectile->setPosition(posEnemy + badguy->getProjectileSpawn());
+		projectile->setTileMap(map);
+		projlistLevel2Turret->push_back(*(projectile));
+
+	}
+}
 void EnemyManager::despawnOffScreenProjectiles()
 {
 	list<Projectile>::iterator it = projlist->begin();
