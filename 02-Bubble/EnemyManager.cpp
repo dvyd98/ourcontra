@@ -158,6 +158,7 @@ void EnemyManager::initLvl2(const glm::ivec2 &tileMapPos, ShaderProgram &shaderP
 	nDestroyed = 0;
 	soldierCd = 45;
 	coreDestroyed = false;
+	isLaserSpawned = -1;
 	int n = map->getNumEnemies();
 	enemies = new list<Enemy*>();
 	projlist = new list<Projectile>();
@@ -331,7 +332,13 @@ void EnemyManager::updateLvl2(int deltaTime, float leftt, float rightt, float bo
 	if (soldierCd > 0) --soldierCd;
 	else if (sublvl < 5) {
 		spawnGreenSoldiers();
-		soldierCd = 120;
+		soldierCd = 30;
+	}
+	if (sublvl < 5) {
+		if (isLaserSpawned != sublvl) {
+			isLaserSpawned = sublvl;
+			spawnLaser();
+		}
 	}
 	despawnDeadEnemies();
 	checkPhysicsLevel2(); // coctel
@@ -811,6 +818,23 @@ void EnemyManager::spawnGreenSoldiers()
 	enemies->push_back(aux);
 }
 
+void EnemyManager::spawnLaser()
+{
+	Laser *aux = new Laser();
+	aux->init(tilemap, texProgram);
+	aux->setTileMap(map);
+	aux->sublvl = sublvl;
+	aux->setPosition(glm::vec2(68, 145));
+	enemies->push_back(aux);
+
+	aux = new Laser();
+	aux->init(tilemap, texProgram);
+	aux->setTileMap(map);
+	aux->sublvl = sublvl;
+	aux->setPosition(glm::vec2(68, 160));
+	enemies->push_back(aux);
+}
+
 void EnemyManager::spawnProjectileLevel2Turret(glm::ivec2 positionPlayer, Level2Turret* badguy)
 {
 	glm::ivec2 posPlayer = positionPlayer + glm::ivec2{ 10, 30 };
@@ -1128,7 +1152,7 @@ void EnemyManager::checkPhysicsLevel2()
 			bool shot = false;
 			while (it_enemy != enemies->end() && !shot) {
 				vector<glm::ivec2> boxEnemy = (*it_enemy)->buildHitBox();
-				if ((*it_enemy)->state == ALIVE && (*it_enemy)->sublvl == sublvl && areTouching(box[0], box[1], boxEnemy[0], boxEnemy[1])) {
+				if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() != "laser" && (*it_enemy)->sublvl == sublvl && areTouching(box[0], box[1], boxEnemy[0], boxEnemy[1])) {
 					if ((*it_enemy)->isOpen) {
 						if ((*it_enemy)->decreaseLife(it_projec->getDmg())) {
 							(*it_enemy)->state = DYING;

@@ -17,6 +17,7 @@
 #include "Level2Core.h"
 #include "Level2Turret.h"
 #include "GreenSoldier.h"
+#include "Laser.h"
 #include "ShaderProgram.h"
 #include "TileMap.h"
 #include <glm/glm.hpp>
@@ -52,6 +53,7 @@ public:
 	void spawnProjectileGreenSoldier(glm::ivec2 position, GreenSoldier* badguy);
 	void spawnProjectileCannon(glm::ivec2 position, Cannon* badguy);
 	void spawnGreenSoldiers();
+	void spawnLaser();
 	void despawnOffScreenProjectiles();
 	void despawnOffScreenEnemies();
 	void didthePlayerFuckingFall();
@@ -87,6 +89,7 @@ private:
 	int sublvl;
 	int nDestroyed;
 	int soldierCd;
+	int isLaserSpawned;
 };
 
 #endif
