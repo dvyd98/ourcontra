@@ -29,8 +29,9 @@ enum upgradeRank
 	RIFLEMAN, RANK1, SPREAD
 };
 
-EnemyManager::EnemyManager()
+EnemyManager::EnemyManager(Audio *_audiomanager)
 {
+	audiomanager = _audiomanager;
 }
 
 

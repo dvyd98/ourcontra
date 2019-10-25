@@ -20,6 +20,7 @@
 #include "Laser.h"
 #include "ShaderProgram.h"
 #include "TileMap.h"
+#include "Audio.h"
 #include <glm/glm.hpp>
 #include <list>
 #include <GL/glew.h>
@@ -28,7 +29,7 @@
 class EnemyManager
 {
 public:
-	EnemyManager();
+	EnemyManager(Audio *audiomanger);
 	~EnemyManager();
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, TileMap *tileMap, Player *p1
 		);
@@ -90,6 +91,7 @@ private:
 	int nDestroyed;
 	int soldierCd;
 	int isLaserSpawned;
+	Audio *audiomanager;
 };
 
 #endif
