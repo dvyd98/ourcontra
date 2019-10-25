@@ -442,6 +442,20 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 			map[y*mapSize.x + x] == GRASS2 ||
 			map[y*mapSize.x + x] == BRIDGE1 ||
 			map[y*mapSize.x + x] == BRIDGE2 ||
+			map[y*mapSize.x + x] == B1 ||
+			map[y*mapSize.x + x] == B2 ||
+			map[y*mapSize.x + x] == B3 ||
+			map[y*mapSize.x + x] == B4 ||
+			map[y*mapSize.x + x] == B6 ||
+			map[y*mapSize.x + x] == B7 ||
+			map[y*mapSize.x + x] == B8 ||
+			map[y*mapSize.x + x] == B9 ||
+			map[y*mapSize.x + x] == B10 ||
+			map[y*mapSize.x + x] == B11 ||
+			map[y*mapSize.x + x] == B16 ||
+			map[y*mapSize.x + x] == B19 ||
+			map[y*mapSize.x + x] == B5 ||
+
 			bBridge || (y > 13 && bottomIsSea(x, y)))
 		{
 			if(*posY - tileSize.y * y + size.y <= 4 || bBridge)

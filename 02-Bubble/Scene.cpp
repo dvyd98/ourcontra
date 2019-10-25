@@ -68,7 +68,6 @@ void Scene::init()
 		_RPT0(0, "falla el init");
 	
 	audiomanager = new Audio();
-	audiomanager->play(TITLE);
 }
 
 void Scene::update(int deltaTime)
@@ -92,7 +91,7 @@ void Scene::update(int deltaTime)
 				left += 2;
 				right += 2;
 			}
-			else currentState = MENU;
+			else changeToScene(MENU);
 			break;
 		}
 		case MENU: updateMenu(deltaTime); break;
@@ -168,8 +167,11 @@ void Scene::updateLvl1(int deltaTime) {
 	life->update(deltaTime, left, right, bottom, top, player->life);
 
 	if (player->life <= 0) {
-		currentState = GAMEOVER;
 		changeToScene(GAMEOVER);
+	}
+
+	if (player->getPos().x >= map->getMapSize().x * map->getTileSize()) {
+		changeToScene(LVL2);
 	}
 }
 
@@ -231,6 +233,8 @@ void Scene::lvl2AnimationDoor(int deltaTime) {
 				case 5: {
 					map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, BOSS); 
 					player->setPosition(glm::vec2(player->getPos().x, 200));
+					audiomanager->stopAllSounds();
+					audiomanager->play(BASEBOSS_MUSIC);
 					break;
 				}
 				}
@@ -252,10 +256,15 @@ void Scene::changeToScene(int scene) {
 		right = 0;
 		break;
 	}
+	case MENU: {
+		audiomanager->play(TITLE_MUSIC);
+		break;
+	}
 	case LVL1: {
-		// TODO animation de menu a lvl1
 		map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		initEntitiesLvl1();
+		audiomanager->stopAllSounds();
+		audiomanager->play(STAGE1_MUSIC);
 		break;
 	}
 	case LVL2: {
@@ -263,12 +272,15 @@ void Scene::changeToScene(int scene) {
 		initEntitiesLvl2();
 		left = 0;
 		right = float(SCREEN_WIDTH - 1) / 2;
+		audiomanager->play(STAGE2_MUSIC);
 		break;
 	}
 	case GAMEOVER: {
 		map = TileMap::createTileMap("levels/gameover.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		left = 0;
 		right = float(SCREEN_WIDTH - 1) / 2;
+		audiomanager->stopAllSounds();
+		audiomanager->play(GAMEOVER_MUSIC);
 		break;
 	}
 	}
@@ -279,23 +291,31 @@ void Scene::godMode() {
 		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
 		map = TileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		currentState = MENU;
+		audiomanager->stopAllSounds();
+		audiomanager->play(TITLE_MUSIC);
 	}
 	if (Game::instance().getKey('2')) {
 		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
 		currentState = LVL1;
 		map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		initEntitiesLvl1();
+		audiomanager->stopAllSounds();
+		audiomanager->play(STAGE1_MUSIC);
 	}
 	if (Game::instance().getKey('3')) {
 		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
 		currentState = LVL2;
 		map = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		initEntitiesLvl2();		
+		audiomanager->stopAllSounds();
+		audiomanager->play(STAGE2_MUSIC);
 	}
 	if (Game::instance().getKey('0')) {
 		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
 		map = TileMap::createTileMap("levels/gameover.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		currentState = GAMEOVER;
+		audiomanager->stopAllSounds();
+		audiomanager->play(GAMEOVER_MUSIC);
 	}
 	// TODO click posa flag immortal al personatge
 }
@@ -338,7 +358,7 @@ void Scene::initEntitiesLvl1() {
 	player->setPosition(glm::vec2(3 * map->getTileSize(), 0 * map->getTileSize()));
 	player->setTileMap(map);
 
-	enemymanager = new EnemyManager();
+	enemymanager = new EnemyManager(audiomanager);
 	enemymanager->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, map, player);
 
 }
@@ -354,7 +374,7 @@ void Scene::initEntitiesLvl2() {
 	player->setPosition(glm::vec2(128, 124));
 	player->setTileMap(map);
 
-	enemymanager = new EnemyManager();
+	enemymanager = new EnemyManager(audiomanager);
 	enemymanager->initLvl2(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, map, player);
 }
 
