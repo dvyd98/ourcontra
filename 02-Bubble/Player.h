@@ -49,6 +49,7 @@ public:
 private:
 	bool bJumping;
 	bool bShooting;
+	bool wasShooting;
 	
 	int currentKeyframe;
 	glm::ivec2 tileMapDispl;

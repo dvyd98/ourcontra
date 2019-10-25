@@ -91,6 +91,10 @@ private:
 	int nDestroyed;
 	int soldierCd;
 	int isLaserSpawned;
+
+	bool keypressed;
+	bool keyreleased;
+	bool playerShot;
 };
 
 #endif

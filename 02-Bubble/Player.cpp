@@ -225,8 +225,10 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 
 		if (Game::instance().getKey('a')) {
 			bShooting = true;
+			wasShooting = true;
 		}
-		else bShooting = false;
+		else if (bShooting) bShooting = false;
+		else wasShooting = false;
 
 		if (lvl == 1) {
 			if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_UP))
@@ -240,7 +242,12 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 				if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58), &posPlayer.y) || posPlayer.x - 2 <= left)
 				{
 					posPlayer.x += 2;
-					sprite->changeAnimation(STAND_LEFT);
+					if (bJumping) {
+						if (sprite->animation() != AIRBONE_LEFT)
+							sprite->changeAnimation(AIRBONE_LEFT);
+					}
+					else if (!bWater) sprite->changeAnimation(STAND_LEFT);
+					else sprite->changeAnimation(SWIM_LEFT);
 				}
 			}
 			else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_UP))
@@ -266,7 +273,12 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 				if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58), &posPlayer.y) || posPlayer.x - 2 <= left)
 				{
 					posPlayer.x += 2;
-					sprite->changeAnimation(STAND_LEFT);
+					if (bJumping) {
+						if (sprite->animation() != AIRBONE_LEFT)
+							sprite->changeAnimation(AIRBONE_LEFT);
+					}
+					else if (!bWater) sprite->changeAnimation(STAND_LEFT);
+					else sprite->changeAnimation(SWIM_LEFT);
 				}
 			}
 			else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_DOWN))
@@ -302,7 +314,8 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 								if (sprite->animation() != AIRBONE_LEFT)
 									sprite->changeAnimation(AIRBONE_LEFT);
 							}
-							else sprite->changeAnimation(STAND_LEFT);
+							else if (!bWater) sprite->changeAnimation(STAND_LEFT);
+							else sprite->changeAnimation(SWIM_LEFT);
 						}
 			}
 			else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
@@ -310,7 +323,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 				if ((sprite->animation() != MOVE_RIGHT && !bShooting || sprite->animation() != MOVE_RIGHT_AIM && bShooting) && !bJumping)
 					if (bShooting) {
 						if (bWater) sprite->changeAnimation(SWIM_AIM_RIGHT);
-						else sprite->changeAnimation(MOVE_RIGHT_AIM);
+						else sprite->changeAnimation(MOVE_RIGHT_AIM, currentKeyframe);
 					}
 					else
 						if (bWater) {
@@ -322,7 +335,8 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 						if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 58), &posPlayer.y))
 						{
 							posPlayer.x -= 2;
-							sprite->changeAnimation(STAND_RIGHT);
+							if (!bWater) sprite->changeAnimation(STAND_RIGHT);
+							else sprite->changeAnimation(SWIM_RIGHT);
 						}
 			}
 			else if (Game::instance().getSpecialKey(GLUT_KEY_UP))
@@ -419,7 +433,11 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 				if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 58), &posPlayer.y))
 				{
 					posPlayer.x -= 2;
-					sprite->changeAnimation(LVL2_IDLE);
+					if (bJumping) {
+						if (sprite->animation() != AIRBONE_RIGHT)
+							sprite->changeAnimation(AIRBONE_RIGHT);
+					}
+					else sprite->changeAnimation(LVL2_IDLE);
 				}
 			}
 			else if (Game::instance().getSpecialKey(GLUT_KEY_UP))
@@ -475,7 +493,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 		{
 			posPlayer.y += FALL_STEP;
 			glm::ivec2 aux = posPlayer + glm::ivec2(10, 30);
-			if (Game::instance().getKey(' ') && Game::instance().getSpecialKey(GLUT_KEY_DOWN) && aux.y < 180);
+			if (lvl == 1 && Game::instance().getKey(' ') && Game::instance().getSpecialKey(GLUT_KEY_DOWN) && aux.y < 180);
 			else if (map->collisionMoveDown(aux, glm::ivec2(10, 28), &aux.y, bBridge))
 			{
 				if (map->isSwimming(aux, glm::ivec2(10, 28)))
@@ -588,6 +606,18 @@ glm::ivec2 Player::getProjectileSpawn() {
 		return glm::ivec2{ -4, 46 };
 	else if (sprite->animation() == CROUCH_LOOK_RIGHT)
 		return glm::ivec2{ 21, 46 };
+	else if (sprite->animation() == SWIM_AIM_LEFT)
+		return glm::ivec2{ 4, 52 };
+	else if (sprite->animation() == SWIM_AIM_RIGHT)
+		return glm::ivec2{ 4, 52 };
+	else if (sprite->animation() == SWIM_AIM_UPLEFT)
+		return glm::ivec2{ 2, 46 };
+	else if (sprite->animation() == SWIM_AIM_UPRIGHT)
+		return glm::ivec2{ 11, 46 };
+	else if (sprite->animation() == SWIM_AIM_UP_LOOK_LEFT)
+		return glm::ivec2{ 3, 31 };
+	else if (sprite->animation() == SWIM_AIM_UP_LOOK_RIGHT)
+		return glm::ivec2{ 11, 31 };
 	else return glm::ivec2{ 10, 46 };
 }
 glm::ivec2 Player::getProjectileSpawnlvl2()

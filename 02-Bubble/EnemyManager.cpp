@@ -46,6 +46,9 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 	map = tileMap;
 	player = p1;
 	p1->lvl = 1;
+	keypressed = false;
+	keyreleased = true;
+	playerShot = false;
 	int n = map->getNumEnemies();
 	enemies = new list<Enemy*>();
 	projlist = new list<Projectile>();
@@ -295,13 +298,26 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 		}
 	}
 	if (Game::instance().getKey('a')) {
+		keypressed = true;
+		keyreleased = false;
+	}
+	else {
+		keypressed = false;
+		keyreleased = true;
+		playerShot = false;
+	}
+	if (keypressed && !playerShot) {
 		if (player->projectile == RANK1) {
-			if (projlist->size() < 4)
+			if (projlist->size() < 4) {
+				playerShot = true;
 				spawnProjectilePlayer(player->getPos());
+			}
 		}
 		else if (player->projectile == SPREAD) {
-			if (projlist->size() < 10)
+			if (projlist->size() < 10) {
+				playerShot = true;
 				spawnProjectileSPREADPlayer(player->getPos());
+			}
 		}
 	}
 	list<Projectile>::iterator it;
@@ -511,7 +527,7 @@ void EnemyManager::spawnProjectilePlayer(glm::ivec2 position)
 		else if (dir == STAND_RIGHT || dir == AIRBONE_RIGHT || dir == SWIM_AIM_RIGHT || dir == DROPPED) newPos = glm::ivec2{ 1,0 };
 	}
 
-	projectile->init(tilemap, texProgram, 6, newPos);
+	projectile->init(tilemap, texProgram, 3, newPos);
 	projectile->rank = RANK1;
 	projectile->setPosition(position + player->getProjectileSpawn());
 	projectile->setTileMap(map);
