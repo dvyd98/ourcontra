@@ -25,6 +25,7 @@ public:
 
 	glm::ivec2 getPos();
 	glm::ivec2 getProjectileSpawn();
+	glm::ivec2 getProjectileSpawnlvl2();
 
 	bool isJumping();
 	bool isOnBridge();
@@ -37,15 +38,18 @@ public:
 	int state;
 	int LandedFrame;
 	int projectile;
+	int lvl;
 	bool bBridge;
 	bool bWater;
 	bool justLanded;
+	bool coreDestroyed;
 	glm::ivec2 posPlayer;
 	Sprite *sprite;
 	
 private:
 	bool bJumping;
 	bool bShooting;
+	bool wasShooting;
 	
 	int currentKeyframe;
 	glm::ivec2 tileMapDispl;

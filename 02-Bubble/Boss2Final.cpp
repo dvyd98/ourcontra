@@ -26,7 +26,7 @@ void Boss2Final::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram
 {
 	type = "boss2final";
 	state = ALIVE;
-	life = 10;
+	life = 50;
 	frameCount = 0;
 	projectileCd = 120;
 	hurt = false;

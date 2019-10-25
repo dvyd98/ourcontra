@@ -210,6 +210,7 @@ void Scene::lvl2AnimationDoor(int deltaTime) {
 	player->update(deltaTime, left, right, bottom, top);
 	if (--lvl2Delay == 0) {
 		if (Game::instance().getSpecialKey(GLUT_KEY_UP) && enemymanager->coreDestroyed) {
+
 			switch (map->getFrame()) {
 			case SLVL1: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM1); break;
 			case SLVL3: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM1); break;
@@ -222,6 +223,7 @@ void Scene::lvl2AnimationDoor(int deltaTime) {
 			case ANIM4: {
 				enemymanager->setSublvl(enemymanager->getSublvl() + 1);
 				enemymanager->coreDestroyed = false;
+				player->coreDestroyed = false;
 				switch (enemymanager->getSublvl()) {
 				case 0:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, SLVL1); break;
 				case 1:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, SLVL1); break;
