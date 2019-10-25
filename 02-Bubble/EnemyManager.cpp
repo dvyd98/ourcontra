@@ -45,6 +45,7 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 	tilemap = tileMapPos;
 	map = tileMap;
 	player = p1;
+	p1->lvl = 1;
 	int n = map->getNumEnemies();
 	enemies = new list<Enemy*>();
 	projlist = new list<Projectile>();
@@ -154,10 +155,13 @@ void EnemyManager::initLvl2(const glm::ivec2 &tileMapPos, ShaderProgram &shaderP
 	tilemap = tileMapPos;
 	map = tileMap;
 	player = p1;
+	p1->sprite->changeAnimation(28);
+	p1->lvl = 2;
 	sublvl = 0;
 	nDestroyed = 0;
 	soldierCd = 45;
 	coreDestroyed = false;
+	player->coreDestroyed = false;
 	isLaserSpawned = -1;
 	int n = map->getNumEnemies();
 	enemies = new list<Enemy*>();
@@ -340,6 +344,7 @@ void EnemyManager::updateLvl2(int deltaTime, float leftt, float rightt, float bo
 			spawnLaser();
 		}
 	}
+	if (sublvl == 5) player->lvl = 1;
 	despawnDeadEnemies();
 	checkPhysicsLevel2(); // coctel
 
@@ -374,7 +379,8 @@ void EnemyManager::updateLvl2(int deltaTime, float leftt, float rightt, float bo
 	if (Game::instance().getKey('a')) {
 		if (player->projectile == RANK1) {
 			if (projlist->size() < 4)
-				spawnProjectilePlayer(player->getPos());
+				if (sublvl < 5) spawnProjectilePlayerLVL2(player->getPos());
+				else spawnProjectilePlayer(player->getPos());
 		}
 	}
 	list<Projectile>::iterator it;
@@ -508,6 +514,20 @@ void EnemyManager::spawnProjectilePlayer(glm::ivec2 position)
 	projectile->init(tilemap, texProgram, 6, newPos);
 	projectile->rank = RANK1;
 	projectile->setPosition(position + player->getProjectileSpawn());
+	projectile->setTileMap(map);
+	projlist->push_back(*(projectile));
+}
+
+void EnemyManager::spawnProjectilePlayerLVL2(glm::ivec2 position)
+{
+	projectile = new Projectile();
+	glm::vec2 newPos = glm::vec2{ 0,-1 };
+	glm::vec2 vec = glm::ivec2{ 145, 60 } -position;
+	float magnitude = sqrt(vec.x * vec.x + vec.y * vec.y);
+	newPos = glm::vec2{ vec.x / magnitude, vec.y / magnitude };
+	projectile->init(tilemap, texProgram, 6, newPos);
+	projectile->rank = RANK1;
+	projectile->setPosition(position + player->getProjectileSpawnlvl2());
 	projectile->setTileMap(map);
 	projlist->push_back(*(projectile));
 }
@@ -968,8 +988,10 @@ void EnemyManager::despawnDeadEnemies() {
 	list<Enemy*>::iterator it = enemies->begin();
 	while (it != enemies->end()) {
 		if ((*it)->state == DEAD && (*it)->getType() != "bridge") {
-			if ((*it)->getType() == "level2core") 
+			if ((*it)->getType() == "level2core") {
 				coreDestroyed = true;
+				player->coreDestroyed = true;
+			}
 			it = enemies->erase(it);
 		}
 		else ++it;

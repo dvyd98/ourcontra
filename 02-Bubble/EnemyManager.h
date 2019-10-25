@@ -43,6 +43,7 @@ public:
 	bool isOffScreenLevel2(glm::ivec2 pj);
 	bool isOffScreenLevel2Enemy(glm::ivec2 pj);
 	void spawnProjectilePlayer(glm::ivec2 position);
+	void spawnProjectilePlayerLVL2(glm::ivec2 position);
 	void spawnProjectileSPREADPlayer(glm::ivec2 position);
 	void spawnProjectileRifleman(glm::ivec2 position, Rifleman* badguy);
 	void spawnProjectileWallTurret(glm::ivec2 position, WallTurret* badguy);
