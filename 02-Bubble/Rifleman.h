@@ -16,6 +16,8 @@ public:
 	vector<glm::ivec2> buildHitBox();
 	glm::ivec2 getProjectileSpawn();
 
+	int shotCd;
+	bool hasShot = false;
 	glm::ivec2 projDir;
 
 };

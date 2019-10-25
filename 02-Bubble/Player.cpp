@@ -268,6 +268,9 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 			{
 				if (sprite->animation() != AIM_DOWN_WALK_LEFT && !bJumping && !bWater)
 					sprite->changeAnimation(AIM_DOWN_WALK_LEFT);
+				else if (bWater && sprite->animation() != SWIM_LEFT) {
+					sprite->changeAnimation(SWIM_LEFT);
+				}
 				posPlayer.x -= 2;
 				lookingTo = LOOKING_LEFT;
 				if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58), &posPlayer.y) || posPlayer.x - 2 <= left)
@@ -285,6 +288,9 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 			{
 				if (sprite->animation() != AIM_DOWN_WALK_RIGHT && !bJumping && !bWater)
 					sprite->changeAnimation(AIM_DOWN_WALK_RIGHT);
+				else if (bWater && sprite->animation() != SWIM_RIGHT) {
+					sprite->changeAnimation(SWIM_RIGHT);
+				}
 				posPlayer.x += 2;
 				lookingTo = LOOKING_RIGHT;
 				if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58), &posPlayer.y))

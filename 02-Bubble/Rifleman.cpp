@@ -38,6 +38,7 @@ void Rifleman::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	life = 1;
 	lookingTo = LOOKING_RIGHT;
 	lastKeyframe = 0;
+	shotCd = 5;
 	spritesheet.loadFromFile("images/rifleman.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
 	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
@@ -91,6 +92,11 @@ void Rifleman::update(int deltaTime)
 		else if (sprite->animation() != AIM_UP_LOOK_RIGHT && projDir == glm::ivec2{ 1,-1 }) sprite->changeAnimation(AIM_UP_LOOK_RIGHT);
 		else if (projDir == glm::ivec2{ -1,1 }) sprite->changeAnimation(AIM_DOWN_LOOK_LEFT);
 		else if (projDir == glm::ivec2{ 1,1 }) sprite->changeAnimation(AIM_DOWN_LOOK_RIGHT);
+		if (shotCd > 0 && hasShot) --shotCd;
+		else if (shotCd == 0) {
+			shotCd = 5;
+			hasShot = false;
+		}
 	}
 	else if (state == DYING) {
 		if (sprite->animation() != ANIM_DYING) sprite->changeAnimation(ANIM_DYING);
