@@ -183,7 +183,13 @@ void Scene::updateLvl1(int deltaTime) {
 		left += PLAYER_VEL;
 	}
 	player->update(deltaTime, left, right, bottom, top);
-	if (_2Playermode) player2->update(deltaTime, left, right, bottom, top);
+	if (_2Playermode) {
+		player2->update(deltaTime, left, right, bottom, top);
+		life2->update(deltaTime, left, right, bottom, top, player2->life);
+		if (player2->life <= 0) {
+			changeToScene(GAMEOVER);
+		}
+	}
 	enemymanager->update(deltaTime, left, right, bottom, top);
 	life->update(deltaTime, left, right, bottom, top, player->life);
 
@@ -198,7 +204,14 @@ void Scene::updateLvl1(int deltaTime) {
 
 void Scene::updateLvl2(int deltaTime) {
 	player->update(deltaTime, left, right, bottom, top);
-	if (_2Playermode) player2->update(deltaTime, left, right, bottom, top);
+	if (_2Playermode) {
+		player2->update(deltaTime, left, right, bottom, top);
+		life2->update(deltaTime, left, right, bottom, top, player2->life);
+		if (player2->life <= 0) {
+			currentState = GAMEOVER;
+			changeToScene(GAMEOVER);
+		}
+	}
 	enemymanager->updateLvl2(deltaTime, left, right, bottom, top);
 
 	life->update(deltaTime, left, right, bottom, top, player->life);
@@ -371,7 +384,10 @@ void Scene::render()
 		if (currentState == LVL1) enemymanager->render();
 		if (currentState == LVL2) enemymanager->renderLvl2();
 		player->render();
-		if (_2Playermode) player2->render();
+		if (_2Playermode) {
+			player2->render();
+			life2->render();
+		}
 		life->render();
 	}
 
@@ -385,6 +401,7 @@ void Scene::initEntitiesLvl1() {
 	player = new Player();
 	player2 = new Player2();
 	life = new Life();
+	life2 = new Life();
 	life->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 0);
 	life->setPosition(glm::vec2(3 * map->getTileSize(), 0 * map->getTileSize()));
 	life->setTileMap(map);
@@ -397,6 +414,10 @@ void Scene::initEntitiesLvl1() {
 		player2->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		player2->setPosition(glm::vec2(3 * map->getTileSize(), 0 * map->getTileSize()));
 		player2->setTileMap(map);
+
+		life2->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 1);
+		life2->setPosition(glm::vec2(9 * map->getTileSize(), 0 * map->getTileSize()));
+		life2->setTileMap(map);
 	}
 
 	enemymanager = new EnemyManager(audiomanager);
@@ -409,6 +430,7 @@ void Scene::initEntitiesLvl2() {
 	player = new Player();
 	player2 = new Player2();
 	life = new Life();
+	life2 = new Life();
 	life->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 0);
 	life->setPosition(glm::vec2(3 * map->getTileSize(), 0 * map->getTileSize()));
 	life->setTileMap(map);
@@ -421,6 +443,10 @@ void Scene::initEntitiesLvl2() {
 		player2->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		player2->setPosition(glm::vec2(128, 124));
 		player2->setTileMap(map);
+
+		life2->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 1);
+		life2->setPosition(glm::vec2(9 * map->getTileSize(), 0 * map->getTileSize()));
+		life2->setTileMap(map);
 	}
 
 	enemymanager = new EnemyManager(audiomanager);
