@@ -28,6 +28,9 @@ void BossTurret::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram
 	state = ALIVE;
 	life = 30;
 	frameCount = 60;
+	projCd = 30;
+	left = true;
+	hasShot = false;
 	spritesheet.loadFromFile("images/BossTurret.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
 	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
@@ -66,6 +69,13 @@ void BossTurret::update(int deltaTime)
 				sprite->changeAnimation(SHOOTING);
 		}
 		if (frameCount > 0) --frameCount;
+		if (hasShot) {
+			if (projCd > 0) --projCd;
+			else {
+				projCd = 30;
+				hasShot = false;
+			}
+		}
 	}
 	else if (state == DYING) {
 		if (sprite->animation() != ANIM_DYING && sprite->animation() != ANIM_DEAD) sprite->changeAnimation(ANIM_DYING);
@@ -86,5 +96,12 @@ vector<glm::ivec2> BossTurret::buildHitBox()
 
 glm::ivec2 BossTurret::getProjectileSpawn()
 {
-	return glm::ivec2{ 0,0 };
+	if (left) {
+		left = false;
+		return glm::ivec2{ -10,-10 };
+	}
+	else {
+		left = true;
+		return glm::ivec2{ 10,-10 };
+	}
 }

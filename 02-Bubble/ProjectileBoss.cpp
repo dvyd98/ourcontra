@@ -45,13 +45,13 @@ void ProjectileBoss::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderPro
 void ProjectileBoss::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	if (loop > 30) peak = true;
+	if (loop > 15) peak = true;
 	if (!peak) {
-		posProjectile += glm::vec2(-1, -1);
+		posProjectile += glm::vec2(-2, -1);
 		loop += 1;
 	}
 	else
-		posProjectile += glm::vec2(-1, 1);
+		posProjectile += glm::vec2(-1, 2);
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posProjectile.x), float(tileMapDispl.y + posProjectile.y)));
 }
 

@@ -17,6 +17,9 @@ public:
 	glm::ivec2 getProjectileSpawn();
 
 	glm::vec2 projDir;
+	int projCd;
+	bool left;
+	bool hasShot;
 
 private:
 

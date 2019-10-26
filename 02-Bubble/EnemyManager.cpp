@@ -154,7 +154,6 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 		}
 	}
 
-
 }
 
 void EnemyManager::initLvl2(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, TileMap *tileMap, Player *p1, Player2 *p2
@@ -305,7 +304,7 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 				Cannon* turretboi = dynamic_cast<Cannon*>(*it_enemy);
 				spawnProjectileCannon(player->getPos(), turretboi);
 			}
-			else if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() == "bossturret" && projlistBossTurret->size() < 1 && (*it_enemy)->frameCount < 1) {
+			else if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() == "bossturret" && (*it_enemy)->frameCount < 1) {
 				BossTurret* turretboi = dynamic_cast<BossTurret*>(*it_enemy);
 				spawnProjectileBossTurret(player->getPos(), turretboi);
 			}
@@ -1054,7 +1053,8 @@ void EnemyManager::spawnProjectileBossTurret(glm::ivec2 positionPlayer, BossTurr
 {
 	glm::ivec2 posPlayer = positionPlayer + glm::ivec2{ 10, 30 };
 	glm::ivec2 posEnemy = badguy->getPos() + glm::ivec2{ 8,8 };
-	if (!isOffScreen(posEnemy)) {
+	if (!isOffScreen(posEnemy) && badguy->hasShot == false) {
+		badguy->hasShot = true;
 		glm::vec2 newPos = glm::vec2{ 1,1 };
 		if (posPlayer.x < posEnemy.x) newPos = glm::ivec2{ -1,0 };
 		else newPos = glm::ivec2{ 1,0 };
