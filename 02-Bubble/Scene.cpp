@@ -108,10 +108,24 @@ void Scene::update(int deltaTime)
 				blinkAnimation = BLINK_ANIMATION_DURATION;
 			}
 			else if (blinks == 0) {
-				
-				changeToScene(LVL1);
-
+				if (map->getFrame() == MENU_1_PLAYER || map->getFrame() == MENU_2_PLAYER)
+					changeToScene(LVL1);
+				else if (map->getFrame() == MENU_HOW_TO_PLAY)
+					changeToScene(HOW_TO);
+				else if (map->getFrame() == MENU_CREDITS)
+					changeToScene(MENU_CREDITS);
 			}
+			break;
+		}
+		case HOW_TO: {
+			if (Game::instance().getKey(' ')) {
+				changeToScene(LOADING_MENU);
+			}
+			break;
+		}
+		case CREDITS: {
+			if (Game::instance().getKey(' '))
+				changeToScene(LOADING_MENU);
 			break;
 		}
 		case LVL1: updateLvl1(deltaTime); break;
@@ -147,7 +161,7 @@ void Scene::updateMenu(int deltaTime) {
 	if (--selectDelay == 0) {
 		if (Game::instance().getKey(','))
 			map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram,
-				((map->getFrame() == MENU_1_PLAYER) ? MENU_2_PLAYER : MENU_1_PLAYER));
+				((map->getFrame()+2) % 8));
 		// start game with enter
 		if (Game::instance().getKey('.')) {
 			_2Playermode = !map->getFrame() == MENU_1_PLAYER;
@@ -261,7 +275,15 @@ void Scene::changeToScene(int scene) {
 		break;
 	}
 	case MENU: {
-		audiomanager->play(TITLE_MUSIC, true);
+		audiomanager->play(TITLE_MUSIC, false);
+		break;
+	}
+	case HOW_TO: {
+		map = TileMap::createTileMap("levels/howto.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		break;
+	}
+	case CREDITS: {
+		map = TileMap::createTileMap("levels/credits.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		break;
 	}
 	case LVL1: {
@@ -296,7 +318,7 @@ void Scene::godMode() {
 		map = TileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		currentState = MENU;
 		audiomanager->stopAllSounds();
-		audiomanager->play(TITLE_MUSIC, true);
+		audiomanager->play(TITLE_MUSIC, false);
 	}
 	if (Game::instance().getKey('2')) {
 		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
@@ -314,6 +336,16 @@ void Scene::godMode() {
 		audiomanager->stopAllSounds();
 		audiomanager->play(STAGE2_MUSIC, true);
 	}
+	if (Game::instance().getKey('4')) {
+		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
+		currentState = HOW_TO;
+		map = TileMap::createTileMap("howto/howto.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	}
+	if (Game::instance().getKey('5')) {
+		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
+		currentState = CREDITS;
+		map = TileMap::createTileMap("credits/credits.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	}
 	if (Game::instance().getKey('0')) {
 		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
 		map = TileMap::createTileMap("levels/gameover.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -321,7 +353,6 @@ void Scene::godMode() {
 		audiomanager->stopAllSounds();
 		audiomanager->play(GAMEOVER_MUSIC, true);
 	}
-	// TODO click posa flag immortal al personatge
 }
 
 void Scene::render()

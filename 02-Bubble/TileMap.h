@@ -77,6 +77,7 @@ private:
 	void loadLevel2();
 	void loadMenu();
 	void loadGameover();
+	void loadExtras();
 	bool bottomIsSea(const int y, const int x) const;
 
 private:
