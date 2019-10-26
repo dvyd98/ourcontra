@@ -17,6 +17,7 @@ Life::Life()
 
 void Life::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int player)
 {
+	whatplayer = player;
 	if (player == 0) spritesheet.loadFromFile("images/life.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	else spritesheet.loadFromFile("images/life2.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
@@ -49,8 +50,14 @@ void Life::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int 
 void Life::update(int deltaTime, float left, float right, float bottom, float top, int life)
 {
 	sprite->update(deltaTime);
-	posLife.y = top + 5;
-	posLife.x = left + 16;
+	if (whatplayer == 0) {
+		posLife.y = top + 5;
+		posLife.x = left + 16;
+	}
+	else {
+		posLife.y = top + 5;
+		posLife.x = left + 225;
+	}
 	if (life >= 4) sprite->changeAnimation(FOUR_LIVES);
 	else if (life == 3) sprite->changeAnimation(THREE_LIVES);
 	else if (life == 2) sprite->changeAnimation(TWO_LIVES);

@@ -160,7 +160,6 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 void EnemyManager::initLvl2(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, TileMap *tileMap, Player *p1, Player2 *p2
 )
 {
-
 	texProgram = shaderProgram;
 	tilemap = tileMapPos;
 	map = tileMap;
@@ -558,8 +557,10 @@ void EnemyManager::renderLvl2()
 	for (it = projlist->begin(); it != projlist->end(); ++it) {
 		it->render();
 	}
-	for (it = projlist2->begin(); it != projlist2->end(); ++it) {
-		it->render();
+	if (_2Playermode) {
+		for (it = projlist2->begin(); it != projlist2->end(); ++it) {
+			it->render();
+		}
 	}
 	for (it = projlistLevel2Turret->begin(); it != projlistLevel2Turret->end(); ++it) {
 		it->render();

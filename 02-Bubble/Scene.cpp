@@ -385,8 +385,8 @@ void Scene::initEntitiesLvl1() {
 	}
 
 	enemymanager = new EnemyManager(audiomanager);
-	enemymanager->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, map, player, player2);
 	enemymanager->_2Playermode = _2Playermode;
+	enemymanager->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, map, player, player2);
 
 }
 
@@ -414,8 +414,8 @@ void Scene::initEntitiesLvl2() {
 	}
 
 	enemymanager = new EnemyManager(audiomanager);
-	enemymanager->initLvl2(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, map, player, player2);
 	enemymanager->_2Playermode = _2Playermode;
+	enemymanager->initLvl2(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, map, player, player2);
 }
 
 void Scene::initShaders()

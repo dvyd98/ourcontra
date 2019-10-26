@@ -28,7 +28,7 @@ public:
 
 protected:
 	int life;
-
+	int whatplayer;
 	string type;
 	bool bJumping;
 	int lookingTo;
