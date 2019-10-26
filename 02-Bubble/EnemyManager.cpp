@@ -1217,6 +1217,7 @@ void EnemyManager::checkPhysicsLevel2()
 					if ((*it_enemy)->isOpen) {
 						if ((*it_enemy)->decreaseLife(it_projec->getDmg())) {
 							(*it_enemy)->state = DYING;
+							playDeathSound((*it_enemy)->getType());
 							if ((*it_enemy)->getType() == "boss2core") ++nDestroyed;
 						}
 					}
@@ -1295,7 +1296,7 @@ void EnemyManager::checkPhysicsLevel2()
 void EnemyManager::playDeathSound(string type) {
 	if (type == "bosscore") audiomanager->play(BOSS_DEATH_1_AUDIO, false);
 	if (type == "bosscore2") audiomanager->play(BOSS_DEATH_2_AUDIO, false);
-	else if (type == "bridge" || type == "rifleman" || type == "soldier") 
+	else if (type == "bridge" || type == "rifleman" || type == "soldier" || type == "greensoldier") 
 		audiomanager->play(ENEMY_DEATH_SOUND, false);
 	else audiomanager->play(BRIDGE_EXPLOSION_SOUND, false);
 }
