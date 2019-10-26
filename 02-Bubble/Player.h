@@ -41,10 +41,13 @@ public:
 	int lvl;
 	int invtimer = 0;
 	int frameCount;
+	int rolldistance = 40;
+	int lastKeyframe;
 	bool bBridge;
 	bool bWater;
 	bool justLanded;
 	bool coreDestroyed;
+	bool lvl2boss;
 	glm::ivec2 posPlayer;
 	Sprite *sprite;
 	
