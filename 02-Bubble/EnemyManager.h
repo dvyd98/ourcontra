@@ -29,6 +29,7 @@
 class EnemyManager
 {
 public:
+
 	EnemyManager(Audio *audiomanger);
 	~EnemyManager();
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, TileMap *tileMap, Player *p1
@@ -93,12 +94,12 @@ private:
 	int nDestroyed;
 	int soldierCd;
 	int isLaserSpawned;
-	Audio *audiomanager;
 
 	bool keypressed;
 	bool keyreleased;
 	bool playerShot;
 
+	Audio *audiomanager;
 	void playDeathSound(string type);
 };
 

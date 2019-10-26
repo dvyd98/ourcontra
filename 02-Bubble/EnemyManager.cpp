@@ -390,9 +390,11 @@ void EnemyManager::updateLvl2(int deltaTime, float leftt, float rightt, float bo
 	}
 	if (Game::instance().getKey('a')) {
 		if (player->projectile == RANK1) {
-			if (projlist->size() < 4)
+			if (projlist->size() < 4) {
 				if (sublvl < 5) spawnProjectilePlayerLVL2(player->getPos());
 				else spawnProjectilePlayer(player->getPos());
+				audiomanager->play(NORMAL_GUN_SOUND, false);
+			}
 		}
 	}
 	list<Projectile>::iterator it;
@@ -1279,7 +1281,8 @@ void EnemyManager::checkPhysicsLevel2()
 
 void EnemyManager::playDeathSound(string type) {
 	if (type == "bosscore") audiomanager->play(BOSS_DEATH_1_AUDIO, false);
+	if (type == "bosscore2") audiomanager->play(BOSS_DEATH_2_AUDIO, false);
 	else if (type == "bridge" || type == "rifleman" || type == "soldier") 
-		audiomanager->play(BRIDGE_EXPLOSION_SOUND, false);
-	else audiomanager->play(ENEMY_DEATH_SOUND, false);
+		audiomanager->play(ENEMY_DEATH_SOUND, false);
+	else audiomanager->play(BRIDGE_EXPLOSION_SOUND, false);
 }
