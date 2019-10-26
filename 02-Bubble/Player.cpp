@@ -47,7 +47,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	coreDestroyed = false;
 	lvl2boss = false;
 	lookingTo = LOOKING_RIGHT;
-	life = 99;
+	life = 2;
 	frameCount = 120;
 	rolldistance = 40;
 	state = ALIVE;
@@ -496,6 +496,8 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 				else if (sprite->animation() == AIRBONE_LEFT && !bJumping)
 					sprite->changeAnimation(LVL2_IDLE);
 				else if (sprite->animation() == AIRBONE_RIGHT && !bJumping)
+					sprite->changeAnimation(LVL2_IDLE);
+				else if (sprite->animation() == LVL2_ANIM_DEAD)
 					sprite->changeAnimation(LVL2_IDLE);
 			}
 			

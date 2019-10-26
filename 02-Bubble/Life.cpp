@@ -15,9 +15,10 @@ Life::Life()
 
 }
 
-void Life::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
+void Life::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int player)
 {
-	spritesheet.loadFromFile("images/life.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	if (player == 0) spritesheet.loadFromFile("images/life.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	else spritesheet.loadFromFile("images/life2.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
 	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
 	spritesheet.setMinFilter(GL_NEAREST);

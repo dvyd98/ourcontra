@@ -52,6 +52,7 @@ private:
 	Player *player;
 	Player2 *player2;
 	Life *life;
+	Life *life2;
 	EnemyManager *enemymanager;
 	ShaderProgram texProgram;
 	float currentTime;

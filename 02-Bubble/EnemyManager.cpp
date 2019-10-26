@@ -1619,6 +1619,11 @@ void EnemyManager::checkPhysicsLevel2()
 			if (areTouching(boxPlayer[0], boxPlayer[1], box[0], box[1])) {
 				updatePlayerState();
 			}
+			if (_2Playermode) {
+				if (areTouching(boxPlayer2[0], boxPlayer2[1], box[0], box[1])) {
+					updatePlayer2State();
+				}
+			}
 			++it_projec;
 		}
 
@@ -1631,6 +1636,11 @@ void EnemyManager::checkPhysicsLevel2()
 			vector<glm::ivec2> box = it_projec->buildHitBox();
 			if (areTouching(boxPlayer[0], boxPlayer[1], box[0], box[1])) {
 				updatePlayerState();
+			}
+			if (_2Playermode) {
+				if (areTouching(boxPlayer2[0], boxPlayer2[1], box[0], box[1])) {
+					updatePlayer2State();
+				}
 			}
 			++it_projec;
 		}
@@ -1658,6 +1668,29 @@ void EnemyManager::checkPhysicsLevel2()
 		}
 	}
 
+	if (_2Playermode) {
+		it_projec = projlist2->begin();
+		while (it_projec != projlist2->end()) { // our pew pew for boss2final projectile 
+			if (isOffScreen((it_projec->getPos())))
+				it_projec = projlist2->erase(it_projec);
+			else {
+				vector<glm::ivec2> box = it_projec->buildHitBox();
+				it_boss2 = projlistBoss2Final->begin();
+				bool shot = false;
+				while (it_boss2 != projlistBoss2Final->end() && !shot) {
+					vector<glm::ivec2> boxBoss = (it_boss2)->buildHitBox();
+					if ((it_boss2)->state == ALIVE && areTouching(box[0], box[1], boxBoss[0], boxBoss[1])) {
+						(it_boss2)->state = DYING;
+						shot = true;
+					}
+					else ++it_boss2;
+				}
+				if (shot) it_projec = projlist->erase(it_projec);
+				else ++it_projec;
+			}
+		}
+	}
+
 	it_boss2 = projlistBoss2Final->begin();
 	while (it_boss2 != projlistBoss2Final->end()) { // their pew pew
 		if (isOffScreen((it_boss2->getPos())))
@@ -1666,6 +1699,11 @@ void EnemyManager::checkPhysicsLevel2()
 			vector<glm::ivec2> box = it_boss2->buildHitBox();
 			if (areTouching(boxPlayer[0], boxPlayer[1], box[0], box[1])) {
 				updatePlayerState();
+			}
+			if (_2Playermode) {
+				if (areTouching(boxPlayer2[0], boxPlayer2[1], box[0], box[1])) {
+					updatePlayer2State();
+				}
 			}
 			++it_boss2;
 		}
