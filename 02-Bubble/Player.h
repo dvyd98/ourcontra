@@ -41,6 +41,8 @@ public:
 	int lvl;
 	int invtimer = 0;
 	int frameCount;
+	int rolldistance = 40;
+	int lastKeyframe;
 	bool bBridge;
 	bool bWater;
 	bool justLanded;

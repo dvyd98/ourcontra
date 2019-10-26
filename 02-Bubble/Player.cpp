@@ -24,7 +24,7 @@ enum PlayerAnims
 	CROUCH_LOOK_RIGHT, AIM_UP_WALK_RIGHT, AIM_UP_WALK_LEFT, AIM_DOWN_WALK_RIGHT, AIM_DOWN_WALK_LEFT, AIRBONE_LEFT, AIRBONE_RIGHT,
 	DROPPED, UNDERWATER, SWIM_LEFT, SWIM_RIGHT, SWIM_AIM_LEFT, SWIM_AIM_RIGHT, SWIM_AIM_UPRIGHT, SWIM_AIM_UPLEFT, SWIM_AIM_UP_LOOK_LEFT, SWIM_AIM_UP_LOOK_RIGHT,
 	ANIM_DYING, ANIM_DEAD, LVL2_ANIM_DYING,
-	LVL2_IDLE, LVL2_IDLE_SHOOT, LVL2_CROUCH, LVL2_CROUCH_SHOOT, LVL2_FORWARD, LVL2_MOVE_LEFT, LVL2_MOVE_RIGHT, LVL2_ZAP
+	LVL2_IDLE, LVL2_IDLE_SHOOT, LVL2_CROUCH, LVL2_CROUCH_SHOOT, LVL2_FORWARD, LVL2_MOVE_LEFT, LVL2_MOVE_RIGHT, LVL2_ZAP, LVL2_ANIM_DEAD
 
 };
 
@@ -48,6 +48,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	lookingTo = LOOKING_RIGHT;
 	life = 99;
 	frameCount = 120;
+	rolldistance = 40;
 	state = ALIVE;
 	projectile = RANK1;
 	LandedFrame = 15;
@@ -206,9 +207,15 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(ANIM_DYING, glm::vec2(0.8f, 0.7f));
 		sprite->addKeyframe(ANIM_DYING, glm::vec2(0.9f, 0.7f));
 
+		sprite->setAnimationSpeed(ANIM_DEAD, 8);
+		sprite->addKeyframe(ANIM_DEAD, glm::vec2(0.9f, 0.7f));
+
+		sprite->setAnimationSpeed(LVL2_ANIM_DEAD, 8);
+		sprite->addKeyframe(LVL2_ANIM_DEAD, glm::vec2(0.9f, 0.5f));
+
 		sprite->setAnimationSpeed(LVL2_ANIM_DYING, 8);
-		sprite->addKeyframe(LVL2_ZAP, glm::vec2(0.8f, 0.5f));
-		sprite->addKeyframe(LVL2_ZAP, glm::vec2(0.9f, 0.5f));
+		sprite->addKeyframe(LVL2_ANIM_DYING, glm::vec2(0.8f, 0.5f));
+		sprite->addKeyframe(LVL2_ANIM_DYING, glm::vec2(0.9f, 0.5f));
 
 
 		
@@ -425,6 +432,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 					sprite->changeAnimation(STAND_LEFT);
 				else if (sprite->animation() == AIRBONE_RIGHT && !bJumping)
 					sprite->changeAnimation(STAND_RIGHT);
+				else sprite->changeAnimation(STAND_RIGHT);
 
 			}
 		}
@@ -535,12 +543,57 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 		}
 	}
 	else if (state == DYING) {
-		if (frameCount > 0) --frameCount;
-		if (frameCount == 0) state = DEAD;
+		if (lvl == 1) {
+			if (frameCount > 0) {
+				if (sprite->animation() != ANIM_DYING && sprite->animation() != ANIM_DEAD) sprite->changeAnimation(ANIM_DYING);
+				else if (lastKeyframe != 0 && sprite->keyframe() == 0) {
+					sprite->changeAnimation(ANIM_DEAD);
+				}
+				if (rolldistance > 0) {
+					--rolldistance;
+					posPlayer.x -= 1;
+					posPlayer.y += 1;
+					if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 58), &posPlayer.y, false))
+					{
+						posPlayer.y -= 1;
+					}
+					if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58), &posPlayer.y))
+					{
+						posPlayer.x += 1;
+					}
+				}
+				lastKeyframe = sprite->keyframe();
+				--frameCount;
+			}
+			else if (frameCount == 0) state = DEAD;
+		}
+		else if (lvl == 2) {
+			if (frameCount > 0) {
+				if (sprite->animation() != LVL2_ANIM_DYING && sprite->animation() != LVL2_ANIM_DEAD) sprite->changeAnimation(LVL2_ANIM_DYING);
+				else if (lastKeyframe != 0 && sprite->keyframe() == 0) {
+					sprite->changeAnimation(LVL2_ANIM_DEAD);
+				}
+				if (frameCount > 110) {
+					posPlayer.y -= 2;
+				}
+				else if (rolldistance > 20) {
+					--rolldistance;
+					posPlayer.y += 1;
+					if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 58), &posPlayer.y, false))
+					{
+						posPlayer.y -= 1;
+					}
+				}
+				lastKeyframe = sprite->keyframe();
+				--frameCount;
+			}
+			else if (frameCount == 0) state = DEAD;
+		}
 	}
 	else if (state == DEAD) {
 		frameCount = 120;
 		if (lvl == 1) {
+			rolldistance = 40;
 			posPlayer.y = top + 20;
 			posPlayer.x = left + 20;
 			state = ALIVE;
@@ -548,6 +601,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 			invtimer = 120;
 		}
 		else if (lvl == 2) {
+			rolldistance = 40;
 			posPlayer.y = top + 60;
 			posPlayer.x = left + 80;
 			state = ALIVE;
