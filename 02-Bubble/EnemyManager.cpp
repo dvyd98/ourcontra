@@ -137,6 +137,13 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 			aux->setTileMap(map);
 			enemies->push_back(aux);
 		}
+		else if (enemyType == UPGRADE_BOX) {
+			Enemy *aux = new UpgradeBox();
+			aux->init(tilemap, texProgram);
+			aux->setPosition(glm::vec2(map->getEnemy(i).x * map->getTileSize(), map->getEnemy(i).y * map->getTileSize()));
+			aux->setTileMap(map);
+			enemies->push_back(aux);
+		}
 	}
 
 	Enemy *test = new Level2Turret();

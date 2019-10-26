@@ -129,6 +129,7 @@ void TileMap::loadTileMap() {
 		else if (s == "BossTurret") type = BOSS_TURRET;
 		else if (s == "BossCore") type = BOSS_CORE;
 		else if (s == "Cannon") type = CANNON;
+		else if (s == "upgradebox") type = UPGRADE_BOX;
 
 		
 		enemies->push_back(infoEnemies());
