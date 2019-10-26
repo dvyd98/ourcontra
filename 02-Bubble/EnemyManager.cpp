@@ -11,7 +11,9 @@ enum PlayerAnims
 	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, MOVE_LEFT_AIM, MOVE_RIGHT_AIM, AIM_UP_LOOK_LEFT, AIM_UP_LOOK_RIGHT, CROUCH_LOOK_LEFT,
 	CROUCH_LOOK_RIGHT, AIM_UP_WALK_RIGHT, AIM_UP_WALK_LEFT, AIM_DOWN_WALK_RIGHT, AIM_DOWN_WALK_LEFT, AIRBONE_LEFT, AIRBONE_RIGHT,
 	DROPPED, UNDERWATER, SWIM_LEFT, SWIM_RIGHT, SWIM_AIM_LEFT, SWIM_AIM_RIGHT, SWIM_AIM_UPRIGHT, SWIM_AIM_UPLEFT, SWIM_AIM_UP_LOOK_LEFT, SWIM_AIM_UP_LOOK_RIGHT,
-	ANIM_DYING, ANIM_DEAD
+	ANIM_DYING, ANIM_DEAD, LVL2_ANIM_DYING,
+	LVL2_IDLE, LVL2_IDLE_SHOOT, LVL2_CROUCH, LVL2_CROUCH_SHOOT, LVL2_FORWARD, LVL2_MOVE_LEFT, LVL2_MOVE_RIGHT, LVL2_ZAP
+
 };
 
 enum BridgeAnims
@@ -159,7 +161,7 @@ void EnemyManager::initLvl2(const glm::ivec2 &tileMapPos, ShaderProgram &shaderP
 	tilemap = tileMapPos;
 	map = tileMap;
 	player = p1;
-	p1->sprite->changeAnimation(28);
+	p1->sprite->changeAnimation(LVL2_IDLE);
 	p1->lvl = 2;
 	sublvl = 0;
 	nDestroyed = 0;
@@ -283,7 +285,7 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 				WallTurret* turretboi = dynamic_cast<WallTurret*>(*it_enemy);
 				spawnProjectileWallTurret(player->getPos(), turretboi);
 			}
-			else if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() == "cannon" && projlistCannon->size() < 4 && (*it_enemy)->frameCount < 1 && (rand() % 2)) {
+			else if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() == "cannon" && projlistCannon->size() < 3 && (*it_enemy)->frameCount < 1 && (rand() % 2)) {
 				Cannon* turretboi = dynamic_cast<Cannon*>(*it_enemy);
 				spawnProjectileCannon(player->getPos(), turretboi);
 			}
@@ -895,7 +897,8 @@ void EnemyManager::spawnProjectileCannon(glm::ivec2 positionPlayer, Cannon* badg
 {
 	glm::ivec2 posPlayer = positionPlayer + glm::ivec2{ 10, 30 };
 	glm::ivec2 posEnemy = badguy->getPos() + glm::ivec2{ 8,8 };
-	if (!isOffScreen(posEnemy)) {
+	if (!isOffScreen(posEnemy) && badguy->hasShot == false) {
+		badguy->hasShot = true;
 		glm::vec2 newPos = glm::vec2{ 99,99 };
 		if (posPlayer.y < posEnemy.y - 10) { /*  SHOOT UP  */
 			if (posPlayer.x < posEnemy.x - 10) {
@@ -1032,6 +1035,11 @@ bool EnemyManager::areTouchingYcoord(glm::ivec2 obj1_left, glm::ivec2 obj1_right
 	return true;
 }
 
+void EnemyManager::updatePlayerState()
+{
+	if (player->invtimer == 0 && player->state == ALIVE) player->state = DYING;
+}
+
 
 void EnemyManager::checkPhysics()
 {
@@ -1068,7 +1076,6 @@ void EnemyManager::checkPhysics()
 		}
 	}
 
-	// LEVEL 2 //
 	
 
 	it_projec = projlistRifleman->begin();
@@ -1079,7 +1086,7 @@ void EnemyManager::checkPhysics()
 		else {
 			vector<glm::ivec2> box = it_projec->buildHitBox();
 			if (areTouching(boxPlayer[0], boxPlayer[1], box[0], box[1])) {
-				//player->state = DEAD;
+				updatePlayerState();
 			}
 			++it_projec;
 		}
@@ -1093,7 +1100,7 @@ void EnemyManager::checkPhysics()
 		else {
 			vector<glm::ivec2> box = it_projec->buildHitBox();
 			if (areTouching(boxPlayer[0], boxPlayer[1], box[0], box[1])) {
-				//player->state = DEAD;
+				updatePlayerState();
 			}
 			++it_projec;
 		}
@@ -1106,7 +1113,7 @@ void EnemyManager::checkPhysics()
 		else {
 			vector<glm::ivec2> box = it_boss->buildHitBox();
 			if (areTouching(boxPlayer[0], boxPlayer[1], box[0], box[1])) {
-				//player->state = DEAD;
+				updatePlayerState();
 			}
 			++it_boss;
 		}
@@ -1120,7 +1127,7 @@ void EnemyManager::checkPhysics()
 		else {
 			vector<glm::ivec2> box = it_projec->buildHitBox();
 			if (areTouching(boxPlayer[0], boxPlayer[1], box[0], box[1])) {
-				//player->state = DEAD;
+				updatePlayerState();
 			}
 			++it_projec;
 		}
@@ -1134,7 +1141,7 @@ void EnemyManager::checkPhysics()
 		else {
 			vector<glm::ivec2> box = it_projec->buildHitBox();
 			if (areTouching(boxPlayer[0], boxPlayer[1], box[0], box[1])) {
-				//player->state = DEAD;
+				updatePlayerState();
 			}
 			++it_projec;
 		}
@@ -1151,7 +1158,7 @@ void EnemyManager::checkPhysics()
 		vector<glm::ivec2> boxEnemy = (*it_enemy)->buildHitBox();
 		if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() != "bridge" && (*it_enemy)->getType() != "upgradebox" && (*it_enemy)->getType() != "gunupgrade") {
 			if (areTouching(boxPlayer[0], boxPlayer[1], boxEnemy[0], boxEnemy[1])) {
-					//player->state = DEAD;
+				updatePlayerState();
 			}
 		}
 		else if ((*it_enemy)->getType() == "bridge"){
@@ -1212,7 +1219,7 @@ void EnemyManager::checkPhysicsLevel2()
 		else {
 			vector<glm::ivec2> box = it_projec->buildHitBox();
 			if (areTouching(boxPlayer[0], boxPlayer[1], box[0], box[1])) {
-				//player->state = DEAD;
+				updatePlayerState();
 			}
 			++it_projec;
 		}
@@ -1225,7 +1232,7 @@ void EnemyManager::checkPhysicsLevel2()
 		else {
 			vector<glm::ivec2> box = it_projec->buildHitBox();
 			if (areTouching(boxPlayer[0], boxPlayer[1], box[0], box[1])) {
-				//player->state = DEAD;
+				updatePlayerState();
 			}
 			++it_projec;
 		}
@@ -1260,7 +1267,7 @@ void EnemyManager::checkPhysicsLevel2()
 		else {
 			vector<glm::ivec2> box = it_boss2->buildHitBox();
 			if (areTouching(boxPlayer[0], boxPlayer[1], box[0], box[1])) {
-				player->state = DEAD;
+				updatePlayerState();
 			}
 			++it_boss2;
 		}

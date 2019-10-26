@@ -35,6 +35,7 @@ void Cannon::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	life = 10;
 	frameCount = 30;
 	lastKeyframe = 0;
+	shotCd = 5;
 	spritesheet.loadFromFile("images/cannon.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
 	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
@@ -101,6 +102,11 @@ void Cannon::update(int deltaTime)
 			if (projDir == glm::vec2{ -1, 0 } && sprite->animation() != AIM_LEFT) sprite->changeAnimation(AIM_LEFT);
 			else if (projDir == glm::vec2{ -0.75,-0.25 } && sprite->animation() != AIM_UP_LEFT_FAR) sprite->changeAnimation(AIM_UP_LEFT_FAR);
 			else if (projDir == glm::vec2{ -0.25,-0.75 } && sprite->animation() != AIM_UP_LEFT_CLOSE) sprite->changeAnimation(AIM_UP_LEFT_CLOSE);
+			if (shotCd > 0 && hasShot) --shotCd;
+			else if (shotCd == 0) {
+				shotCd = 5;
+				hasShot = false;
+			}
 		}
 
 		if (frameCount > 0) --frameCount;
@@ -125,5 +131,11 @@ vector<glm::ivec2> Cannon::buildHitBox()
 
 glm::ivec2 Cannon::getProjectileSpawn()
 {
+	if (sprite->animation() == AIM_LEFT)
+		return glm::ivec2{ -16,0 };
+	else if (sprite->animation() == AIM_UP_LEFT_CLOSE)
+		return glm::ivec2{ -8,-16 };
+	else if (sprite->animation() == AIM_UP_LEFT_FAR)
+		return glm::ivec2{ -16,-8 };
 	return glm::ivec2{ 0,0 };
 }

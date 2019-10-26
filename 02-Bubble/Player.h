@@ -39,6 +39,8 @@ public:
 	int LandedFrame;
 	int projectile;
 	int lvl;
+	int invtimer = 0;
+	int frameCount;
 	bool bBridge;
 	bool bWater;
 	bool justLanded;

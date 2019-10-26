@@ -23,7 +23,7 @@ enum PlayerAnims
 	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, MOVE_LEFT_AIM, MOVE_RIGHT_AIM, AIM_UP_LOOK_LEFT, AIM_UP_LOOK_RIGHT, CROUCH_LOOK_LEFT, 
 	CROUCH_LOOK_RIGHT, AIM_UP_WALK_RIGHT, AIM_UP_WALK_LEFT, AIM_DOWN_WALK_RIGHT, AIM_DOWN_WALK_LEFT, AIRBONE_LEFT, AIRBONE_RIGHT,
 	DROPPED, UNDERWATER, SWIM_LEFT, SWIM_RIGHT, SWIM_AIM_LEFT, SWIM_AIM_RIGHT, SWIM_AIM_UPRIGHT, SWIM_AIM_UPLEFT, SWIM_AIM_UP_LOOK_LEFT, SWIM_AIM_UP_LOOK_RIGHT,
-	ANIM_DYING, ANIM_DEAD,
+	ANIM_DYING, ANIM_DEAD, LVL2_ANIM_DYING,
 	LVL2_IDLE, LVL2_IDLE_SHOOT, LVL2_CROUCH, LVL2_CROUCH_SHOOT, LVL2_FORWARD, LVL2_MOVE_LEFT, LVL2_MOVE_RIGHT, LVL2_ZAP
 
 };
@@ -46,7 +46,8 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	bWater = false;
 	coreDestroyed = false;
 	lookingTo = LOOKING_RIGHT;
-	life = 2;
+	life = 99;
+	frameCount = 120;
 	state = ALIVE;
 	projectile = RANK1;
 	LandedFrame = 15;
@@ -198,6 +199,17 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(LVL2_ZAP, glm::vec2(0.7f, 0.5f));
 		sprite->addKeyframe(LVL2_ZAP, glm::vec2(0.8f, 0.5f));
 
+		sprite->setAnimationSpeed(ANIM_DYING, 8);
+		sprite->addKeyframe(ANIM_DYING, glm::vec2(0.5f, 0.7f));
+		sprite->addKeyframe(ANIM_DYING, glm::vec2(0.6f, 0.7f));
+		sprite->addKeyframe(ANIM_DYING, glm::vec2(0.7f, 0.7f));
+		sprite->addKeyframe(ANIM_DYING, glm::vec2(0.8f, 0.7f));
+		sprite->addKeyframe(ANIM_DYING, glm::vec2(0.9f, 0.7f));
+
+		sprite->setAnimationSpeed(LVL2_ANIM_DYING, 8);
+		sprite->addKeyframe(LVL2_ZAP, glm::vec2(0.8f, 0.5f));
+		sprite->addKeyframe(LVL2_ZAP, glm::vec2(0.9f, 0.5f));
+
 
 		
 	sprite->changeAnimation(1);
@@ -212,6 +224,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 	currentKeyframe = sprite->keyframe();
 	sprite->update(deltaTime);
 	if (state == ALIVE) {
+		if (invtimer > 0) --invtimer;
 		if (bJumping) // lookingTo es una variable que sactualitza segons si el player mira left or right, l'utilitzo per estalviar mirar cada sprite individualment si es left or right
 		{
 			if (lookingTo == LOOKING_RIGHT)
@@ -304,7 +317,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 				if ((sprite->animation() != MOVE_LEFT && !bShooting || sprite->animation() != MOVE_LEFT_AIM && bShooting) && !bJumping)
 					if (bShooting) {
 						if (bWater) sprite->changeAnimation(SWIM_AIM_LEFT);
-						else sprite->changeAnimation(MOVE_LEFT_AIM);
+						else sprite->changeAnimation(MOVE_LEFT_AIM, currentKeyframe);
 					}
 					else
 						if (bWater) {
@@ -521,11 +534,26 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 			posPlayer = aux + glm::ivec2(-10, -30);
 		}
 	}
+	else if (state == DYING) {
+		if (frameCount > 0) --frameCount;
+		if (frameCount == 0) state = DEAD;
+	}
 	else if (state == DEAD) {
-		posPlayer.y = top + 20;
-		posPlayer.x = left + 20;
-		state = ALIVE;
-		life -= 1;
+		frameCount = 120;
+		if (lvl == 1) {
+			posPlayer.y = top + 20;
+			posPlayer.x = left + 20;
+			state = ALIVE;
+			life -= 1;
+			invtimer = 120;
+		}
+		else if (lvl == 2) {
+			posPlayer.y = top + 60;
+			posPlayer.x = left + 80;
+			state = ALIVE;
+			life -= 1;
+			invtimer = 120;
+		}
 	}
 	if (bWater) {
 		if (justLanded) {

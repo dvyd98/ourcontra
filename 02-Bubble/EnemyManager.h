@@ -54,6 +54,7 @@ public:
 	void spawnProjectileBoss2Final(glm::ivec2 positionPlayer, Boss2Final* badguy);
 	void spawnProjectileGreenSoldier(glm::ivec2 position, GreenSoldier* badguy);
 	void spawnProjectileCannon(glm::ivec2 position, Cannon* badguy);
+	void updatePlayerState();
 	void spawnGreenSoldiers();
 	void spawnLaser();
 	void despawnOffScreenProjectiles();
