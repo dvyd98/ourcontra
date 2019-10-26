@@ -522,7 +522,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 		{
 			posPlayer.y += FALL_STEP;
 			glm::ivec2 aux = posPlayer + glm::ivec2(10, 30);
-			if (lvl == 1 && Game::instance().getKey(' ') && Game::instance().getSpecialKey(GLUT_KEY_DOWN) && aux.y < 180);
+			if (lvl == 1 && Game::instance().getKey('l') && Game::instance().getSpecialKey(GLUT_KEY_DOWN) && aux.y < 180);
 			else if (map->collisionMoveDown(aux, glm::ivec2(10, 28), &aux.y, bBridge))
 			{
 				if (map->isSwimming(aux, glm::ivec2(10, 28)))
@@ -533,7 +533,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 					bWater = false;
 					justLanded = true;
 					LandedFrame = 15;
-					if (Game::instance().getKey(' '))
+					if (Game::instance().getKey('l'))
 					{
 						bJumping = true;
 						jumpAngle = 0;

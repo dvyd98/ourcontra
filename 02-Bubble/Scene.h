@@ -62,7 +62,6 @@ private:
 	int currentState;
 
 	int selectDelay, lvl2Delay, pauseDelay;
-	bool onePlayer;
 
 	int blinks, blinkAnimation;
 

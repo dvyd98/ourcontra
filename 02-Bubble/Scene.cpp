@@ -45,7 +45,7 @@ Scene::~Scene()
 
 void Scene::init()
 {
-	_2Playermode = true;
+	_2Playermode = false;
 	initShaders();
 	currentState = LOADING_MENU;
 	map = TileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -60,7 +60,6 @@ void Scene::init()
 	selectDelay = SELECT_DELAY;
 	lvl2Delay = LVL2_ANIMATION_DELAY;
 	pauseDelay = PAUSE_DELAY;
-	onePlayer = true;
 	paused = false;
 
 	score1 = score2 = 0;
@@ -145,7 +144,7 @@ void Scene::updateMenu(int deltaTime) {
 				((map->getFrame() == MENU_1_PLAYER) ? MENU_2_PLAYER : MENU_1_PLAYER));
 		// start game with enter
 		if (Game::instance().getKey('.')) {
-			onePlayer = map->getFrame() == MENU_1_PLAYER;
+			_2Playermode = !map->getFrame() == MENU_1_PLAYER;
 			currentState = MENU_TO_LVL1;
 			blinks = BLINKS;
 			blinkAnimation = BLINK_ANIMATION_DURATION;
