@@ -294,13 +294,9 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 				Cannon* turretboi = dynamic_cast<Cannon*>(*it_enemy);
 				spawnProjectileCannon(player->getPos(), turretboi);
 			}
-			else if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() == "bossturret" && projlistBossTurret->size() < 1 && (*it_enemy)->frameCount < 1 && (rand() % 2)) {
+			else if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() == "bossturret" && projlistBossTurret->size() < 1 && (*it_enemy)->frameCount < 1) {
 				BossTurret* turretboi = dynamic_cast<BossTurret*>(*it_enemy);
 				spawnProjectileBossTurret(player->getPos(), turretboi);
-			}
-			else if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() == "boss2final") {
-				Boss2Final* turretboi = dynamic_cast<Boss2Final*>(*it_enemy);
-				spawnProjectileBoss2Final(player->getPos(), turretboi);
 			}
 			(*it_enemy)->update(deltaTime);
 		}
@@ -700,26 +696,28 @@ void EnemyManager::spawnProjectileRifleman(glm::ivec2 position, Rifleman* badguy
 	glm::ivec2 posEnemy = badguy->getPos();
 	projectile = new Projectile();
 	glm::ivec2 newPos;
-
-	if (position.y + 30 < posEnemy.y - 40) {
-		if (position.x < posEnemy.x) newPos = glm::ivec2{ -1,-1 };
-		else newPos = glm::ivec2{ 1,-1 };
+	if ((badguy)->hasShot == false) {
+		badguy->hasShot = true;
+		if (position.y + 30 < posEnemy.y - 40) {
+			if (position.x < posEnemy.x) newPos = glm::ivec2{ -1,-1 };
+			else newPos = glm::ivec2{ 1,-1 };
+		}
+		else if (position.y + 30 > posEnemy.y + 40) {
+			if (position.x < posEnemy.x) newPos = glm::ivec2{ -1,1 };
+			else newPos = glm::ivec2{ 1,1 };
+		}
+		else {
+			if (position.x < posEnemy.x) newPos = glm::ivec2{ -1,0 };
+			else newPos = glm::ivec2{ 1,0 };
+		}
+		badguy->projDir = newPos;
+		projectile->init(tilemap, texProgram, 2, newPos);
+		projectile->rank = RIFLEMAN;
+		projectile->sprite->changeAnimation(0);
+		projectile->setPosition(posEnemy + badguy->getProjectileSpawn());
+		projectile->setTileMap(map);
+		projlistRifleman->push_back(*(projectile));
 	}
-	else if (position.y + 30 > posEnemy.y + 40) {
-		if (position.x < posEnemy.x) newPos = glm::ivec2{ -1,1 };
-		else newPos = glm::ivec2{ 1,1 };
-	}
-	else {
-		if (position.x < posEnemy.x) newPos = glm::ivec2{ -1,0 };
-		else newPos = glm::ivec2{ 1,0 };
-	}
-	badguy->projDir = newPos;
-	projectile->init(tilemap, texProgram, 2, newPos);
-	projectile->rank = RIFLEMAN;
-	projectile->sprite->changeAnimation(0);
-	projectile->setPosition(posEnemy + badguy->getProjectileSpawn());
-	projectile->setTileMap(map);
-	projlistRifleman->push_back(*(projectile));
 }
 
 void EnemyManager::spawnProjectileWallTurret(glm::ivec2 positionPlayer, WallTurret* badguy)
