@@ -160,6 +160,7 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 void EnemyManager::initLvl2(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, TileMap *tileMap, Player *p1, Player2 *p2
 )
 {
+
 	texProgram = shaderProgram;
 	tilemap = tileMapPos;
 	map = tileMap;
@@ -184,8 +185,8 @@ void EnemyManager::initLvl2(const glm::ivec2 &tileMapPos, ShaderProgram &shaderP
 	projlistLevel2Turret = new list<Projectile>();
 	projlistGreenSoldier = new list<Projectile>();
 	if (_2Playermode) {
-		p2->sprite->changeAnimation(LVL2_IDLE);
 		player2 = p2;
+		p2->sprite->changeAnimation(LVL2_IDLE);
 		p2->lvl = 2;
 		player2->coreDestroyed = false;
 		keypressed2 = false;
