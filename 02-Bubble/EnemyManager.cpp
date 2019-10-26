@@ -41,9 +41,10 @@ EnemyManager::~EnemyManager()
 {
 }
 
-void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, TileMap *tileMap, Player *p1
+void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, TileMap *tileMap, Player *p1, Player2 *p2
 	)
 {
+	_2Playermode = true;
 	texProgram = shaderProgram;
 	tilemap = tileMapPos;
 	map = tileMap;
@@ -61,6 +62,14 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 	projlistCannon = new list<Projectile>();
 	projlistBoss2Final = new list<ProjectileBoss2>();
 	projlistLevel2Turret = new list<Projectile>();
+	if (_2Playermode) {
+		player2 = p2;
+		p2->lvl = 1;
+		keypressed2 = false;
+		keyreleased2 = true;
+		playerShot2 = false;
+		projlist2 = new list<Projectile>();
+	}
 	for (int i = 0; i < n; ++i) {
 		int enemyType = map->getEnemy(i).type;
 		if (enemyType == SOLDIER)
@@ -291,7 +300,7 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 			(*it_enemy)->update(deltaTime);
 		}
 	}
-	if (Game::instance().getKey('a')) {
+	if (Game::instance().getKey('k')) {
 		keypressed = true;
 		keyreleased = false;
 	}
@@ -299,6 +308,37 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 		keypressed = false;
 		keyreleased = true;
 		playerShot = false;
+	}
+	if (_2Playermode) {
+		if (Game::instance().getKey('g')) {
+			keypressed2 = true;
+			keyreleased2 = false;
+		}
+		else {
+			keypressed2 = false;
+			keyreleased2 = true;
+			playerShot2 = false;
+		}
+		if (keypressed2 && !playerShot2 && player2->state == ALIVE) {
+			if (player2->projectile == RANK1) {
+				if (projlist2->size() < 4) {
+					playerShot2 = true;
+					spawnProjectilePlayer2(player2->getPos());
+					audiomanager->play(NORMAL_GUN_SOUND, false);
+				}
+			}
+			else if (player2->projectile == SPREAD) {
+				if (projlist2->size() < 10) {
+					playerShot2 = true;
+					spawnProjectileSPREADPlayer2(player2->getPos());
+					audiomanager->play(SPREAD_GUN_SOUND, false);
+				}
+			}
+		}
+		list<Projectile>::iterator it2;
+		for (it2 = projlist2->begin(); it2 != projlist2->end(); ++it2) {
+			it2->update(deltaTime);
+		}
 	}
 	if (keypressed && !playerShot && player->state == ALIVE) {
 		if (player->projectile == RANK1) {
@@ -436,6 +476,12 @@ void EnemyManager::render()
 	for (it = projlist->begin(); it != projlist->end(); ++it) {
 		it->render();
 	}
+	if (_2Playermode) {
+		list<Projectile>::iterator it_p2;
+		for (it_p2 = projlist2->begin(); it_p2 != projlist2->end(); ++it_p2) {
+			it_p2->render();
+		}
+	}
 	for (it = projlistRifleman->begin(); it != projlistRifleman->end(); ++it) {
 		it->render();
 	}
@@ -542,6 +588,37 @@ void EnemyManager::spawnProjectilePlayer(glm::ivec2 position)
 	projectile->setPosition(position + player->getProjectileSpawn());
 	projectile->setTileMap(map);
 	projlist->push_back(*(projectile));
+}
+
+void EnemyManager::spawnProjectilePlayer2(glm::ivec2 position)
+{
+	projectile = new Projectile();
+	glm::ivec2 newPos = glm::ivec2{ 1,0 };
+	int dir = player2->sprite->animation();
+	if (Game::instance().getKey('a') && Game::instance().getKey('w')) newPos = glm::ivec2{ -1,-1 };
+	else if (Game::instance().getKey('d') && Game::instance().getKey('w')) newPos = glm::ivec2{ 1,-1 };
+	else if (Game::instance().getKey('a') && Game::instance().getKey('s')) newPos = glm::ivec2{ -1,1 };
+	else if (Game::instance().getKey('d') && Game::instance().getKey('s')) newPos = glm::ivec2{ 1,1 };
+	else if (Game::instance().getKey('a')) newPos = glm::ivec2{ -1,0 };
+	else if (Game::instance().getKey('d')) newPos = glm::ivec2{ 1,0 };
+	else if (Game::instance().getKey('w')) newPos = glm::ivec2{ 0,-1 };
+	else if (Game::instance().getKey('s')) {
+		if (dir == CROUCH_LOOK_LEFT)
+			newPos = glm::ivec2{ -1,0 };
+		else if (dir == CROUCH_LOOK_RIGHT)
+			newPos = glm::ivec2{ 1,0 };
+		else newPos = glm::ivec2{ 0, 1 };
+	}
+	else {
+		if (dir == STAND_LEFT || dir == AIRBONE_LEFT || dir == SWIM_AIM_LEFT || dir == DROPPED) newPos = glm::ivec2{ -1,0 };
+		else if (dir == STAND_RIGHT || dir == AIRBONE_RIGHT || dir == SWIM_AIM_RIGHT || dir == DROPPED) newPos = glm::ivec2{ 1,0 };
+	}
+
+	projectile->init(tilemap, texProgram, 3, newPos);
+	projectile->rank = RANK1;
+	projectile->setPosition(position + player2->getProjectileSpawn());
+	projectile->setTileMap(map);
+	projlist2->push_back(*(projectile));
 }
 
 void EnemyManager::spawnProjectilePlayerLVL2(glm::ivec2 position)
@@ -695,6 +772,145 @@ void EnemyManager::spawnProjectileSPREADPlayer(glm::ivec2 position)
 	projectile->setPosition(position + player->getProjectileSpawn());
 	projectile->setTileMap(map);
 	projlist->push_back(*(projectile));
+}
+
+void EnemyManager::spawnProjectileSPREADPlayer2(glm::ivec2 position)
+{
+	glm::vec2 newPos;
+	glm::vec2 newPos2;
+	glm::vec2 newPos3;
+	glm::vec2 newPos4;
+	glm::vec2 newPos5;
+	int dir = player2->sprite->animation();
+	if (Game::instance().getKey('a') && Game::instance().getKey('w')) {
+		newPos = glm::vec2{ -1,-1 };
+		newPos2 = glm::vec2{ -0.85,-1.15 };
+		newPos3 = glm::vec2{ -0.70,-1.30 };
+		newPos4 = glm::vec2{ -1.15,-0.85 };
+		newPos5 = glm::vec2{ -1.30,-0.70 };
+	}
+	else if (Game::instance().getKey('d') && Game::instance().getKey('w')) {
+		newPos = glm::vec2{ 1,-1 };
+		newPos2 = glm::vec2{ 0.85,-1.15 };
+		newPos3 = glm::vec2{ 0.70,-1.30 };
+		newPos4 = glm::vec2{ 1.15,-0.85 };
+		newPos5 = glm::vec2{ 1.30,-0.70 };
+
+	}
+	else if (Game::instance().getKey('a') && Game::instance().getKey('s')) {
+		newPos = glm::vec2{ -1,1 };
+		newPos2 = glm::vec2{ -0.85,1.15 };
+		newPos3 = glm::vec2{ -0.70,1.30 };
+		newPos4 = glm::vec2{ -1.15,0.85 };
+		newPos5 = glm::vec2{ -1.30,0.70 };
+	}
+	else if (Game::instance().getKey('d') && Game::instance().getKey('s')) {
+		newPos = glm::vec2{ 1,1 };
+		newPos2 = glm::vec2{ 0.85,1.15 };
+		newPos3 = glm::vec2{ 0.70,1.30 };
+		newPos4 = glm::vec2{ 1.15,0.85 };
+		newPos5 = glm::vec2{ 1.30,0.70 };
+	}
+	else if (Game::instance().getKey('a')) {
+		newPos = glm::vec2{ -1,0 };
+		newPos2 = glm::vec2{ -1,0.15 };
+		newPos3 = glm::vec2{ -1,0.30 };
+		newPos4 = glm::vec2{ -1,-0.15 };
+		newPos5 = glm::vec2{ -1,-0.30 };
+	}
+	else if (Game::instance().getKey('d')) {
+		newPos = glm::vec2{ 1,0 };
+		newPos2 = glm::vec2{ 1,0.15 };
+		newPos3 = glm::vec2{ 1,0.30 };
+		newPos4 = glm::vec2{ 1,-0.15 };
+		newPos5 = glm::vec2{ 1,-0.30 };
+	}
+	else if (Game::instance().getKey('w')) {
+		newPos = glm::vec2{ 0,-1 };
+		newPos2 = glm::vec2{ 0.15,-1 };
+		newPos3 = glm::vec2{ 0.30,-1 };
+		newPos4 = glm::vec2{ -0.15,-1 };
+		newPos5 = glm::vec2{ -0.30,-1 };
+	}
+	else if (Game::instance().getKey('s')) {
+		if (dir == CROUCH_LOOK_LEFT) {
+			newPos = glm::vec2{ -1,0 };
+			newPos2 = glm::vec2{ -1,0.15 };
+			newPos3 = glm::vec2{ -1,0.30 };
+			newPos4 = glm::vec2{ -1,-0.15 };
+			newPos5 = glm::vec2{ -1,-0.30 };
+		}
+		else if (dir == CROUCH_LOOK_RIGHT) {
+			newPos = glm::vec2{ 1,0 };
+			newPos2 = glm::vec2{ 1,0.15 };
+			newPos3 = glm::vec2{ 1,0.30 };
+			newPos4 = glm::vec2{ 1,-0.15 };
+			newPos5 = glm::vec2{ 1,-0.30 };
+		}
+		else {
+			newPos = glm::vec2{ 0, 1 };
+			newPos2 = glm::vec2{ 0.15, 1 };
+			newPos3 = glm::vec2{ 0.30, 1 };
+			newPos4 = glm::vec2{ -0.15, 1 };
+			newPos5 = glm::vec2{ -0.30, 1 };
+		}
+	}
+	else {
+		if (dir == STAND_LEFT || dir == AIRBONE_LEFT || dir == SWIM_AIM_LEFT || dir == DROPPED) {
+			newPos = glm::vec2{ -1,0 };
+			newPos2 = glm::vec2{ -1,0.15 };
+			newPos3 = glm::vec2{ -1,0.30 };
+			newPos4 = glm::vec2{ -1,-0.15 };
+			newPos5 = glm::vec2{ -1,-0.30 };
+		}
+		else if (dir == STAND_RIGHT || dir == AIRBONE_RIGHT || dir == SWIM_AIM_RIGHT || dir == DROPPED) {
+			newPos = glm::vec2{ 1,0 };
+			newPos2 = glm::vec2{ 1,0.15 };
+			newPos3 = glm::vec2{ 1,0.30 };
+			newPos4 = glm::vec2{ 1,-0.15 };
+			newPos5 = glm::vec2{ 1,-0.30 };
+		}
+	}
+
+	projectile = new Projectile();
+	projectile->init(tilemap, texProgram, 6, newPos);
+	projectile->rank = SPREAD;
+	projectile->sprite->changeAnimation(SPREAD);
+	projectile->setPosition(position + player->getProjectileSpawn());
+	projectile->setTileMap(map);
+	projlist2->push_back(*(projectile));
+
+	projectile = new Projectile();
+	projectile->init(tilemap, texProgram, 6, newPos2);
+	projectile->rank = SPREAD;
+	projectile->sprite->changeAnimation(SPREAD);
+	projectile->setPosition(position + player->getProjectileSpawn());
+	projectile->setTileMap(map);
+	projlist2->push_back(*(projectile));
+
+	projectile = new Projectile();
+	projectile->init(tilemap, texProgram, 6, newPos3);
+	projectile->rank = SPREAD;
+	projectile->sprite->changeAnimation(SPREAD);
+	projectile->setPosition(position + player->getProjectileSpawn());
+	projectile->setTileMap(map);
+	projlist2->push_back(*(projectile));
+
+	projectile = new Projectile();
+	projectile->init(tilemap, texProgram, 6, newPos4);
+	projectile->rank = SPREAD;
+	projectile->sprite->changeAnimation(SPREAD);
+	projectile->setPosition(position + player->getProjectileSpawn());
+	projectile->setTileMap(map);
+	projlist2->push_back(*(projectile));
+
+	projectile = new Projectile();
+	projectile->init(tilemap, texProgram, 6, newPos5);
+	projectile->rank = SPREAD;
+	projectile->sprite->changeAnimation(SPREAD);
+	projectile->setPosition(position + player->getProjectileSpawn());
+	projectile->setTileMap(map);
+	projlist2->push_back(*(projectile));
 }
 
 void EnemyManager::spawnProjectileRifleman(glm::ivec2 position, Rifleman* badguy)
@@ -1054,6 +1270,14 @@ void EnemyManager::updatePlayerState()
 	}
 }
 
+void EnemyManager::updatePlayer2State()
+{
+	if (player2->invtimer == 0 && player2->state == ALIVE) {
+		player2->state = DYING;
+		audiomanager->play(DEATH_SOUND, false);
+	}
+}
+
 
 void EnemyManager::checkPhysics()
 {
@@ -1092,10 +1316,48 @@ void EnemyManager::checkPhysics()
 		}
 	}
 
+	if (_2Playermode) {
+		list<Enemy*>::iterator it_enemy_p2;
+		list<Projectile>::iterator it_projec_p2 = projlist2->begin();
+		while (it_projec_p2 != projlist2->end()) { // our pew pew
+			if (isOffScreen((it_projec_p2->getPos())))
+				it_projec_p2 = projlist2->erase(it_projec_p2);
+			else {
+				vector<glm::ivec2> box = it_projec_p2->buildHitBox();
+				it_enemy_p2 = enemies->begin();
+				bool shot = false;
+				while (it_enemy_p2 != enemies->end() && !shot) {
+					vector<glm::ivec2> boxEnemy = (*it_enemy_p2)->buildHitBox();
+					if ((*it_enemy_p2)->state == ALIVE && (*it_enemy_p2)->getType() != "bridge" && (*it_enemy_p2)->getType() != "gunupgrade" && areTouching(box[0], box[1], boxEnemy[0], boxEnemy[1])) {
+						if ((*it_enemy_p2)->getType() == "wallturret" || (*it_enemy_p2)->getType() == "cannon") audiomanager->play(TURRET_HIT_SOUND, false);
+						if ((*it_enemy_p2)->decreaseLife(it_projec_p2->getDmg())) {
+							(*it_enemy_p2)->state = DYING;
+							playDeathSound((*it_enemy_p2)->getType());
+							if ((*it_enemy_p2)->getType() == "upgradebox") {
+								Enemy *pew = new GunUpgrade();
+								pew->init(tilemap, texProgram);
+								pew->setPosition((*it_enemy_p2)->getPos());
+								pew->setTileMap(map);
+								enemies->push_back(pew);
+							}
+						}
+						(*it_enemy_p2)->hurt = true;
+						shot = true;
+					}
+					else ++it_enemy_p2;
+				}
+				if (shot) it_projec_p2 = projlist2->erase(it_projec_p2);
+				else ++it_projec_p2;
+			}
+		}
+	}
 	
 
 	it_projec = projlistRifleman->begin();
 	vector<glm::ivec2> boxPlayer = player->buildHitBox();
+	vector<glm::ivec2> boxPlayer2;
+	if (_2Playermode) boxPlayer2 = player2->buildHitBox();
+
 	while (it_projec != projlistRifleman->end()) { // their pew pew
 		if (isOffScreen((it_projec->getPos())))
 			it_projec = projlistRifleman->erase(it_projec);
@@ -1103,6 +1365,11 @@ void EnemyManager::checkPhysics()
 			vector<glm::ivec2> box = it_projec->buildHitBox();
 			if (areTouching(boxPlayer[0], boxPlayer[1], box[0], box[1])) {
 				updatePlayerState();
+			}
+			if (_2Playermode) {
+				if (areTouching(boxPlayer2[0], boxPlayer2[1], box[0], box[1])) {
+					updatePlayer2State();
+				}
 			}
 			++it_projec;
 		}
@@ -1118,6 +1385,11 @@ void EnemyManager::checkPhysics()
 			if (areTouching(boxPlayer[0], boxPlayer[1], box[0], box[1])) {
 				updatePlayerState();
 			}
+			if (_2Playermode) {
+				if (areTouching(boxPlayer2[0], boxPlayer2[1], box[0], box[1])) {
+					updatePlayer2State();
+				}
+			}
 			++it_projec;
 		}
 
@@ -1130,6 +1402,11 @@ void EnemyManager::checkPhysics()
 			vector<glm::ivec2> box = it_boss->buildHitBox();
 			if (areTouching(boxPlayer[0], boxPlayer[1], box[0], box[1])) {
 				updatePlayerState();
+			}
+			if (_2Playermode) {
+				if (areTouching(boxPlayer2[0], boxPlayer2[1], box[0], box[1])) {
+					updatePlayer2State();
+				}
 			}
 			++it_boss;
 		}
@@ -1145,36 +1422,29 @@ void EnemyManager::checkPhysics()
 			if (areTouching(boxPlayer[0], boxPlayer[1], box[0], box[1])) {
 				updatePlayerState();
 			}
-			++it_projec;
-		}
-
-	}
-
-	it_projec = projlistLevel2Turret->begin();
-	while (it_projec != projlistLevel2Turret->end()) { // their pew pew
-		if (isOffScreen((it_projec->getPos())))
-			it_projec = projlistLevel2Turret->erase(it_projec);
-		else {
-			vector<glm::ivec2> box = it_projec->buildHitBox();
-			if (areTouching(boxPlayer[0], boxPlayer[1], box[0], box[1])) {
-				updatePlayerState();
+			if (_2Playermode) {
+				if (areTouching(boxPlayer2[0], boxPlayer2[1], box[0], box[1])) {
+					updatePlayer2State();
+				}
 			}
 			++it_projec;
 		}
 
 	}
-	// LEVEL 2 //
-	
-	// LEVEL 2 //
-	
 
 	it_enemy = enemies->begin();
 	player->bBridge = FALSE;
+	if (_2Playermode) player2->bBridge = FALSE;
 	while (it_enemy != enemies->end()) {  // are we touching bad guys?
 		vector<glm::ivec2> boxEnemy = (*it_enemy)->buildHitBox();
 		if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() != "bridge" && (*it_enemy)->getType() != "upgradebox" && (*it_enemy)->getType() != "gunupgrade") {
 			if (areTouching(boxPlayer[0], boxPlayer[1], boxEnemy[0], boxEnemy[1])) {
 				updatePlayerState();
+			}
+			if (_2Playermode) {
+				if (areTouching(boxPlayer2[0], boxPlayer2[1], boxEnemy[0], boxEnemy[1])) {
+					updatePlayer2State();
+				}
 			}
 		}
 		else if ((*it_enemy)->getType() == "bridge"){
@@ -1182,7 +1452,14 @@ void EnemyManager::checkPhysics()
 				if ((*it_enemy)->state != DEAD && (*it_enemy)->state != DYING) {
 					(*it_enemy)->state = SPECIAL_BRIDGE_STATE;
 					player->bBridge = TRUE;
-					if (/*!player->isJumping() && */(*it_enemy)->state == ALIVE);// player->posPlayer.y -= FALL_STEP;
+				}
+			}
+			if (_2Playermode) {
+				if (areTouching(boxPlayer2[0], boxPlayer2[1], boxEnemy[0], boxEnemy[1])) {
+					if ((*it_enemy)->state != DEAD && (*it_enemy)->state != DYING) {
+						(*it_enemy)->state = SPECIAL_BRIDGE_STATE;
+						player2->bBridge = TRUE;
+					}
 				}
 			}
 		}
@@ -1190,6 +1467,12 @@ void EnemyManager::checkPhysics()
 			if (areTouching(boxPlayer[0], boxPlayer[1], boxEnemy[0], boxEnemy[1])) {
 				(*it_enemy)->state = DYING;
 				player->projectile = SPREAD;
+			}
+			if (_2Playermode) {
+				if (areTouching(boxPlayer2[0], boxPlayer2[1], boxEnemy[0], boxEnemy[1])) {
+					(*it_enemy)->state = DYING;
+					player2->projectile = SPREAD;
+				}
 			}
 		}
 		++it_enemy;

@@ -45,6 +45,7 @@ Scene::~Scene()
 
 void Scene::init()
 {
+	_2Playermode = true;
 	initShaders();
 	currentState = LOADING_MENU;
 	map = TileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -163,6 +164,7 @@ void Scene::updateLvl1(int deltaTime) {
 		left += PLAYER_VEL;
 	}
 	player->update(deltaTime, left, right, bottom, top);
+	if (_2Playermode) player2->update(deltaTime, left, right, bottom, top);
 	enemymanager->update(deltaTime, left, right, bottom, top);
 	life->update(deltaTime, left, right, bottom, top, player->life);
 
@@ -331,6 +333,7 @@ void Scene::render()
 		if (currentState == LVL1) enemymanager->render();
 		if (currentState == LVL2) enemymanager->renderLvl2();
 		player->render();
+		if (_2Playermode) player2->render();
 		life->render();
 	}
 
@@ -342,6 +345,7 @@ void Scene::render()
 
 void Scene::initEntitiesLvl1() {
 	player = new Player();
+	player2 = new Player2();
 	life = new Life();
 	life->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	life->setPosition(glm::vec2(3 * map->getTileSize(), 0 * map->getTileSize()));
@@ -351,8 +355,14 @@ void Scene::initEntitiesLvl1() {
 	player->setPosition(glm::vec2(3 * map->getTileSize(), 0 * map->getTileSize()));
 	player->setTileMap(map);
 
+	if (_2Playermode) {
+		player2->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		player2->setPosition(glm::vec2(3 * map->getTileSize(), 0 * map->getTileSize()));
+		player2->setTileMap(map);
+	}
+
 	enemymanager = new EnemyManager(audiomanager);
-	enemymanager->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, map, player);
+	enemymanager->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, map, player, player2);
 
 }
 
