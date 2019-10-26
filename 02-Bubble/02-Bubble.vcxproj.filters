@@ -35,6 +35,7 @@
     <ClCompile Include="WallTurret.cpp" />
     <ClCompile Include="GreenSoldier.cpp" />
     <ClCompile Include="Laser.cpp" />
+    <ClCompile Include="Player2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
@@ -71,5 +72,6 @@
     <ClInclude Include="WallTurret.h" />
     <ClInclude Include="GreenSoldier.h" />
     <ClInclude Include="Laser.h" />
+    <ClInclude Include="Player2.h" />
   </ItemGroup>
 </Project>

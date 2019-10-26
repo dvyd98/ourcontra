@@ -2,7 +2,7 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <GL/glut.h>
-#include "Player.h"
+#include "Player2.h"
 #include "Game.h"
 
 
@@ -18,9 +18,9 @@ enum States
 };
 
 
-enum PlayerAnims
+enum Player2Anims
 {
-	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, MOVE_LEFT_AIM, MOVE_RIGHT_AIM, AIM_UP_LOOK_LEFT, AIM_UP_LOOK_RIGHT, CROUCH_LOOK_LEFT, 
+	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, MOVE_LEFT_AIM, MOVE_RIGHT_AIM, AIM_UP_LOOK_LEFT, AIM_UP_LOOK_RIGHT, CROUCH_LOOK_LEFT,
 	CROUCH_LOOK_RIGHT, AIM_UP_WALK_RIGHT, AIM_UP_WALK_LEFT, AIM_DOWN_WALK_RIGHT, AIM_DOWN_WALK_LEFT, AIRBONE_LEFT, AIRBONE_RIGHT,
 	DROPPED, UNDERWATER, SWIM_LEFT, SWIM_RIGHT, SWIM_AIM_LEFT, SWIM_AIM_RIGHT, SWIM_AIM_UPRIGHT, SWIM_AIM_UPLEFT, SWIM_AIM_UP_LOOK_LEFT, SWIM_AIM_UP_LOOK_RIGHT,
 	ANIM_DYING, ANIM_DEAD, LVL2_ANIM_DYING,
@@ -39,7 +39,7 @@ enum upgradeRank
 };
 
 
-void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
+void Player2::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	bJumping = false;
 	bShooting = false;
@@ -54,181 +54,181 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	projectile = RANK1;
 	LandedFrame = 15;
 	lvl = 1;
-	spritesheet.loadFromFile("images/blueguy.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.loadFromFile("images/redguy.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
 	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
 	spritesheet.setMinFilter(GL_NEAREST);
 	spritesheet.setMagFilter(GL_NEAREST);
 	sprite = Sprite::createSprite(glm::ivec2(32, 64), glm::vec2(0.1f, 0.1f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(100);
-	
-		sprite->setAnimationSpeed(STAND_LEFT, 8);
-		sprite->addKeyframe(STAND_LEFT, glm::vec2(0.1f, 0.f));
-		
-		sprite->setAnimationSpeed(STAND_RIGHT, 8);
-		sprite->addKeyframe(STAND_RIGHT, glm::vec2(0.0f, 0.0f));
-		
-		sprite->setAnimationSpeed(MOVE_LEFT, 8);
-		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.f, 0.2f));
-		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.1f, 0.2f));
-		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.2f, 0.2f));
-		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.3f, 0.2f));
-		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.4f, 0.2f));
-		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.5f, 0.2f));
-		
-		sprite->setAnimationSpeed(MOVE_RIGHT, 8);
-		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.f, 0.1f));
-		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.1f, 0.1f));
-		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.2f, 0.1f));
-		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.3f, 0.1f));
-		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.4f, 0.1f));
-		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.5f, 0.1f));
 
-		sprite->setAnimationSpeed(MOVE_LEFT_AIM, 8);
-		sprite->addKeyframe(MOVE_LEFT_AIM, glm::vec2(0.7f, 0.2f));
-		sprite->addKeyframe(MOVE_LEFT_AIM, glm::vec2(0.8f, 0.2f));
-		sprite->addKeyframe(MOVE_LEFT_AIM, glm::vec2(0.9f, 0.2f));
+	sprite->setAnimationSpeed(STAND_LEFT, 8);
+	sprite->addKeyframe(STAND_LEFT, glm::vec2(0.1f, 0.f));
 
-		sprite->setAnimationSpeed(MOVE_RIGHT_AIM, 8);
-		sprite->addKeyframe(MOVE_RIGHT_AIM, glm::vec2(0.7f, 0.1f));
-		sprite->addKeyframe(MOVE_RIGHT_AIM, glm::vec2(0.8f, 0.1f));
-		sprite->addKeyframe(MOVE_RIGHT_AIM, glm::vec2(0.9f, 0.1f));
+	sprite->setAnimationSpeed(STAND_RIGHT, 8);
+	sprite->addKeyframe(STAND_RIGHT, glm::vec2(0.0f, 0.0f));
 
-		sprite->setAnimationSpeed(AIM_UP_LOOK_LEFT, 8);
-		sprite->addKeyframe(AIM_UP_LOOK_LEFT, glm::vec2(0.50f, 0.0f));
+	sprite->setAnimationSpeed(MOVE_LEFT, 8);
+	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.f, 0.2f));
+	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.1f, 0.2f));
+	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.2f, 0.2f));
+	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.3f, 0.2f));
+	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.4f, 0.2f));
+	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.5f, 0.2f));
 
-		sprite->setAnimationSpeed(AIM_UP_LOOK_RIGHT, 8);
-		sprite->addKeyframe(AIM_UP_LOOK_RIGHT, glm::vec2(0.40f, 0.0f));
+	sprite->setAnimationSpeed(MOVE_RIGHT, 8);
+	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.f, 0.1f));
+	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.1f, 0.1f));
+	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.2f, 0.1f));
+	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.3f, 0.1f));
+	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.4f, 0.1f));
+	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.5f, 0.1f));
 
-		sprite->setAnimationSpeed(AIM_UP_WALK_RIGHT, 8);
-		sprite->addKeyframe(AIM_UP_WALK_RIGHT, glm::vec2(0.0f, 0.5f));
-		sprite->addKeyframe(AIM_UP_WALK_RIGHT, glm::vec2(0.1f, 0.5f));
-		sprite->addKeyframe(AIM_UP_WALK_RIGHT, glm::vec2(0.2f, 0.5f));
+	sprite->setAnimationSpeed(MOVE_LEFT_AIM, 8);
+	sprite->addKeyframe(MOVE_LEFT_AIM, glm::vec2(0.7f, 0.2f));
+	sprite->addKeyframe(MOVE_LEFT_AIM, glm::vec2(0.8f, 0.2f));
+	sprite->addKeyframe(MOVE_LEFT_AIM, glm::vec2(0.9f, 0.2f));
 
-		sprite->setAnimationSpeed(AIM_UP_WALK_LEFT, 8);
-		sprite->addKeyframe(AIM_UP_WALK_LEFT, glm::vec2(0.3f, 0.5f));
-		sprite->addKeyframe(AIM_UP_WALK_LEFT, glm::vec2(0.4f, 0.5f));
-		sprite->addKeyframe(AIM_UP_WALK_LEFT, glm::vec2(0.5f, 0.5f));
+	sprite->setAnimationSpeed(MOVE_RIGHT_AIM, 8);
+	sprite->addKeyframe(MOVE_RIGHT_AIM, glm::vec2(0.7f, 0.1f));
+	sprite->addKeyframe(MOVE_RIGHT_AIM, glm::vec2(0.8f, 0.1f));
+	sprite->addKeyframe(MOVE_RIGHT_AIM, glm::vec2(0.9f, 0.1f));
 
-		sprite->setAnimationSpeed(CROUCH_LOOK_LEFT, 8);
-		sprite->addKeyframe(CROUCH_LOOK_LEFT, glm::vec2(0.3f, 0.0f));
+	sprite->setAnimationSpeed(AIM_UP_LOOK_LEFT, 8);
+	sprite->addKeyframe(AIM_UP_LOOK_LEFT, glm::vec2(0.50f, 0.0f));
 
-		sprite->setAnimationSpeed(CROUCH_LOOK_RIGHT, 8);
-		sprite->addKeyframe(CROUCH_LOOK_RIGHT, glm::vec2(0.2f, 0.0f));
+	sprite->setAnimationSpeed(AIM_UP_LOOK_RIGHT, 8);
+	sprite->addKeyframe(AIM_UP_LOOK_RIGHT, glm::vec2(0.40f, 0.0f));
 
-		sprite->setAnimationSpeed(AIM_DOWN_WALK_RIGHT, 8);
-		sprite->addKeyframe(AIM_DOWN_WALK_RIGHT, glm::vec2(0.0f, 0.6f));
-		sprite->addKeyframe(AIM_DOWN_WALK_RIGHT, glm::vec2(0.1f, 0.6f));
-		sprite->addKeyframe(AIM_DOWN_WALK_RIGHT, glm::vec2(0.2f, 0.6f));
+	sprite->setAnimationSpeed(AIM_UP_WALK_RIGHT, 8);
+	sprite->addKeyframe(AIM_UP_WALK_RIGHT, glm::vec2(0.0f, 0.5f));
+	sprite->addKeyframe(AIM_UP_WALK_RIGHT, glm::vec2(0.1f, 0.5f));
+	sprite->addKeyframe(AIM_UP_WALK_RIGHT, glm::vec2(0.2f, 0.5f));
 
-		sprite->setAnimationSpeed(AIM_DOWN_WALK_LEFT, 8);
-		sprite->addKeyframe(AIM_DOWN_WALK_LEFT, glm::vec2(0.3f, 0.6f));
-		sprite->addKeyframe(AIM_DOWN_WALK_LEFT, glm::vec2(0.4f, 0.6f));
-		sprite->addKeyframe(AIM_DOWN_WALK_LEFT, glm::vec2(0.5f, 0.6f));
+	sprite->setAnimationSpeed(AIM_UP_WALK_LEFT, 8);
+	sprite->addKeyframe(AIM_UP_WALK_LEFT, glm::vec2(0.3f, 0.5f));
+	sprite->addKeyframe(AIM_UP_WALK_LEFT, glm::vec2(0.4f, 0.5f));
+	sprite->addKeyframe(AIM_UP_WALK_LEFT, glm::vec2(0.5f, 0.5f));
 
-		sprite->setAnimationSpeed(AIRBONE_RIGHT, 8);
-		sprite->addKeyframe(AIRBONE_RIGHT, glm::vec2(0.0f, 0.3f));
-		sprite->addKeyframe(AIRBONE_RIGHT, glm::vec2(0.1f, 0.3f));
-		sprite->addKeyframe(AIRBONE_RIGHT, glm::vec2(0.2f, 0.3f));
-		sprite->addKeyframe(AIRBONE_RIGHT, glm::vec2(0.3f, 0.3f));
+	sprite->setAnimationSpeed(CROUCH_LOOK_LEFT, 8);
+	sprite->addKeyframe(CROUCH_LOOK_LEFT, glm::vec2(0.3f, 0.0f));
 
-		sprite->setAnimationSpeed(AIRBONE_LEFT, 8);
-		sprite->addKeyframe(AIRBONE_LEFT, glm::vec2(0.0f, 0.4f));
-		sprite->addKeyframe(AIRBONE_LEFT, glm::vec2(0.1f, 0.4f));
-		sprite->addKeyframe(AIRBONE_LEFT, glm::vec2(0.2f, 0.4f));
-		sprite->addKeyframe(AIRBONE_LEFT, glm::vec2(0.3f, 0.4f));
+	sprite->setAnimationSpeed(CROUCH_LOOK_RIGHT, 8);
+	sprite->addKeyframe(CROUCH_LOOK_RIGHT, glm::vec2(0.2f, 0.0f));
 
-		sprite->setAnimationSpeed(DROPPED, 8);
-		sprite->addKeyframe(DROPPED, glm::vec2(0.0f, 0.7f));
+	sprite->setAnimationSpeed(AIM_DOWN_WALK_RIGHT, 8);
+	sprite->addKeyframe(AIM_DOWN_WALK_RIGHT, glm::vec2(0.0f, 0.6f));
+	sprite->addKeyframe(AIM_DOWN_WALK_RIGHT, glm::vec2(0.1f, 0.6f));
+	sprite->addKeyframe(AIM_DOWN_WALK_RIGHT, glm::vec2(0.2f, 0.6f));
 
-		sprite->setAnimationSpeed(SWIM_LEFT, 8);
-		sprite->addKeyframe(SWIM_LEFT, glm::vec2(0.0f, 0.9f));
-		sprite->addKeyframe(SWIM_LEFT, glm::vec2(0.1f, 0.9f));
+	sprite->setAnimationSpeed(AIM_DOWN_WALK_LEFT, 8);
+	sprite->addKeyframe(AIM_DOWN_WALK_LEFT, glm::vec2(0.3f, 0.6f));
+	sprite->addKeyframe(AIM_DOWN_WALK_LEFT, glm::vec2(0.4f, 0.6f));
+	sprite->addKeyframe(AIM_DOWN_WALK_LEFT, glm::vec2(0.5f, 0.6f));
 
-		sprite->setAnimationSpeed(SWIM_RIGHT, 8);
-		sprite->addKeyframe(SWIM_RIGHT, glm::vec2(0.0f, 0.8f));
-		sprite->addKeyframe(SWIM_RIGHT, glm::vec2(0.1f, 0.8f));
+	sprite->setAnimationSpeed(AIRBONE_RIGHT, 8);
+	sprite->addKeyframe(AIRBONE_RIGHT, glm::vec2(0.0f, 0.3f));
+	sprite->addKeyframe(AIRBONE_RIGHT, glm::vec2(0.1f, 0.3f));
+	sprite->addKeyframe(AIRBONE_RIGHT, glm::vec2(0.2f, 0.3f));
+	sprite->addKeyframe(AIRBONE_RIGHT, glm::vec2(0.3f, 0.3f));
 
-		sprite->setAnimationSpeed(SWIM_AIM_RIGHT, 8);
-		sprite->addKeyframe(SWIM_AIM_RIGHT, glm::vec2(0.2f, 0.8f));
+	sprite->setAnimationSpeed(AIRBONE_LEFT, 8);
+	sprite->addKeyframe(AIRBONE_LEFT, glm::vec2(0.0f, 0.4f));
+	sprite->addKeyframe(AIRBONE_LEFT, glm::vec2(0.1f, 0.4f));
+	sprite->addKeyframe(AIRBONE_LEFT, glm::vec2(0.2f, 0.4f));
+	sprite->addKeyframe(AIRBONE_LEFT, glm::vec2(0.3f, 0.4f));
 
-		sprite->setAnimationSpeed(SWIM_AIM_UPRIGHT, 8);
-		sprite->addKeyframe(SWIM_AIM_UPRIGHT, glm::vec2(0.3f, 0.8f));
+	sprite->setAnimationSpeed(DROPPED, 8);
+	sprite->addKeyframe(DROPPED, glm::vec2(0.0f, 0.7f));
 
-		sprite->setAnimationSpeed(SWIM_AIM_UP_LOOK_RIGHT, 8);
-		sprite->addKeyframe(SWIM_AIM_UP_LOOK_RIGHT, glm::vec2(0.4f, 0.8f));
+	sprite->setAnimationSpeed(SWIM_LEFT, 8);
+	sprite->addKeyframe(SWIM_LEFT, glm::vec2(0.0f, 0.9f));
+	sprite->addKeyframe(SWIM_LEFT, glm::vec2(0.1f, 0.9f));
 
-		sprite->setAnimationSpeed(SWIM_AIM_LEFT, 8);
-		sprite->addKeyframe(SWIM_AIM_LEFT, glm::vec2(0.2f, 0.9f));
+	sprite->setAnimationSpeed(SWIM_RIGHT, 8);
+	sprite->addKeyframe(SWIM_RIGHT, glm::vec2(0.0f, 0.8f));
+	sprite->addKeyframe(SWIM_RIGHT, glm::vec2(0.1f, 0.8f));
 
-		sprite->setAnimationSpeed(SWIM_AIM_UPLEFT, 8);
-		sprite->addKeyframe(SWIM_AIM_UPLEFT, glm::vec2(0.3f, 0.9f));
+	sprite->setAnimationSpeed(SWIM_AIM_RIGHT, 8);
+	sprite->addKeyframe(SWIM_AIM_RIGHT, glm::vec2(0.2f, 0.8f));
 
-		sprite->setAnimationSpeed(SWIM_AIM_UP_LOOK_LEFT, 8);
-		sprite->addKeyframe(SWIM_AIM_UP_LOOK_LEFT, glm::vec2(0.4f, 0.9f));
+	sprite->setAnimationSpeed(SWIM_AIM_UPRIGHT, 8);
+	sprite->addKeyframe(SWIM_AIM_UPRIGHT, glm::vec2(0.3f, 0.8f));
 
+	sprite->setAnimationSpeed(SWIM_AIM_UP_LOOK_RIGHT, 8);
+	sprite->addKeyframe(SWIM_AIM_UP_LOOK_RIGHT, glm::vec2(0.4f, 0.8f));
 
-		sprite->setAnimationSpeed(LVL2_IDLE, 8);
-		sprite->addKeyframe(LVL2_IDLE, glm::vec2(0.5f, 0.3f));
+	sprite->setAnimationSpeed(SWIM_AIM_LEFT, 8);
+	sprite->addKeyframe(SWIM_AIM_LEFT, glm::vec2(0.2f, 0.9f));
 
-		sprite->setAnimationSpeed(LVL2_IDLE_SHOOT, 8);
-		sprite->addKeyframe(LVL2_IDLE_SHOOT, glm::vec2(0.4f, 0.3f));
-		sprite->addKeyframe(LVL2_IDLE_SHOOT, glm::vec2(0.5f, 0.3f));
+	sprite->setAnimationSpeed(SWIM_AIM_UPLEFT, 8);
+	sprite->addKeyframe(SWIM_AIM_UPLEFT, glm::vec2(0.3f, 0.9f));
 
-		sprite->setAnimationSpeed(LVL2_CROUCH, 8);
-		sprite->addKeyframe(LVL2_CROUCH, glm::vec2(0.6f, 0.3f));
-
-		sprite->setAnimationSpeed(LVL2_CROUCH_SHOOT, 8);
-		sprite->addKeyframe(LVL2_CROUCH_SHOOT, glm::vec2(0.7f, 0.3f));
-		sprite->addKeyframe(LVL2_CROUCH_SHOOT, glm::vec2(0.6f, 0.3f));
-
-		sprite->setAnimationSpeed(LVL2_FORWARD, 8);
-		sprite->addKeyframe(LVL2_FORWARD, glm::vec2(0.8f, 0.3f));
-		sprite->addKeyframe(LVL2_FORWARD, glm::vec2(0.9f, 0.3f));
-
-		sprite->setAnimationSpeed(LVL2_MOVE_RIGHT, 8);
-		sprite->addKeyframe(LVL2_MOVE_RIGHT, glm::vec2(0.4f, 0.4f));
-		sprite->addKeyframe(LVL2_MOVE_RIGHT, glm::vec2(0.5f, 0.4f));
-		sprite->addKeyframe(LVL2_MOVE_RIGHT, glm::vec2(0.6f, 0.4f));
-
-		sprite->setAnimationSpeed(LVL2_MOVE_LEFT, 8);
-		sprite->addKeyframe(LVL2_MOVE_LEFT, glm::vec2(0.7f, 0.4f));
-		sprite->addKeyframe(LVL2_MOVE_LEFT, glm::vec2(0.8f, 0.4f));
-		sprite->addKeyframe(LVL2_MOVE_LEFT, glm::vec2(0.9f, 0.4f));
-
-		sprite->setAnimationSpeed(LVL2_ZAP, 32);
-		sprite->addKeyframe(LVL2_ZAP, glm::vec2(0.6f, 0.5f));
-		sprite->addKeyframe(LVL2_ZAP, glm::vec2(0.7f, 0.5f));
-		sprite->addKeyframe(LVL2_ZAP, glm::vec2(0.8f, 0.5f));
-
-		sprite->setAnimationSpeed(ANIM_DYING, 8);
-		sprite->addKeyframe(ANIM_DYING, glm::vec2(0.5f, 0.7f));
-		sprite->addKeyframe(ANIM_DYING, glm::vec2(0.6f, 0.7f));
-		sprite->addKeyframe(ANIM_DYING, glm::vec2(0.7f, 0.7f));
-		sprite->addKeyframe(ANIM_DYING, glm::vec2(0.8f, 0.7f));
-		sprite->addKeyframe(ANIM_DYING, glm::vec2(0.9f, 0.7f));
-
-		sprite->setAnimationSpeed(ANIM_DEAD, 8);
-		sprite->addKeyframe(ANIM_DEAD, glm::vec2(0.9f, 0.7f));
-
-		sprite->setAnimationSpeed(LVL2_ANIM_DEAD, 8);
-		sprite->addKeyframe(LVL2_ANIM_DEAD, glm::vec2(0.9f, 0.5f));
-
-		sprite->setAnimationSpeed(LVL2_ANIM_DYING, 8);
-		sprite->addKeyframe(LVL2_ANIM_DYING, glm::vec2(0.8f, 0.5f));
-		sprite->addKeyframe(LVL2_ANIM_DYING, glm::vec2(0.9f, 0.5f));
+	sprite->setAnimationSpeed(SWIM_AIM_UP_LOOK_LEFT, 8);
+	sprite->addKeyframe(SWIM_AIM_UP_LOOK_LEFT, glm::vec2(0.4f, 0.9f));
 
 
-		
+	sprite->setAnimationSpeed(LVL2_IDLE, 8);
+	sprite->addKeyframe(LVL2_IDLE, glm::vec2(0.5f, 0.3f));
+
+	sprite->setAnimationSpeed(LVL2_IDLE_SHOOT, 8);
+	sprite->addKeyframe(LVL2_IDLE_SHOOT, glm::vec2(0.4f, 0.3f));
+	sprite->addKeyframe(LVL2_IDLE_SHOOT, glm::vec2(0.5f, 0.3f));
+
+	sprite->setAnimationSpeed(LVL2_CROUCH, 8);
+	sprite->addKeyframe(LVL2_CROUCH, glm::vec2(0.6f, 0.3f));
+
+	sprite->setAnimationSpeed(LVL2_CROUCH_SHOOT, 8);
+	sprite->addKeyframe(LVL2_CROUCH_SHOOT, glm::vec2(0.7f, 0.3f));
+	sprite->addKeyframe(LVL2_CROUCH_SHOOT, glm::vec2(0.6f, 0.3f));
+
+	sprite->setAnimationSpeed(LVL2_FORWARD, 8);
+	sprite->addKeyframe(LVL2_FORWARD, glm::vec2(0.8f, 0.3f));
+	sprite->addKeyframe(LVL2_FORWARD, glm::vec2(0.9f, 0.3f));
+
+	sprite->setAnimationSpeed(LVL2_MOVE_RIGHT, 8);
+	sprite->addKeyframe(LVL2_MOVE_RIGHT, glm::vec2(0.4f, 0.4f));
+	sprite->addKeyframe(LVL2_MOVE_RIGHT, glm::vec2(0.5f, 0.4f));
+	sprite->addKeyframe(LVL2_MOVE_RIGHT, glm::vec2(0.6f, 0.4f));
+
+	sprite->setAnimationSpeed(LVL2_MOVE_LEFT, 8);
+	sprite->addKeyframe(LVL2_MOVE_LEFT, glm::vec2(0.7f, 0.4f));
+	sprite->addKeyframe(LVL2_MOVE_LEFT, glm::vec2(0.8f, 0.4f));
+	sprite->addKeyframe(LVL2_MOVE_LEFT, glm::vec2(0.9f, 0.4f));
+
+	sprite->setAnimationSpeed(LVL2_ZAP, 32);
+	sprite->addKeyframe(LVL2_ZAP, glm::vec2(0.6f, 0.5f));
+	sprite->addKeyframe(LVL2_ZAP, glm::vec2(0.7f, 0.5f));
+	sprite->addKeyframe(LVL2_ZAP, glm::vec2(0.8f, 0.5f));
+
+	sprite->setAnimationSpeed(ANIM_DYING, 8);
+	sprite->addKeyframe(ANIM_DYING, glm::vec2(0.5f, 0.7f));
+	sprite->addKeyframe(ANIM_DYING, glm::vec2(0.6f, 0.7f));
+	sprite->addKeyframe(ANIM_DYING, glm::vec2(0.7f, 0.7f));
+	sprite->addKeyframe(ANIM_DYING, glm::vec2(0.8f, 0.7f));
+	sprite->addKeyframe(ANIM_DYING, glm::vec2(0.9f, 0.7f));
+
+	sprite->setAnimationSpeed(ANIM_DEAD, 8);
+	sprite->addKeyframe(ANIM_DEAD, glm::vec2(0.9f, 0.7f));
+
+	sprite->setAnimationSpeed(LVL2_ANIM_DEAD, 8);
+	sprite->addKeyframe(LVL2_ANIM_DEAD, glm::vec2(0.9f, 0.5f));
+
+	sprite->setAnimationSpeed(LVL2_ANIM_DYING, 8);
+	sprite->addKeyframe(LVL2_ANIM_DYING, glm::vec2(0.8f, 0.5f));
+	sprite->addKeyframe(LVL2_ANIM_DYING, glm::vec2(0.9f, 0.5f));
+
+
+
 	sprite->changeAnimation(1);
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
-	
+
 }
 
-void Player::update(int deltaTime, float left, float right, float bottom, float top)
+void Player2::update(int deltaTime, float left, float right, float bottom, float top)
 {
-	
+
 	currentKeyframe = sprite->keyframe();
 	sprite->update(deltaTime);
 	if (state == ALIVE) {
@@ -244,7 +244,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 
 		}
 
-		if (Game::instance().getKey('k')) {
+		if (Game::instance().getKey('g')) {
 			bShooting = true;
 			wasShooting = true;
 		}
@@ -252,7 +252,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 		else wasShooting = false;
 
 		if (lvl == 1) {
-			if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_UP))
+			if (Game::instance().getKey('a') && Game::instance().getKey('w'))
 			{
 				if (sprite->animation() != AIM_UP_WALK_LEFT && !bJumping) {
 					if (bWater) sprite->changeAnimation(SWIM_AIM_UPLEFT);
@@ -271,7 +271,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 					else sprite->changeAnimation(SWIM_LEFT);
 				}
 			}
-			else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_UP))
+			else if (Game::instance().getKey('d') && Game::instance().getKey('w'))
 			{
 				if (sprite->animation() != AIM_UP_WALK_RIGHT && !bJumping) {
 					if (bWater) sprite->changeAnimation(SWIM_AIM_UPRIGHT);
@@ -285,7 +285,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 					sprite->changeAnimation(STAND_RIGHT);
 				}
 			}
-			else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_DOWN))
+			else if (Game::instance().getKey('a') && Game::instance().getKey('s'))
 			{
 				if (sprite->animation() != AIM_DOWN_WALK_LEFT && !bJumping && !bWater)
 					sprite->changeAnimation(AIM_DOWN_WALK_LEFT);
@@ -305,7 +305,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 					else sprite->changeAnimation(SWIM_LEFT);
 				}
 			}
-			else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_DOWN))
+			else if (Game::instance().getKey('d') && Game::instance().getKey('s'))
 			{
 				if (sprite->animation() != AIM_DOWN_WALK_RIGHT && !bJumping && !bWater)
 					sprite->changeAnimation(AIM_DOWN_WALK_RIGHT);
@@ -320,7 +320,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 					sprite->changeAnimation(STAND_RIGHT);
 				}
 			}
-			else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
+			else if (Game::instance().getKey('a'))
 			{
 				if ((sprite->animation() != MOVE_LEFT && !bShooting || sprite->animation() != MOVE_LEFT_AIM && bShooting) && !bJumping)
 					if (bShooting) {
@@ -345,7 +345,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 							else sprite->changeAnimation(SWIM_LEFT);
 						}
 			}
-			else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
+			else if (Game::instance().getKey('d'))
 			{
 				if ((sprite->animation() != MOVE_RIGHT && !bShooting || sprite->animation() != MOVE_RIGHT_AIM && bShooting) && !bJumping)
 					if (bShooting) {
@@ -366,7 +366,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 							else sprite->changeAnimation(SWIM_RIGHT);
 						}
 			}
-			else if (Game::instance().getSpecialKey(GLUT_KEY_UP))
+			else if (Game::instance().getKey('w'))
 			{
 				if (lookingTo == LOOKING_LEFT && !bJumping) {
 					if (bWater) sprite->changeAnimation(SWIM_AIM_UP_LOOK_LEFT);
@@ -378,7 +378,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 				}
 
 			}
-			else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
+			else if (Game::instance().getKey('s'))
 			{
 				if (lookingTo == LOOKING_LEFT && !bJumping && !bWater)
 					sprite->changeAnimation(CROUCH_LOOK_LEFT);
@@ -433,13 +433,13 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 					sprite->changeAnimation(STAND_LEFT);
 				else if (sprite->animation() == AIRBONE_RIGHT && !bJumping)
 					sprite->changeAnimation(STAND_RIGHT);
-				else if (sprite->animation() == ANIM_DEAD) 
+				else if (sprite->animation() == ANIM_DEAD)
 					sprite->changeAnimation(STAND_RIGHT);
 
 			}
 		}
 		else if (lvl == 2) {
-			if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
+			if (Game::instance().getKey('a'))
 			{
 				if ((sprite->animation() != LVL2_MOVE_LEFT && !bJumping)) sprite->changeAnimation(LVL2_MOVE_LEFT);
 				posPlayer.x -= 2;
@@ -454,7 +454,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 					else sprite->changeAnimation(LVL2_IDLE);
 				}
 			}
-			else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
+			else if (Game::instance().getKey('d'))
 			{
 				if ((sprite->animation() != LVL2_MOVE_RIGHT && !bJumping)) sprite->changeAnimation(LVL2_MOVE_RIGHT);
 				posPlayer.x += 2;
@@ -469,7 +469,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 					else sprite->changeAnimation(LVL2_IDLE);
 				}
 			}
-			else if (Game::instance().getSpecialKey(GLUT_KEY_UP))
+			else if (Game::instance().getKey('w'))
 			{
 				if (coreDestroyed) {
 					if (sprite->animation() != LVL2_FORWARD) sprite->changeAnimation(LVL2_FORWARD);
@@ -479,7 +479,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 				}
 
 			}
-			else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
+			else if (Game::instance().getKey('s'))
 			{
 				if (bShooting) {
 					if (sprite->animation() != LVL2_CROUCH_SHOOT) sprite->changeAnimation(LVL2_CROUCH_SHOOT);
@@ -498,7 +498,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 				else if (sprite->animation() == AIRBONE_RIGHT && !bJumping)
 					sprite->changeAnimation(LVL2_IDLE);
 			}
-			
+
 		}
 		if (bJumping)
 		{
@@ -522,7 +522,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 		{
 			posPlayer.y += FALL_STEP;
 			glm::ivec2 aux = posPlayer + glm::ivec2(10, 30);
-			if (lvl == 1 && Game::instance().getKey(' ') && Game::instance().getSpecialKey(GLUT_KEY_DOWN) && aux.y < 180);
+			if (lvl == 1 && Game::instance().getKey('h') && Game::instance().getKey('s') && aux.y < 180);
 			else if (map->collisionMoveDown(aux, glm::ivec2(10, 28), &aux.y, bBridge))
 			{
 				if (map->isSwimming(aux, glm::ivec2(10, 28)))
@@ -533,7 +533,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 					bWater = false;
 					justLanded = true;
 					LandedFrame = 15;
-					if (Game::instance().getKey(' '))
+					if (Game::instance().getKey('h'))
 					{
 						bJumping = true;
 						jumpAngle = 0;
@@ -558,7 +558,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 					{
 						posPlayer.y -= 1;
 					}
-					
+
 				}
 				posPlayer.y += 1;
 				if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58), &posPlayer.y))
@@ -632,33 +632,33 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
-void Player::render()
+void Player2::render()
 {
 	sprite->render();
 }
 
-void Player::setTileMap(TileMap *tileMap)
+void Player2::setTileMap(TileMap *tileMap)
 {
 	map = tileMap;
 }
 
-void Player::setPosition(const glm::vec2 &pos)
+void Player2::setPosition(const glm::vec2 &pos)
 {
 	posPlayer = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
-glm::ivec2 Player::getPos()
+glm::ivec2 Player2::getPos()
 {
 	return posPlayer;
 }
 
-bool Player::isOnBridge() 
+bool Player2::isOnBridge()
 {
 	return bBridge;
 }
 
-vector<glm::ivec2> Player::buildHitBox()
+vector<glm::ivec2> Player2::buildHitBox()
 {
 	if (sprite->animation() == CROUCH_LOOK_LEFT || sprite->animation() == CROUCH_LOOK_RIGHT) {
 		glm::ivec2 lpos1 = posPlayer + glm::ivec2{ 4,50 };
@@ -682,7 +682,7 @@ vector<glm::ivec2> Player::buildHitBox()
 	}
 }
 
-glm::ivec2 Player::getProjectileSpawn() {
+glm::ivec2 Player2::getProjectileSpawn() {
 	if (sprite->animation() == MOVE_LEFT_AIM || sprite->animation() == STAND_LEFT)
 		return glm::ivec2{ -2, 32 };
 	else if (sprite->animation() == MOVE_RIGHT_AIM || sprite->animation() == STAND_RIGHT)
@@ -717,7 +717,7 @@ glm::ivec2 Player::getProjectileSpawn() {
 		return glm::ivec2{ 11, 31 };
 	else return glm::ivec2{ 10, 46 };
 }
-glm::ivec2 Player::getProjectileSpawnlvl2()
+glm::ivec2 Player2::getProjectileSpawnlvl2()
 {
 	if (sprite->animation() == LVL2_IDLE || sprite->animation() == LVL2_IDLE_SHOOT)
 		return glm::ivec2{ 7,14 };
@@ -730,7 +730,7 @@ glm::ivec2 Player::getProjectileSpawnlvl2()
 	else return glm::ivec2{ 7,14 };
 }
 
-bool Player::isJumping()
+bool Player2::isJumping()
 {
 	return bJumping;
 }

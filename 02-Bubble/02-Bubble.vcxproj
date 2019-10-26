@@ -30,6 +30,7 @@
     <ClInclude Include="Level2Turret.h" />
     <ClInclude Include="Life.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Player2.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="ProjectileBoss.h" />
     <ClInclude Include="ProjectileBoss2.h" />
@@ -66,6 +67,7 @@
     <ClCompile Include="Life.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Player2.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ProjectileBoss.cpp" />
     <ClCompile Include="ProjectileBoss2.cpp" />

@@ -7,6 +7,7 @@
 #include "ShaderProgram.h"
 #include "TileMap.h"
 #include "Player.h"
+#include "Player2.h"
 #include "Life.h"
 #include "Soldier.h"
 #include "Projectile.h"
@@ -49,6 +50,7 @@ private:
 private:
 	TileMap *map;
 	Player *player;
+	Player2 *player2;
 	Life *life;
 	EnemyManager *enemymanager;
 	ShaderProgram texProgram;
@@ -67,6 +69,8 @@ private:
 	int subLvl;
 
 	bool paused;
+
+	bool _2Playermode;
 
 	int score1, score2;
 	Text score1Text, score2Text;

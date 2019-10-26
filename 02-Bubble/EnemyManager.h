@@ -4,6 +4,7 @@
 #include "Soldier.h"
 #include "Rifleman.h"
 #include "Player.h"
+#include "Player2.h"
 #include "Bridge.h"
 #include "WallTurret.h"
 #include "BossTurret.h"
@@ -32,9 +33,9 @@ public:
 
 	EnemyManager(Audio *audiomanger);
 	~EnemyManager();
-	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, TileMap *tileMap, Player *p1
+	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, TileMap *tileMap, Player *p1, Player2 *p2
 		);
-	void initLvl2(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, TileMap *tileMap, Player *p1
+	void initLvl2(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, TileMap *tileMap, Player *p1, Player2 *p2
 	);
 	void update(int deltaTime, float left, float right, float bottom, float top);
 	void updateLvl2(int deltaTime, float left, float right, float bottom, float top);
@@ -45,8 +46,11 @@ public:
 	bool isOffScreenLevel2(glm::ivec2 pj);
 	bool isOffScreenLevel2Enemy(glm::ivec2 pj);
 	void spawnProjectilePlayer(glm::ivec2 position);
+	void spawnProjectilePlayer2(glm::ivec2 position);
 	void spawnProjectilePlayerLVL2(glm::ivec2 position);
+	void spawnProjectilePlayer2LVL2(glm::ivec2 position);
 	void spawnProjectileSPREADPlayer(glm::ivec2 position);
+	void spawnProjectileSPREADPlayer2(glm::ivec2 position);
 	void spawnProjectileRifleman(glm::ivec2 position, Rifleman* badguy);
 	void spawnProjectileWallTurret(glm::ivec2 position, WallTurret* badguy);
 	void spawnProjectileLevel2Turret(glm::ivec2 positionPlayer, Level2Turret* badguy);
@@ -56,6 +60,7 @@ public:
 	void spawnProjectileGreenSoldier(glm::ivec2 position, GreenSoldier* badguy);
 	void spawnProjectileCannon(glm::ivec2 position, Cannon* badguy);
 	void updatePlayerState();
+	void updatePlayer2State();
 	void spawnGreenSoldiers();
 	void spawnLaser();
 	void despawnOffScreenProjectiles();
@@ -70,13 +75,16 @@ public:
 	int getSublvl() { return sublvl; }
 
 	bool coreDestroyed;
+	bool _2Playermode;
 	list<Enemy*> *enemies;
 	TileMap *map;
 	Projectile *projectile;
 	ProjectileBoss *projectileBoss;
 	ProjectileBoss2 *projectileBoss2;
 	Player* player;
+	Player2* player2;
 	list<Projectile> *projlist;
+	list<Projectile> *projlist2;
 	list<Projectile> *projlistRifleman;
 	list<Projectile> *projlistWallTurret;
 	list<ProjectileBoss> *projlistBossTurret;
@@ -100,6 +108,10 @@ private:
 	bool playerShot;
 
 	Audio *audiomanager;
+	bool keypressed2;
+	bool keyreleased2;
+	bool playerShot2;
+
 	void playDeathSound(string type);
 };
 
