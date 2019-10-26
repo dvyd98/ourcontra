@@ -63,9 +63,6 @@ void Scene::init()
 	paused = false;
 
 	score1 = score2 = 0;
-
-	if (!score1Text.init("fonts/OpenSans-Regular.ttf"))
-		_RPT0(0, "falla el init");
 	
 	audiomanager = new Audio();
 }
@@ -102,10 +99,33 @@ void Scene::update(int deltaTime)
 				case MENU_1_PLAYER_BLINK: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_1_PLAYER); break;
 				case MENU_2_PLAYER: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_2_PLAYER_BLINK); break;
 				case MENU_2_PLAYER_BLINK: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_2_PLAYER); break;
+
+				case MENU_HOW_TO_PLAY: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_HOW_TO_PLAY_BLINK); break;
+				case MENU_HOW_TO_PLAY_BLINK: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_HOW_TO_PLAY); break;
+				case MENU_CREDITS: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_CREDITS_BLINK); break;
+				case MENU_CREDITS_BLINK: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, MENU_CREDITS); break;
 				}
 				blinkAnimation = BLINK_ANIMATION_DURATION;
 			}
-			else if (blinks == 0) changeToScene(LVL1);
+			else if (blinks == 0) {
+				if (map->getFrame() == MENU_1_PLAYER || map->getFrame() == MENU_2_PLAYER)
+					changeToScene(LVL1);
+				else if (map->getFrame() == MENU_HOW_TO_PLAY)
+					changeToScene(HOW_TO);
+				else if (map->getFrame() == MENU_CREDITS)
+					changeToScene(MENU_CREDITS);
+			}
+			break;
+		}
+		case HOW_TO: {
+			if (Game::instance().getKey(' ')) {
+				changeToScene(LOADING_MENU);
+			}
+			break;
+		}
+		case CREDITS: {
+			if (Game::instance().getKey(' '))
+				changeToScene(LOADING_MENU);
 			break;
 		}
 		case LVL1: updateLvl1(deltaTime); break;
@@ -141,7 +161,7 @@ void Scene::updateMenu(int deltaTime) {
 	if (--selectDelay == 0) {
 		if (Game::instance().getKey(','))
 			map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram,
-				((map->getFrame() == MENU_1_PLAYER) ? MENU_2_PLAYER : MENU_1_PLAYER));
+				((map->getFrame()+2) % 8));
 		// start game with enter
 		if (Game::instance().getKey('.')) {
 			_2Playermode = !map->getFrame() == MENU_1_PLAYER;
@@ -163,16 +183,9 @@ void Scene::updateLvl1(int deltaTime) {
 		left += PLAYER_VEL;
 	}
 	player->update(deltaTime, left, right, bottom, top);
-	if (_2Playermode) {
-		player2->update(deltaTime, left, right, bottom, top);
-		life2->update(deltaTime, left, right, bottom, top, player2->life);
-		if (player2->life <= 0) {
-			changeToScene(GAMEOVER);
-		}
-	}
+	if (_2Playermode) player2->update(deltaTime, left, right, bottom, top);
 	enemymanager->update(deltaTime, left, right, bottom, top);
 	life->update(deltaTime, left, right, bottom, top, player->life);
-
 
 	if (player->life <= 0) {
 		changeToScene(GAMEOVER);
@@ -185,14 +198,7 @@ void Scene::updateLvl1(int deltaTime) {
 
 void Scene::updateLvl2(int deltaTime) {
 	player->update(deltaTime, left, right, bottom, top);
-	if (_2Playermode) {
-		player2->update(deltaTime, left, right, bottom, top);
-		life2->update(deltaTime, left, right, bottom, top, player2->life);
-		if (player2->life <= 0) {
-			currentState = GAMEOVER;
-			changeToScene(GAMEOVER);
-		}
-	}
+	if (_2Playermode) player2->update(deltaTime, left, right, bottom, top);
 	enemymanager->updateLvl2(deltaTime, left, right, bottom, top);
 
 	life->update(deltaTime, left, right, bottom, top, player->life);
@@ -269,7 +275,15 @@ void Scene::changeToScene(int scene) {
 		break;
 	}
 	case MENU: {
-		audiomanager->play(TITLE_MUSIC, true);
+		audiomanager->play(TITLE_MUSIC, false);
+		break;
+	}
+	case HOW_TO: {
+		map = TileMap::createTileMap("levels/howto.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		break;
+	}
+	case CREDITS: {
+		map = TileMap::createTileMap("levels/credits.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		break;
 	}
 	case LVL1: {
@@ -304,7 +318,7 @@ void Scene::godMode() {
 		map = TileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		currentState = MENU;
 		audiomanager->stopAllSounds();
-		audiomanager->play(TITLE_MUSIC, true);
+		audiomanager->play(TITLE_MUSIC, false);
 	}
 	if (Game::instance().getKey('2')) {
 		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
@@ -322,6 +336,16 @@ void Scene::godMode() {
 		audiomanager->stopAllSounds();
 		audiomanager->play(STAGE2_MUSIC, true);
 	}
+	if (Game::instance().getKey('4')) {
+		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
+		currentState = HOW_TO;
+		map = TileMap::createTileMap("howto/howto.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	}
+	if (Game::instance().getKey('5')) {
+		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
+		currentState = CREDITS;
+		map = TileMap::createTileMap("credits/credits.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	}
 	if (Game::instance().getKey('0')) {
 		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
 		map = TileMap::createTileMap("levels/gameover.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -329,7 +353,6 @@ void Scene::godMode() {
 		audiomanager->stopAllSounds();
 		audiomanager->play(GAMEOVER_MUSIC, true);
 	}
-	// TODO click posa flag immortal al personatge
 }
 
 void Scene::render()
@@ -348,10 +371,7 @@ void Scene::render()
 		if (currentState == LVL1) enemymanager->render();
 		if (currentState == LVL2) enemymanager->renderLvl2();
 		player->render();
-		if (_2Playermode) {
-			player2->render();
-			life2->render();
-		}
+		if (_2Playermode) player2->render();
 		life->render();
 	}
 
@@ -365,7 +385,6 @@ void Scene::initEntitiesLvl1() {
 	player = new Player();
 	player2 = new Player2();
 	life = new Life();
-	life2 = new Life();
 	life->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 0);
 	life->setPosition(glm::vec2(3 * map->getTileSize(), 0 * map->getTileSize()));
 	life->setTileMap(map);
@@ -378,10 +397,6 @@ void Scene::initEntitiesLvl1() {
 		player2->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		player2->setPosition(glm::vec2(3 * map->getTileSize(), 0 * map->getTileSize()));
 		player2->setTileMap(map);
-
-		life2->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 1);
-		life2->setPosition(glm::vec2(9 * map->getTileSize(), 0 * map->getTileSize()));
-		life2->setTileMap(map);
 	}
 
 	enemymanager = new EnemyManager(audiomanager);
@@ -394,7 +409,6 @@ void Scene::initEntitiesLvl2() {
 	player = new Player();
 	player2 = new Player2();
 	life = new Life();
-	life2 = new Life();
 	life->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 0);
 	life->setPosition(glm::vec2(3 * map->getTileSize(), 0 * map->getTileSize()));
 	life->setTileMap(map);
@@ -407,10 +421,6 @@ void Scene::initEntitiesLvl2() {
 		player2->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		player2->setPosition(glm::vec2(128, 124));
 		player2->setTileMap(map);
-
-		life2->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 1);
-		life2->setPosition(glm::vec2(9 * map->getTileSize(), 0 * map->getTileSize()));
-		life2->setTileMap(map);
 	}
 
 	enemymanager = new EnemyManager(audiomanager);

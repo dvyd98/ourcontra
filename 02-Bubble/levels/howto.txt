@@ -1,0 +1,2 @@
+HOW_TO
+images/howto/howto.png

@@ -23,7 +23,7 @@ enum enemyType {
 };
 
 enum MENU_FRAMES {
-	MENU_1_PLAYER, MENU_1_PLAYER_BLINK, MENU_2_PLAYER, MENU_2_PLAYER_BLINK
+	MENU_1_PLAYER, MENU_1_PLAYER_BLINK, MENU_2_PLAYER, MENU_2_PLAYER_BLINK, MENU_HOW_TO_PLAY, MENU_HOW_TO_PLAY_BLINK, MENU_CREDITS, MENU_CREDITS_BLINK
 };
 
 enum GAMEOVER_FRAMES {
@@ -77,6 +77,7 @@ private:
 	void loadLevel2();
 	void loadMenu();
 	void loadGameover();
+	void loadExtras();
 	bool bottomIsSea(const int y, const int x) const;
 
 private:
