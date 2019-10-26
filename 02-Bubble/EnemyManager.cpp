@@ -1360,7 +1360,7 @@ void EnemyManager::checkPhysics()
 			while ( it_enemy != enemies->end() && !shot) {
 				vector<glm::ivec2> boxEnemy = (*it_enemy)->buildHitBox();
 				if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() != "bridge" && (*it_enemy)->getType() != "gunupgrade" && areTouching(box[0], box[1], boxEnemy[0], boxEnemy[1])) {
-					if ((*it_enemy)->getType() == "wallturret" || (*it_enemy)->getType() == "cannon") audiomanager->play(TURRET_HIT_SOUND, false);
+					if ((*it_enemy)->getType() == "wallturret" || (*it_enemy)->getType() == "cannon" || (*it_enemy)->getType() == "upgradebox") audiomanager->play(TURRET_HIT_SOUND, false);
 					if ((*it_enemy)->decreaseLife(it_projec->getDmg())) {
 						(*it_enemy)->state = DYING;
 						playDeathSound((*it_enemy)->getType());
