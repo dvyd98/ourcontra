@@ -146,18 +146,6 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 		}
 	}
 
-	Enemy *test = new Level2Turret();
-	test->init(tilemap, texProgram);
-	test->setPosition(glm::vec2(14 * map->getTileSize(), 3 * map->getTileSize()));
-	test->setTileMap(map);
-	enemies->push_back(test);
-
-	Enemy *test2 = new BossTurret();
-	test2->init(tilemap, texProgram);
-	test2->setPosition(glm::vec2(14 * map->getTileSize(), 2 * map->getTileSize()));
-	test2->setTileMap(map);
-	enemies->push_back(test2);
-
 
 }
 
@@ -317,12 +305,14 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 			if (projlist->size() < 4) {
 				playerShot = true;
 				spawnProjectilePlayer(player->getPos());
+				audiomanager->play(NORMAL_GUN_SOUND, false);
 			}
 		}
 		else if (player->projectile == SPREAD) {
 			if (projlist->size() < 10) {
 				playerShot = true;
 				spawnProjectileSPREADPlayer(player->getPos());
+				audiomanager->play(SPREAD_GUN_SOUND, false);
 			}
 		}
 	}
@@ -1006,7 +996,7 @@ void EnemyManager::despawnOffScreenEnemies() {
 
 void EnemyManager::didthePlayerFuckingFall() {
 	vector <glm::ivec2> box = player->buildHitBox();
-	if (box[0].y > bottom) player->state = DEAD;
+	if (box[0].y > bottom) updatePlayerState();
 }
 
 void EnemyManager::despawnDeadEnemies() {
@@ -1044,7 +1034,10 @@ bool EnemyManager::areTouchingYcoord(glm::ivec2 obj1_left, glm::ivec2 obj1_right
 
 void EnemyManager::updatePlayerState()
 {
-	if (player->invtimer == 0 && player->state == ALIVE) player->state = DYING;
+	if (player->invtimer == 0 && player->state == ALIVE) {
+		player->state = DYING;
+		audiomanager->play(DEATH_SOUND, false);
+	}
 }
 
 
@@ -1063,8 +1056,10 @@ void EnemyManager::checkPhysics()
 			while ( it_enemy != enemies->end() && !shot) {
 				vector<glm::ivec2> boxEnemy = (*it_enemy)->buildHitBox();
 				if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() != "bridge" && (*it_enemy)->getType() != "gunupgrade" && areTouching(box[0], box[1], boxEnemy[0], boxEnemy[1])) {
+					if ((*it_enemy)->getType() == "wallturret" || (*it_enemy)->getType() == "cannon") audiomanager->play(TURRET_HIT_SOUND, false);
 					if ((*it_enemy)->decreaseLife(it_projec->getDmg())) {
 						(*it_enemy)->state = DYING;
+						playDeathSound((*it_enemy)->getType());
 						if ((*it_enemy)->getType() == "upgradebox") {
 							Enemy *pew = new GunUpgrade();
 							pew->init(tilemap, texProgram);
@@ -1280,4 +1275,11 @@ void EnemyManager::checkPhysicsLevel2()
 		}
 
 	}
+}
+
+void EnemyManager::playDeathSound(string type) {
+	if (type == "bosscore") audiomanager->play(BOSS_DEATH_1_AUDIO, false);
+	else if (type == "bridge" || type == "rifleman" || type == "soldier") 
+		audiomanager->play(BRIDGE_EXPLOSION_SOUND, false);
+	else audiomanager->play(ENEMY_DEATH_SOUND, false);
 }

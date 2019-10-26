@@ -98,6 +98,8 @@ private:
 	bool keypressed;
 	bool keyreleased;
 	bool playerShot;
+
+	void playDeathSound(string type);
 };
 
 #endif

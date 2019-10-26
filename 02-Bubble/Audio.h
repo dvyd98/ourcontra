@@ -21,7 +21,7 @@ public:
 
 	void init();
 	void bindAudio(const char* file, int i);
-	void play(int i);
+	void play(int i, bool loop);
 	void stopAllSounds();
 
 private:

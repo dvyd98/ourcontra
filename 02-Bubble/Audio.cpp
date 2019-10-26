@@ -27,7 +27,7 @@ void Audio::init()
 	bindAudio("music/BaseBoss.mp3", BASEBOSS_MUSIC);
 	bindAudio("music/Boss death 1.wav", BOSS_DEATH_1_AUDIO);
 	bindAudio("music/Boss death 2.wav", BOSS_DEATH_2_AUDIO);
-	bindAudio("music/Bridge explision effect.wav", BRIDGE_EXPLOSION_SOUND);
+	bindAudio("music/Bridge explosion effect.wav", BRIDGE_EXPLOSION_SOUND);
 	bindAudio("music/Death.wav", DEATH_SOUND);
 	bindAudio("music/Enemy death.wav", ENEMY_DEATH_SOUND);
 	bindAudio("music/Laser touch.wav", LASER_TOUCH_SOUND);
@@ -40,8 +40,8 @@ void Audio::bindAudio(const char * file, int i) {
 	sounds[i] = soundEngine->addSoundSourceFromFile(file);
 }
 
-void Audio::play(int i) {
-	soundEngine->play2D(sounds[i]);
+void Audio::play(int i, bool loop) {
+	soundEngine->play2D(sounds[i], loop);
 }
 
 void Audio::stopAllSounds() {

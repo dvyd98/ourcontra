@@ -182,7 +182,8 @@ void Scene::updateLvl2(int deltaTime) {
 
 	life->update(deltaTime, left, right, bottom, top, player->life);
 
-	if (Game::instance().getSpecialKey(GLUT_KEY_UP) && enemymanager->coreDestroyed) {
+	if (enemymanager->coreDestroyed) {
+		map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM1);
 		currentState = LVL2_ANIMATION;
 	}
 	else if (player->life <= 0) {
@@ -210,13 +211,7 @@ void Scene::lvl2AnimationDoor(int deltaTime) {
 	player->update(deltaTime, left, right, bottom, top);
 	if (--lvl2Delay == 0) {
 		if (Game::instance().getSpecialKey(GLUT_KEY_UP) && enemymanager->coreDestroyed) {
-
 			switch (map->getFrame()) {
-			case SLVL1: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM1); break;
-			case SLVL3: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM1); break;
-			case SLVL4: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM1); break;
-			case SLVL5: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM1); break;
-			
 			case ANIM1: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM2); break;
 			case ANIM2: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM3); break;
 			case ANIM3: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM4); break;
@@ -234,7 +229,7 @@ void Scene::lvl2AnimationDoor(int deltaTime) {
 					map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, BOSS); 
 					player->setPosition(glm::vec2(player->getPos().x, 200));
 					audiomanager->stopAllSounds();
-					audiomanager->play(BASEBOSS_MUSIC);
+					audiomanager->play(BASEBOSS_MUSIC, true);
 					break;
 				}
 				}
@@ -257,14 +252,14 @@ void Scene::changeToScene(int scene) {
 		break;
 	}
 	case MENU: {
-		audiomanager->play(TITLE_MUSIC);
+		audiomanager->play(TITLE_MUSIC, true);
 		break;
 	}
 	case LVL1: {
 		map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		initEntitiesLvl1();
 		audiomanager->stopAllSounds();
-		audiomanager->play(STAGE1_MUSIC);
+		audiomanager->play(STAGE1_MUSIC, true);
 		break;
 	}
 	case LVL2: {
@@ -272,7 +267,7 @@ void Scene::changeToScene(int scene) {
 		initEntitiesLvl2();
 		left = 0;
 		right = float(SCREEN_WIDTH - 1) / 2;
-		audiomanager->play(STAGE2_MUSIC);
+		audiomanager->play(STAGE2_MUSIC, true);
 		break;
 	}
 	case GAMEOVER: {
@@ -280,7 +275,7 @@ void Scene::changeToScene(int scene) {
 		left = 0;
 		right = float(SCREEN_WIDTH - 1) / 2;
 		audiomanager->stopAllSounds();
-		audiomanager->play(GAMEOVER_MUSIC);
+		audiomanager->play(GAMEOVER_MUSIC, true);
 		break;
 	}
 	}
@@ -292,7 +287,7 @@ void Scene::godMode() {
 		map = TileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		currentState = MENU;
 		audiomanager->stopAllSounds();
-		audiomanager->play(TITLE_MUSIC);
+		audiomanager->play(TITLE_MUSIC, true);
 	}
 	if (Game::instance().getKey('2')) {
 		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
@@ -300,7 +295,7 @@ void Scene::godMode() {
 		map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		initEntitiesLvl1();
 		audiomanager->stopAllSounds();
-		audiomanager->play(STAGE1_MUSIC);
+		audiomanager->play(STAGE1_MUSIC, true);
 	}
 	if (Game::instance().getKey('3')) {
 		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
@@ -308,14 +303,14 @@ void Scene::godMode() {
 		map = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		initEntitiesLvl2();		
 		audiomanager->stopAllSounds();
-		audiomanager->play(STAGE2_MUSIC);
+		audiomanager->play(STAGE2_MUSIC, true);
 	}
 	if (Game::instance().getKey('0')) {
 		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
 		map = TileMap::createTileMap("levels/gameover.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		currentState = GAMEOVER;
 		audiomanager->stopAllSounds();
-		audiomanager->play(GAMEOVER_MUSIC);
+		audiomanager->play(GAMEOVER_MUSIC, true);
 	}
 	// TODO click posa flag immortal al personatge
 }
@@ -337,13 +332,11 @@ void Scene::render()
 		if (currentState == LVL2) enemymanager->renderLvl2();
 		player->render();
 		life->render();
-		
 	}
 
 	if (currentState == GAMEOVER) {
 		score1Text.render(std::to_string(score1), glm::vec2(10, 10), 32, glm::vec4(1, 1, 1, 1));
 		score1Text.render('s', glm::vec2(10, 10), 32, glm::vec4(1, 1, 1, 1));
-
 	}
 }
 
