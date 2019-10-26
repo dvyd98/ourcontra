@@ -439,7 +439,7 @@ void Player2::update(int deltaTime, float left, float right, float bottom, float
 			}
 		}
 		else if (lvl == 2) {
-			if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
+			if (Game::instance().getKey('a'))
 			{
 				if ((sprite->animation() != LVL2_MOVE_LEFT && !bJumping)) sprite->changeAnimation(LVL2_MOVE_LEFT);
 				posPlayer.x -= 2;
@@ -454,7 +454,7 @@ void Player2::update(int deltaTime, float left, float right, float bottom, float
 					else sprite->changeAnimation(LVL2_IDLE);
 				}
 			}
-			else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
+			else if (Game::instance().getKey('d'))
 			{
 				if ((sprite->animation() != LVL2_MOVE_RIGHT && !bJumping)) sprite->changeAnimation(LVL2_MOVE_RIGHT);
 				posPlayer.x += 2;
@@ -469,7 +469,7 @@ void Player2::update(int deltaTime, float left, float right, float bottom, float
 					else sprite->changeAnimation(LVL2_IDLE);
 				}
 			}
-			else if (Game::instance().getSpecialKey(GLUT_KEY_UP))
+			else if (Game::instance().getKey('w'))
 			{
 				if (coreDestroyed) {
 					if (sprite->animation() != LVL2_FORWARD) sprite->changeAnimation(LVL2_FORWARD);
@@ -479,7 +479,7 @@ void Player2::update(int deltaTime, float left, float right, float bottom, float
 				}
 
 			}
-			else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
+			else if (Game::instance().getKey('s'))
 			{
 				if (bShooting) {
 					if (sprite->animation() != LVL2_CROUCH_SHOOT) sprite->changeAnimation(LVL2_CROUCH_SHOOT);

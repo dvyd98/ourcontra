@@ -34,7 +34,7 @@ public:
 	~EnemyManager();
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, TileMap *tileMap, Player *p1, Player2 *p2
 		);
-	void initLvl2(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, TileMap *tileMap, Player *p1
+	void initLvl2(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, TileMap *tileMap, Player *p1, Player2 *p2
 	);
 	void update(int deltaTime, float left, float right, float bottom, float top);
 	void updateLvl2(int deltaTime, float left, float right, float bottom, float top);
@@ -47,6 +47,7 @@ public:
 	void spawnProjectilePlayer(glm::ivec2 position);
 	void spawnProjectilePlayer2(glm::ivec2 position);
 	void spawnProjectilePlayerLVL2(glm::ivec2 position);
+	void spawnProjectilePlayer2LVL2(glm::ivec2 position);
 	void spawnProjectileSPREADPlayer(glm::ivec2 position);
 	void spawnProjectileSPREADPlayer2(glm::ivec2 position);
 	void spawnProjectileRifleman(glm::ivec2 position, Rifleman* badguy);

@@ -179,7 +179,7 @@ void Scene::updateLvl1(int deltaTime) {
 
 void Scene::updateLvl2(int deltaTime) {
 	player->update(deltaTime, left, right, bottom, top);
-
+	if (_2Playermode) player2->update(deltaTime, left, right, bottom, top);
 	enemymanager->updateLvl2(deltaTime, left, right, bottom, top);
 
 	life->update(deltaTime, left, right, bottom, top, player->life);
@@ -211,8 +211,9 @@ void Scene::updateGameover(int deltaTime) {
 
 void Scene::lvl2AnimationDoor(int deltaTime) {
 	player->update(deltaTime, left, right, bottom, top);
+	player2->update(deltaTime, left, right, bottom, top);
 	if (--lvl2Delay == 0) {
-		if (Game::instance().getSpecialKey(GLUT_KEY_UP) && enemymanager->coreDestroyed) {
+		if (Game::instance().getSpecialKey(GLUT_KEY_UP) || Game::instance().getKey('w') && enemymanager->coreDestroyed) {
 			switch (map->getFrame()) {
 			case ANIM1: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM2); break;
 			case ANIM2: map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM3); break;
@@ -221,6 +222,7 @@ void Scene::lvl2AnimationDoor(int deltaTime) {
 				enemymanager->setSublvl(enemymanager->getSublvl() + 1);
 				enemymanager->coreDestroyed = false;
 				player->coreDestroyed = false;
+				if (_2Playermode) player2->coreDestroyed = false;
 				switch (enemymanager->getSublvl()) {
 				case 0:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, SLVL1); break;
 				case 1:  map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, SLVL1); break;
@@ -363,11 +365,13 @@ void Scene::initEntitiesLvl1() {
 
 	enemymanager = new EnemyManager(audiomanager);
 	enemymanager->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, map, player, player2);
+	enemymanager->_2Playermode = _2Playermode;
 
 }
 
 void Scene::initEntitiesLvl2() {
 	player = new Player();
+	player2 = new Player2();
 	life = new Life();
 	life->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	life->setPosition(glm::vec2(3 * map->getTileSize(), 0 * map->getTileSize()));
@@ -377,8 +381,14 @@ void Scene::initEntitiesLvl2() {
 	player->setPosition(glm::vec2(128, 124));
 	player->setTileMap(map);
 
+	if (_2Playermode) {
+		player2->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		player2->setPosition(glm::vec2(128, 124));
+		player2->setTileMap(map);
+	}
+
 	enemymanager = new EnemyManager(audiomanager);
-	enemymanager->initLvl2(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, map, player);
+	enemymanager->initLvl2(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, map, player, player2);
 }
 
 void Scene::initShaders()
