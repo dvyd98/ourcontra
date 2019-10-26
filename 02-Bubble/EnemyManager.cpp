@@ -300,7 +300,7 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 		keyreleased = true;
 		playerShot = false;
 	}
-	if (keypressed && !playerShot) {
+	if (keypressed && !playerShot && player->state == ALIVE) {
 		if (player->projectile == RANK1) {
 			if (projlist->size() < 4) {
 				playerShot = true;
@@ -348,7 +348,7 @@ void EnemyManager::updateLvl2(int deltaTime, float leftt, float rightt, float bo
 	if (soldierCd > 0) --soldierCd;
 	else if (sublvl < 5) {
 		spawnGreenSoldiers();
-		soldierCd = 30;
+		soldierCd = 60;
 	}
 	if (sublvl < 5) {
 		if (isLaserSpawned != sublvl) {
@@ -356,7 +356,10 @@ void EnemyManager::updateLvl2(int deltaTime, float leftt, float rightt, float bo
 			spawnLaser();
 		}
 	}
-	if (sublvl == 5) player->lvl = 1;
+	if (sublvl == 5) {
+		player->lvl = 1;
+		player->lvl2boss = true;
+	}
 	despawnDeadEnemies();
 	checkPhysicsLevel2(); // coctel
 
@@ -389,10 +392,21 @@ void EnemyManager::updateLvl2(int deltaTime, float leftt, float rightt, float bo
 		}
 	}
 	if (Game::instance().getKey('a')) {
+		keypressed = true;
+		keyreleased = false;
+	}
+	else {
+		keypressed = false;
+		keyreleased = true;
+		playerShot = false;
+	}
+	if (keypressed && !playerShot && player->state == ALIVE) {
 		if (player->projectile == RANK1) {
-			if (projlist->size() < 4)
+			if (projlist->size() < 4) {
+				playerShot = true;
 				if (sublvl < 5) spawnProjectilePlayerLVL2(player->getPos());
 				else spawnProjectilePlayer(player->getPos());
+			}
 		}
 	}
 	list<Projectile>::iterator it;
@@ -502,7 +516,7 @@ bool EnemyManager::isOffScreenY(Enemy &pj)
 void EnemyManager::spawnProjectilePlayer(glm::ivec2 position)
 {
 	projectile = new Projectile();
-	glm::ivec2 newPos;
+	glm::ivec2 newPos = glm::ivec2{ 1,0 };
 	int dir = player->sprite->animation();
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_UP)) newPos = glm::ivec2{ -1,-1 };
 	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_UP)) newPos = glm::ivec2{ 1,-1 };

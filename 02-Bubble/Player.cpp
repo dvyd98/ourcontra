@@ -45,6 +45,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	bShooting = false;
 	bWater = false;
 	coreDestroyed = false;
+	lvl2boss = false;
 	lookingTo = LOOKING_RIGHT;
 	life = 99;
 	frameCount = 120;
@@ -432,7 +433,8 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 					sprite->changeAnimation(STAND_LEFT);
 				else if (sprite->animation() == AIRBONE_RIGHT && !bJumping)
 					sprite->changeAnimation(STAND_RIGHT);
-				else sprite->changeAnimation(STAND_RIGHT);
+				else if (sprite->animation() == ANIM_DEAD) 
+					sprite->changeAnimation(STAND_RIGHT);
 
 			}
 		}
@@ -543,7 +545,7 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 		}
 	}
 	else if (state == DYING) {
-		if (lvl == 1) {
+		if (lvl == 1 && lvl2boss == false) {
 			if (frameCount > 0) {
 				if (sprite->animation() != ANIM_DYING && sprite->animation() != ANIM_DEAD) sprite->changeAnimation(ANIM_DYING);
 				else if (lastKeyframe != 0 && sprite->keyframe() == 0) {
@@ -552,22 +554,23 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 				if (rolldistance > 0) {
 					--rolldistance;
 					posPlayer.x -= 1;
-					posPlayer.y += 1;
 					if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 58), &posPlayer.y, false))
 					{
 						posPlayer.y -= 1;
 					}
-					if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58), &posPlayer.y))
-					{
-						posPlayer.x += 1;
-					}
+					
+				}
+				posPlayer.y += 1;
+				if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58), &posPlayer.y))
+				{
+					posPlayer.x += 1;
 				}
 				lastKeyframe = sprite->keyframe();
 				--frameCount;
 			}
 			else if (frameCount == 0) state = DEAD;
 		}
-		else if (lvl == 2) {
+		else if (lvl == 2 || lvl2boss) {
 			if (frameCount > 0) {
 				if (sprite->animation() != LVL2_ANIM_DYING && sprite->animation() != LVL2_ANIM_DEAD) sprite->changeAnimation(LVL2_ANIM_DYING);
 				else if (lastKeyframe != 0 && sprite->keyframe() == 0) {
@@ -576,13 +579,10 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 				if (frameCount > 110) {
 					posPlayer.y -= 2;
 				}
-				else if (rolldistance > 20) {
-					--rolldistance;
-					posPlayer.y += 1;
-					if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 58), &posPlayer.y, false))
-					{
-						posPlayer.y -= 1;
-					}
+				posPlayer.y += 1;
+				if (posPlayer.y > 140)
+				{
+					posPlayer.y -= 1;
 				}
 				lastKeyframe = sprite->keyframe();
 				--frameCount;
@@ -592,7 +592,8 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 	}
 	else if (state == DEAD) {
 		frameCount = 120;
-		if (lvl == 1) {
+		projectile = RANK1;
+		if (lvl == 1 && lvl2boss == false) {
 			rolldistance = 40;
 			posPlayer.y = top + 20;
 			posPlayer.x = left + 20;
@@ -601,6 +602,14 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 			invtimer = 120;
 		}
 		else if (lvl == 2) {
+			rolldistance = 40;
+			posPlayer.y = top + 60;
+			posPlayer.x = left + 80;
+			state = ALIVE;
+			life -= 1;
+			invtimer = 120;
+		}
+		else if (lvl2boss) {
 			rolldistance = 40;
 			posPlayer.y = top + 60;
 			posPlayer.x = left + 80;

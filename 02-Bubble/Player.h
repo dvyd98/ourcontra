@@ -47,6 +47,7 @@ public:
 	bool bWater;
 	bool justLanded;
 	bool coreDestroyed;
+	bool lvl2boss;
 	glm::ivec2 posPlayer;
 	Sprite *sprite;
 	
