@@ -64,6 +64,9 @@ void Scene::init()
 
 	score1 = score2 = 0;
 	
+	if (!score1Text.init("fonts/OpenSans-Regular.ttf"))
+		_RPT0(0, "falla el init");
+
 	audiomanager = new Audio();
 }
 
