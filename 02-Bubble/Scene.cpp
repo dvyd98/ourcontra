@@ -255,7 +255,7 @@ void Scene::updateGameover(int deltaTime) {
 
 void Scene::lvl2AnimationDoor(int deltaTime) {
 	player->update(deltaTime, left, right, bottom, top);
-	player2->update(deltaTime, left, right, bottom, top);
+	if (_2Playermode) player2->update(deltaTime, left, right, bottom, top);
 	if (--lvl2Delay == 0) {
 		if (Game::instance().getSpecialKey(GLUT_KEY_UP) || Game::instance().getKey('w') && enemymanager->coreDestroyed) {
 			switch (map->getFrame()) {
