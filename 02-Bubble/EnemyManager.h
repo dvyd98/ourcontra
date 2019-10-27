@@ -61,6 +61,7 @@ public:
 	void spawnProjectileCannon(glm::ivec2 position, Cannon* badguy);
 	void updatePlayerState();
 	void updatePlayer2State();
+	void spawnNormalSoldiers();
 	void spawnGreenSoldiers();
 	void spawnLaser();
 	void despawnOffScreenProjectiles();
@@ -102,6 +103,7 @@ private:
 	int sublvl;
 	int nDestroyed;
 	int soldierCd;
+	int spawnCd;
 	int isLaserSpawned;
 
 	bool keypressed;

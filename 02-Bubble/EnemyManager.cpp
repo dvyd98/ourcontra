@@ -49,6 +49,7 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 	keypressed = false;
 	keyreleased = true;
 	playerShot = false;
+	spawnCd = 120;
 	int n = map->getNumEnemies();
 	enemies = new list<Enemy*>();
 	projlist = new list<Projectile>();
@@ -284,8 +285,12 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 	right = rightt;
 	bottom = bottomm;
 	top = topp;
-
 	despawnOffScreenEnemies();
+	if (spawnCd > 0) --spawnCd;
+	else if (!player->bJumping) {
+		spawnNormalSoldiers();
+		spawnCd = 120;
+	}
 	despawnDeadEnemies();
 	didthePlayerFuckingFall();
 	checkPhysics(); // coctel
@@ -293,7 +298,8 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 	list<Enemy*>::iterator it_enemy;
 	for (it_enemy = enemies->begin(); it_enemy != enemies->end(); ++it_enemy) {
 		vector <glm::ivec2> box = (*it_enemy)->buildHitBox();
-		if (!isOffScreen(box[0]) || !isOffScreen(box[1])) {
+		if ((*it_enemy)->getType() == "soldier") (*it_enemy)->update(deltaTime);
+		else if (!isOffScreen(box[0]) || !isOffScreen(box[1])) {
 			if ((*it_enemy)->state == ALIVE && (*it_enemy)->getType() == "rifleman" && projlistRifleman->size() < 4 && (rand() % 2)) {
 				Rifleman* rifleguy = dynamic_cast<Rifleman*>(*it_enemy);
 				spawnProjectileRifleman(player->getPos(), rifleguy);
@@ -603,7 +609,7 @@ bool EnemyManager::isOffScreenLevel2Enemy(glm::ivec2 pj)
 bool EnemyManager::isOffScreenY(Enemy &pj)
 {
 	vector <glm::ivec2> box = pj.buildHitBox();
-	if ((box[0].y < top || box[0].y > bottom) && (box[1].y < top || box[1].y > bottom)) return true;
+	if ((box[0].y < top || box[1].y > bottom) && (box[1].y < top || box[1].y > bottom)) return true;
 	return false;
 }
 
@@ -1126,6 +1132,17 @@ void EnemyManager::spawnProjectileBoss2Final(glm::ivec2 positionPlayer, Boss2Fin
 		projectileBoss2->setTileMap(map);
 		projlistBoss2Final->push_back(*(projectileBoss2));
 	}
+}
+
+void EnemyManager::spawnNormalSoldiers()
+{
+	Soldier *aux = new Soldier();
+	aux->init(tilemap, texProgram);
+	aux->setTileMap(map);
+	aux->sublvl = sublvl;
+	aux->lookingTo = 0;
+	aux->setPosition(glm::ivec2{ right + 15, player->getPos().y });
+	enemies->push_back(aux);
 }
 
 void EnemyManager::spawnGreenSoldiers()

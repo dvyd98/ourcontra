@@ -29,6 +29,7 @@ public:
 	int frameCount;
 	int lastKeyframe;
 	int sublvl;
+	int lookingTo;
 	int getSublvl() { return sublvl; }
 	void setSublvl(int x) { sublvl = x; }
 
@@ -37,7 +38,6 @@ protected:
 	
 	string type;
 	bool bJumping;
-	int lookingTo;
 	glm::ivec2 tileMapDispl, posEnemy;
 	int jumpAngle, startY;
 	Texture spritesheet;

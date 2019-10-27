@@ -45,6 +45,7 @@ public:
 	int lastKeyframe;
 	bool bBridge;
 	bool bWater;
+	bool bJumping;
 	bool justLanded;
 	bool coreDestroyed;
 	bool lvl2boss;
@@ -52,7 +53,7 @@ public:
 	Sprite *sprite;
 	
 private:
-	bool bJumping;
+
 	bool bShooting;
 	bool wasShooting;
 	
