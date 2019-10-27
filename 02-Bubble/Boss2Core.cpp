@@ -26,7 +26,7 @@ void Boss2Core::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	type = "boss2core";
 	state = ALIVE;
-	life = 30;
+	life = 10;
 	frameCount = 180;
 	spritesheet.loadFromFile("images/Boss2Core.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);

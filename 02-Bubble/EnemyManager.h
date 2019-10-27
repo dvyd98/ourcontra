@@ -76,6 +76,7 @@ public:
 
 	bool coreDestroyed;
 	bool _2Playermode;
+	bool godmode;
 	list<Enemy*> *enemies;
 	TileMap *map;
 	Projectile *projectile;

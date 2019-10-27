@@ -10,7 +10,6 @@
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
 #define GLUT_KEY_SPACEBAR 32
-#define PLAYER_VEL 2
 
 enum States
 {
@@ -87,13 +86,24 @@ void Soldier::update(int deltaTime)
 {
 	sprite->update(deltaTime);
 	if (state == ALIVE) {
+		posEnemy.y += FALL_STEP;
 		if (lookingTo == LOOKING_LEFT) {
-			posEnemy.x -= 2;
+			posEnemy.x -= PLAYER_VEL;
 			if (sprite->animation() != MOVE_LEFT) sprite->changeAnimation(MOVE_LEFT);
+			if (!map->collisionMoveDownSoldier(posEnemy, glm::ivec2(16, 26) + glm::ivec2{ 8,0 }, &posEnemy.y)) {
+				lookingTo = LOOKING_RIGHT;
+				posEnemy.x += PLAYER_VEL;
+				posEnemy.y -= FALL_STEP;
+			}
 		}
 		else {
-			posEnemy.x += 2;
+			posEnemy.x += PLAYER_VEL;
 			if (sprite->animation() != MOVE_RIGHT) sprite->changeAnimation(MOVE_RIGHT);
+			if (!map->collisionMoveDownSoldier(posEnemy, glm::ivec2(16, 26) + glm::ivec2{ 8,0 }, &posEnemy.y)) {
+				lookingTo = LOOKING_LEFT;
+				posEnemy.x -= PLAYER_VEL;
+				posEnemy.y -= FALL_STEP;
+			}
 		}
 		if (bJumping) // lookingTo es una variable que sactualitza segons si el player mira left or right, l'utilitzo per estalviar mirar cada sprite individualment si es left or right
 		{
@@ -106,18 +116,9 @@ void Soldier::update(int deltaTime)
 
 		}
 		posEnemy.y += FALL_STEP;
-		if (!map->collisionMoveDown(posEnemy, glm::ivec2(16, 26) + glm::ivec2{ 8,0 }, &posEnemy.y, false)) {
-			if (lookingTo == LOOKING_LEFT) {
-				lookingTo = LOOKING_RIGHT;
-				posEnemy.x += 2;
-			}
-			else {
-				lookingTo = LOOKING_LEFT;
-				posEnemy.x -= 2;
-			}
-
+		if (map->collisionMoveDownSoldier(posEnemy, glm::ivec2(16, 26) + glm::ivec2{ 8,0 }, &posEnemy.y)) {
+			posEnemy.y -= FALL_STEP;
 		}
-		posEnemy.y -= FALL_STEP;
 		if (false) {}
 		else {
 			if (sprite->animation() == AIRBONE_LEFT && !bJumping)
@@ -138,13 +139,13 @@ void Soldier::update(int deltaTime)
 			{
 				posEnemy.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
 				if (jumpAngle > 90)
-					bJumping = !map->collisionMoveDown(posEnemy + glm::ivec2{ 8,0 }, glm::ivec2(16, 26), &posEnemy.y, false);
+					bJumping = !map->collisionMoveDownSoldier(posEnemy + glm::ivec2{ 8,0 }, glm::ivec2(16, 26), &posEnemy.y);
 			}
 		}
 		else
 		{
 			posEnemy.y += FALL_STEP;
-			if (map->collisionMoveDown(posEnemy + glm::ivec2{ 8,0 }, glm::ivec2(16, 26), &posEnemy.y, false))
+			if (map->collisionMoveDownSoldier(posEnemy + glm::ivec2{ 8,0 }, glm::ivec2(16, 26), &posEnemy.y))
 			{
 				if ((rand() % 1000) == 1) // jump randomly
 				{

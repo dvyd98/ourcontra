@@ -26,7 +26,7 @@ void Boss2Turret::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgra
 {
 	type = "boss2turret";
 	state = ALIVE;
-	life = 30;
+	life = 10;
 	frameCount = 180;
 	openTime = 90;
 	isOpen = false;

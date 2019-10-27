@@ -9,7 +9,6 @@
 #define JUMP_HEIGHT 20
 #define FALL_STEP 4
 #define GLUT_KEY_SPACEBAR 32
-#define PLAYER_VEL 2
 
 enum States
 {

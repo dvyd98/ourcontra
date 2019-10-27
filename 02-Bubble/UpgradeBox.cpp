@@ -5,11 +5,6 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 
-#define JUMP_ANGLE_STEP 4
-#define JUMP_HEIGHT 96
-#define FALL_STEP 4
-#define GLUT_KEY_SPACEBAR 32
-#define PLAYER_VEL 2
 
 enum States
 {

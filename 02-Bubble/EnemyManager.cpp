@@ -1,10 +1,7 @@
 #include "EnemyManager.h"
 #include "Game.h"
 
-#define JUMP_ANGLE_STEP 4
-#define JUMP_HEIGHT 96
-#define FALL_STEP 4
-#define GLUT_KEY_SPACEBAR 32
+
 
 enum PlayerAnims
 {
@@ -153,6 +150,11 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 			enemies->push_back(aux);
 		}
 	}
+	Enemy *aux = new Soldier();
+	aux->init(tilemap, texProgram);
+	aux->setPosition(glm::vec2(5 * map->getTileSize(), 1 * map->getTileSize()));
+	aux->setTileMap(map);
+	enemies->push_back(aux);
 
 }
 
@@ -470,7 +472,7 @@ void EnemyManager::updateLvl2(int deltaTime, float leftt, float rightt, float bo
 				if (projlist2->size() < 4) {
 					playerShot2 = true;
 					if (sublvl < 5) spawnProjectilePlayer2LVL2(player2->getPos());
-					else spawnProjectilePlayer2LVL2(player2->getPos());
+					else spawnProjectilePlayer2(player2->getPos());
 					audiomanager->play(NORMAL_GUN_SOUND, false);
 				}
 			}
@@ -674,7 +676,7 @@ void EnemyManager::spawnProjectilePlayerLVL2(glm::ivec2 position)
 	glm::vec2 vec = glm::ivec2{ 145, 60 } -position;
 	float magnitude = sqrt(vec.x * vec.x + vec.y * vec.y);
 	newPos = glm::vec2{ vec.x / magnitude, vec.y / magnitude };
-	projectile->init(tilemap, texProgram, 6, newPos);
+	projectile->init(tilemap, texProgram, 3, newPos);
 	projectile->rank = RANK1;
 	projectile->setPosition(position + player->getProjectileSpawnlvl2());
 	projectile->setTileMap(map);
@@ -688,7 +690,7 @@ void EnemyManager::spawnProjectilePlayer2LVL2(glm::ivec2 position)
 	glm::vec2 vec = glm::ivec2{ 145, 60 } -position;
 	float magnitude = sqrt(vec.x * vec.x + vec.y * vec.y);
 	newPos = glm::vec2{ vec.x / magnitude, vec.y / magnitude };
-	projectile->init(tilemap, texProgram, 6, newPos);
+	projectile->init(tilemap, texProgram, 3, newPos);
 	projectile->rank = RANK1;
 	projectile->setPosition(position + player2->getProjectileSpawnlvl2());
 	projectile->setTileMap(map);
@@ -794,7 +796,7 @@ void EnemyManager::spawnProjectileSPREADPlayer(glm::ivec2 position)
 	}
 
 	projectile = new Projectile();
-	projectile->init(tilemap, texProgram, 6, newPos);
+	projectile->init(tilemap, texProgram, 4, newPos);
 	projectile->rank = SPREAD;
 	projectile->sprite->changeAnimation(SPREAD);
 	projectile->setPosition(position + player->getProjectileSpawn());
@@ -802,7 +804,7 @@ void EnemyManager::spawnProjectileSPREADPlayer(glm::ivec2 position)
 	projlist->push_back(*(projectile));
 
 	projectile = new Projectile();
-	projectile->init(tilemap, texProgram, 6, newPos2);
+	projectile->init(tilemap, texProgram, 4, newPos2);
 	projectile->rank = SPREAD;
 	projectile->sprite->changeAnimation(SPREAD);
 	projectile->setPosition(position + player->getProjectileSpawn());
@@ -810,7 +812,7 @@ void EnemyManager::spawnProjectileSPREADPlayer(glm::ivec2 position)
 	projlist->push_back(*(projectile));
 
 	projectile = new Projectile();
-	projectile->init(tilemap, texProgram, 6, newPos3);
+	projectile->init(tilemap, texProgram, 4, newPos3);
 	projectile->rank = SPREAD;
 	projectile->sprite->changeAnimation(SPREAD);
 	projectile->setPosition(position + player->getProjectileSpawn());
@@ -818,7 +820,7 @@ void EnemyManager::spawnProjectileSPREADPlayer(glm::ivec2 position)
 	projlist->push_back(*(projectile));
 
 	projectile = new Projectile();
-	projectile->init(tilemap, texProgram, 6, newPos4);
+	projectile->init(tilemap, texProgram, 4, newPos4);
 	projectile->rank = SPREAD;
 	projectile->sprite->changeAnimation(SPREAD);
 	projectile->setPosition(position + player->getProjectileSpawn());
@@ -826,7 +828,7 @@ void EnemyManager::spawnProjectileSPREADPlayer(glm::ivec2 position)
 	projlist->push_back(*(projectile));
 
 	projectile = new Projectile();
-	projectile->init(tilemap, texProgram, 6, newPos5);
+	projectile->init(tilemap, texProgram, 4, newPos5);
 	projectile->rank = SPREAD;
 	projectile->sprite->changeAnimation(SPREAD);
 	projectile->setPosition(position + player->getProjectileSpawn());
@@ -933,7 +935,7 @@ void EnemyManager::spawnProjectileSPREADPlayer2(glm::ivec2 position)
 	}
 
 	projectile = new Projectile();
-	projectile->init(tilemap, texProgram, 6, newPos);
+	projectile->init(tilemap, texProgram, 4, newPos);
 	projectile->rank = SPREAD;
 	projectile->sprite->changeAnimation(SPREAD);
 	projectile->setPosition(position + player->getProjectileSpawn());
@@ -941,7 +943,7 @@ void EnemyManager::spawnProjectileSPREADPlayer2(glm::ivec2 position)
 	projlist2->push_back(*(projectile));
 
 	projectile = new Projectile();
-	projectile->init(tilemap, texProgram, 6, newPos2);
+	projectile->init(tilemap, texProgram, 4, newPos2);
 	projectile->rank = SPREAD;
 	projectile->sprite->changeAnimation(SPREAD);
 	projectile->setPosition(position + player->getProjectileSpawn());
@@ -949,7 +951,7 @@ void EnemyManager::spawnProjectileSPREADPlayer2(glm::ivec2 position)
 	projlist2->push_back(*(projectile));
 
 	projectile = new Projectile();
-	projectile->init(tilemap, texProgram, 6, newPos3);
+	projectile->init(tilemap, texProgram, 4, newPos3);
 	projectile->rank = SPREAD;
 	projectile->sprite->changeAnimation(SPREAD);
 	projectile->setPosition(position + player->getProjectileSpawn());
@@ -957,7 +959,7 @@ void EnemyManager::spawnProjectileSPREADPlayer2(glm::ivec2 position)
 	projlist2->push_back(*(projectile));
 
 	projectile = new Projectile();
-	projectile->init(tilemap, texProgram, 6, newPos4);
+	projectile->init(tilemap, texProgram, 4, newPos4);
 	projectile->rank = SPREAD;
 	projectile->sprite->changeAnimation(SPREAD);
 	projectile->setPosition(position + player->getProjectileSpawn());
@@ -965,7 +967,7 @@ void EnemyManager::spawnProjectileSPREADPlayer2(glm::ivec2 position)
 	projlist2->push_back(*(projectile));
 
 	projectile = new Projectile();
-	projectile->init(tilemap, texProgram, 6, newPos5);
+	projectile->init(tilemap, texProgram, 4, newPos5);
 	projectile->rank = SPREAD;
 	projectile->sprite->changeAnimation(SPREAD);
 	projectile->setPosition(position + player->getProjectileSpawn());
@@ -993,7 +995,7 @@ void EnemyManager::spawnProjectileRifleman(glm::ivec2 position, Rifleman* badguy
 			else newPos = glm::ivec2{ 1,0 };
 		}
 		badguy->projDir = newPos;
-		projectile->init(tilemap, texProgram, 2, newPos);
+		projectile->init(tilemap, texProgram, 1, newPos);
 		projectile->rank = RIFLEMAN;
 		projectile->sprite->changeAnimation(0);
 		projectile->setPosition(posEnemy + badguy->getProjectileSpawn());
@@ -1040,7 +1042,7 @@ void EnemyManager::spawnProjectileWallTurret(glm::ivec2 positionPlayer, WallTurr
 		}
 		badguy->projDir = newPos;
 		projectile = new Projectile();
-		projectile->init(tilemap, texProgram, 2, newPos);
+		projectile->init(tilemap, texProgram, 1, newPos);
 		projectile->rank = RIFLEMAN;
 		projectile->sprite->changeAnimation(0);
 		projectile->setPosition(posEnemy + badguy->getProjectileSpawn());
@@ -1172,7 +1174,7 @@ void EnemyManager::spawnProjectileLevel2Turret(glm::ivec2 positionPlayer, Level2
 		newPos = glm::vec2{ vec.x / magnitude, vec.y / magnitude };
 		badguy->projDir = newPos;
 		projectile = new Projectile();
-		projectile->init(tilemap, texProgram, 2, newPos);
+		projectile->init(tilemap, texProgram, 1, newPos);
 		projectile->sprite->changeAnimation(0);
 		projectile->setPosition(posEnemy + badguy->getProjectileSpawn());
 		projectile->setTileMap(map);
@@ -1222,7 +1224,7 @@ void EnemyManager::spawnProjectileGreenSoldier(glm::ivec2 position, GreenSoldier
 		newPos = glm::vec2{ vec.x / magnitude, vec.y / magnitude };
 		badguy->projDir = newPos;
 		projectile = new Projectile();
-		projectile->init(tilemap, texProgram, 2, newPos);
+		projectile->init(tilemap, texProgram, 1, newPos);
 		projectile->sprite->changeAnimation(0);
 		projectile->setPosition(posEnemy + badguy->getProjectileSpawn());
 		projectile->setTileMap(map);
@@ -1302,6 +1304,10 @@ void EnemyManager::despawnDeadEnemies() {
 				coreDestroyed = true;
 				player->coreDestroyed = true;
 				if (_2Playermode) player2->coreDestroyed = true;
+				projlistLevel2Turret = new list<Projectile>();
+				projlistGreenSoldier = new list<Projectile>();
+				projlist = new list<Projectile>();
+				projlist2 = new list<Projectile>();
 			}
 			it = enemies->erase(it);
 		}
@@ -1330,7 +1336,7 @@ bool EnemyManager::areTouchingYcoord(glm::ivec2 obj1_left, glm::ivec2 obj1_right
 
 void EnemyManager::updatePlayerState()
 {
-	if (player->invtimer == 0 && player->state == ALIVE) {
+	if (player->invtimer == 0 && player->state == ALIVE && !godmode) {
 		player->state = DYING;
 		audiomanager->play(DEATH_SOUND, false);
 	}
@@ -1338,7 +1344,7 @@ void EnemyManager::updatePlayerState()
 
 void EnemyManager::updatePlayer2State()
 {
-	if (player2->invtimer == 0 && player2->state == ALIVE) {
+	if (player2->invtimer == 0 && player2->state == ALIVE && !godmode) {
 		player2->state = DYING;
 		audiomanager->play(DEATH_SOUND, false);
 	}
@@ -1597,6 +1603,7 @@ void EnemyManager::checkPhysicsLevel2()
 						if ((*it_enemy2)->isOpen) {
 							if ((*it_enemy2)->decreaseLife(it_projec2->getDmg())) {
 								(*it_enemy2)->state = DYING;
+								playDeathSound((*it_enemy2)->getType());
 								if ((*it_enemy2)->getType() == "boss2core") ++nDestroyed;
 							}
 						}
@@ -1686,7 +1693,7 @@ void EnemyManager::checkPhysicsLevel2()
 					}
 					else ++it_boss2;
 				}
-				if (shot) it_projec = projlist->erase(it_projec);
+				if (shot) it_projec = projlist2->erase(it_projec);
 				else ++it_projec;
 			}
 		}

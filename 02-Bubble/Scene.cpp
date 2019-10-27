@@ -46,6 +46,7 @@ Scene::~Scene()
 void Scene::init()
 {
 	_2Playermode = true;
+	godmode = true;
 	initShaders();
 	currentState = LOADING_MENU;
 	map = TileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -193,6 +194,7 @@ void Scene::updateLvl1(int deltaTime) {
 			changeToScene(GAMEOVER);
 		}
 	}
+	enemymanager->godmode = godmode;
 	enemymanager->update(deltaTime, left, right, bottom, top);
 	life->update(deltaTime, left, right, bottom, top, player->life);
 
@@ -215,6 +217,7 @@ void Scene::updateLvl2(int deltaTime) {
 			changeToScene(GAMEOVER);
 		}
 	}
+	enemymanager->godmode = godmode;
 	enemymanager->updateLvl2(deltaTime, left, right, bottom, top);
 
 	life->update(deltaTime, left, right, bottom, top, player->life);
@@ -314,6 +317,7 @@ void Scene::changeToScene(int scene) {
 		initEntitiesLvl2();
 		left = 0;
 		right = float(SCREEN_WIDTH - 1) / 2;
+		audiomanager->stopAllSounds();
 		audiomanager->play(STAGE2_MUSIC, true);
 		break;
 	}
@@ -368,6 +372,9 @@ void Scene::godMode() {
 		currentState = GAMEOVER;
 		audiomanager->stopAllSounds();
 		audiomanager->play(GAMEOVER_MUSIC, true);
+	}
+	if (Game::instance().getKey('9')) {
+		godmode = !godmode;
 	}
 }
 

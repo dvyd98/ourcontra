@@ -28,7 +28,7 @@ void GreenSoldier::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 	state = ALIVE;
 	life = 1;
 	frameCount = 0;
-	projectileCd = 90;
+	projectileCd =100;
 	moveCd = 30;
 	move = false;
 	hurt = false;
@@ -84,7 +84,7 @@ void GreenSoldier::update(int deltaTime)
 		if (hasShot) {
 			if (projectileCd > 0) --projectileCd;
 			if (projectileCd == 0) {
-				projectileCd = 90;
+				projectileCd = 100;
 				hasShot = false;
 			}
 		}

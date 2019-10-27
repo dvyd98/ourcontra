@@ -26,7 +26,7 @@ void Level2Core::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram
 {
 	type = "level2core";
 	state = ALIVE;
-	life = 30;
+	life = 15;
 	frameCount = 150;
 	isOpen = false;
 	spritesheet.loadFromFile("images/Level2Core.png", TEXTURE_PIXEL_FORMAT_RGBA);

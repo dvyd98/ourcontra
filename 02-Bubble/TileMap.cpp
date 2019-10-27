@@ -507,6 +507,29 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	return false;
 }
 
+bool TileMap::collisionMoveDownSoldier(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const
+{
+	int x0, x1, y;
+
+	x0 = pos.x / tileSize.x;
+	x1 = (pos.x + size.x - 1) / tileSize.x;
+	y = (pos.y + size.y - 1) / tileSize.y;
+	for (int x = x0; x <= x1; x++)
+	{
+		if (map[y*mapSize.x + x] == GRASS1 ||
+			map[y*mapSize.x + x] == GRASS2)
+		{
+			if (*posY - tileSize.y * y + size.y <= 4)
+			{
+				*posY = tileSize.y * y - size.y;
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 bool TileMap::isSwimming(const glm::ivec2 &pos, const glm::ivec2 &size) {
 	int x0, x1, y;
 

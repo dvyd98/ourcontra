@@ -73,6 +73,8 @@ private:
 
 	bool _2Playermode;
 
+	bool godmode;
+
 	int score1, score2;
 	Text score1Text, score2Text;
 

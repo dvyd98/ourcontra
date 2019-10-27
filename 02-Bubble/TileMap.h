@@ -63,6 +63,7 @@ public:
 	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
 	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY, bool bBridge) const;
+	bool collisionMoveDownSoldier(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
 
 	// funcions de menu
 	void toggleFrame(const glm::vec2 &minCoords, ShaderProgram &program, int frame);

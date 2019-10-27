@@ -6,8 +6,8 @@
 #include "Game.h"
 
 
-#define JUMP_ANGLE_STEP 4
-#define JUMP_HEIGHT 96
+#define JUMP_ANGLE_STEP 3
+#define JUMP_HEIGHT 75
 #define JUMP_HEIGHT_2 60
 #define FALL_STEP 4
 #define GLUT_KEY_SPACEBAR 32
@@ -258,11 +258,11 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 					if (bWater) sprite->changeAnimation(SWIM_AIM_UPLEFT);
 					else sprite->changeAnimation(AIM_UP_WALK_LEFT);
 				}
-				posPlayer.x -= 2;
+				posPlayer.x -= PLAYER_VEL;
 				lookingTo = LOOKING_LEFT;
 				if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58), &posPlayer.y) || posPlayer.x - 2 <= left)
 				{
-					posPlayer.x += 2;
+					posPlayer.x += PLAYER_VEL;
 					if (bJumping) {
 						if (sprite->animation() != AIRBONE_LEFT)
 							sprite->changeAnimation(AIRBONE_LEFT);
@@ -277,11 +277,11 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 					if (bWater) sprite->changeAnimation(SWIM_AIM_UPRIGHT);
 					else sprite->changeAnimation(AIM_UP_WALK_RIGHT);
 				}
-				posPlayer.x += 2;
+				posPlayer.x += PLAYER_VEL;
 				lookingTo = LOOKING_RIGHT;
 				if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58), &posPlayer.y))
 				{
-					posPlayer.x -= 2;
+					posPlayer.x -= PLAYER_VEL;
 					sprite->changeAnimation(STAND_RIGHT);
 				}
 			}
@@ -292,11 +292,11 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 				else if (bWater && sprite->animation() != SWIM_LEFT) {
 					sprite->changeAnimation(SWIM_LEFT);
 				}
-				posPlayer.x -= 2;
+				posPlayer.x -= PLAYER_VEL;
 				lookingTo = LOOKING_LEFT;
 				if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58), &posPlayer.y) || posPlayer.x - 2 <= left)
 				{
-					posPlayer.x += 2;
+					posPlayer.x += PLAYER_VEL;
 					if (bJumping) {
 						if (sprite->animation() != AIRBONE_LEFT)
 							sprite->changeAnimation(AIRBONE_LEFT);
@@ -312,11 +312,11 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 				else if (bWater && sprite->animation() != SWIM_RIGHT) {
 					sprite->changeAnimation(SWIM_RIGHT);
 				}
-				posPlayer.x += 2;
+				posPlayer.x += PLAYER_VEL;
 				lookingTo = LOOKING_RIGHT;
 				if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58), &posPlayer.y))
 				{
-					posPlayer.x -= 2;
+					posPlayer.x -= PLAYER_VEL;
 					sprite->changeAnimation(STAND_RIGHT);
 				}
 			}
@@ -332,11 +332,11 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 							if (sprite->animation() != SWIM_LEFT) sprite->changeAnimation(SWIM_LEFT);
 						}
 						else sprite->changeAnimation(MOVE_LEFT);
-						posPlayer.x -= 2;
+						posPlayer.x -= PLAYER_VEL;
 						lookingTo = LOOKING_LEFT;
 						if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58), &posPlayer.y) || posPlayer.x - 2 <= left)
 						{
-							posPlayer.x += 2;
+							posPlayer.x += PLAYER_VEL;
 							if (bJumping) {
 								if (sprite->animation() != AIRBONE_LEFT)
 									sprite->changeAnimation(AIRBONE_LEFT);
@@ -357,11 +357,11 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 							if (sprite->animation() != SWIM_RIGHT) sprite->changeAnimation(SWIM_RIGHT);
 						}
 						else sprite->changeAnimation(MOVE_RIGHT);
-						posPlayer.x += 2;
+						posPlayer.x += PLAYER_VEL;
 						lookingTo = LOOKING_RIGHT;
 						if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 58), &posPlayer.y))
 						{
-							posPlayer.x -= 2;
+							posPlayer.x -= PLAYER_VEL;
 							if (!bWater) sprite->changeAnimation(STAND_RIGHT);
 							else sprite->changeAnimation(SWIM_RIGHT);
 						}
@@ -442,11 +442,11 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 			if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 			{
 				if ((sprite->animation() != LVL2_MOVE_LEFT && !bJumping)) sprite->changeAnimation(LVL2_MOVE_LEFT);
-				posPlayer.x -= 2;
+				posPlayer.x -= PLAYER_VEL;
 				lookingTo = LOOKING_LEFT;
 				if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 58), &posPlayer.y) || posPlayer.x - 2 <= left)
 				{
-					posPlayer.x += 2;
+					posPlayer.x += PLAYER_VEL;
 					if (bJumping) {
 						if (sprite->animation() != AIRBONE_LEFT)
 							sprite->changeAnimation(AIRBONE_LEFT);
@@ -457,11 +457,11 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 			else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 			{
 				if ((sprite->animation() != LVL2_MOVE_RIGHT && !bJumping)) sprite->changeAnimation(LVL2_MOVE_RIGHT);
-				posPlayer.x += 2;
+				posPlayer.x += PLAYER_VEL;
 				lookingTo = LOOKING_RIGHT;
 				if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 58), &posPlayer.y))
 				{
-					posPlayer.x -= 2;
+					posPlayer.x -= PLAYER_VEL;
 					if (bJumping) {
 						if (sprite->animation() != AIRBONE_RIGHT)
 							sprite->changeAnimation(AIRBONE_RIGHT);
@@ -498,6 +498,8 @@ void Player::update(int deltaTime, float left, float right, float bottom, float 
 				else if (sprite->animation() == AIRBONE_RIGHT && !bJumping)
 					sprite->changeAnimation(LVL2_IDLE);
 				else if (sprite->animation() == LVL2_ANIM_DEAD)
+					sprite->changeAnimation(LVL2_IDLE);
+				else if (sprite->animation() == LVL2_FORWARD)
 					sprite->changeAnimation(LVL2_IDLE);
 			}
 			
