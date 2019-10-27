@@ -1321,8 +1321,8 @@ void EnemyManager::despawnDeadEnemies() {
 				coreDestroyed = true;
 				player->coreDestroyed = true;
 				if (_2Playermode) player2->coreDestroyed = true;
-				projlistLevel2Turret = new list<Projectile>();
-				projlistGreenSoldier = new list<Projectile>();
+				projlistLevel2Turret->clear();
+				projlistGreenSoldier->clear();
 			}
 			it = enemies->erase(it);
 		}
