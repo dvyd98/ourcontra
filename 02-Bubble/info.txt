@@ -1,0 +1,45 @@
+Integrants del grup:
+
+David Agut
+Paula Zhao
+
+Funcionalitats implementades:
+
+· Pantalles:
+	- Menu principal
+	- How to play
+	- Credits
+	- Stage 1 del contra
+	- Stage 2 del contra
+
+· Implementacions Base:
+	- Tots els SFX i música de fons
+	- Animacions de les entitats dinàmiques
+	- La movilitat dels jugadors del Contra (moures, mirar i disparar, baixar de plataformes)
+	- L'scroll lateral del Stage 1
+	- Els enemics del Stage 1.
+	- Upgrades boxes que sempre fan drop de la Spread Gun
+	- Boss Stage 1
+	- Stage 2 amb la visió frontal
+	- La majoria d'enemics del Stage 2
+	- Boss Stage 2
+	- L'animació de transició de cada subnivell del Stage 2
+
+· Implementacions adicionals:
+	- Jugabilitat de dos jugadors
+	- Pausa clicant la 'P'
+
+Com jugar:
+	Select amb , 
+	Start amb .
+
+	Jugador 1:
+		Moures - Fletxes
+		Saltar - L
+		Disparar - K
+
+	Jugador 2:
+		Moures - wasd
+		Saltar - H
+		Disparar - G
+
