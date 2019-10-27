@@ -117,7 +117,7 @@ void Scene::update(int deltaTime)
 				else if (map->getFrame() == MENU_HOW_TO_PLAY)
 					changeToScene(HOW_TO);
 				else if (map->getFrame() == MENU_CREDITS)
-					changeToScene(MENU_CREDITS);
+					changeToScene(CREDITS);
 			}
 			break;
 		}
