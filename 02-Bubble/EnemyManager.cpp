@@ -287,7 +287,7 @@ void EnemyManager::update(int deltaTime, float leftt, float rightt, float bottom
 	top = topp;
 	despawnOffScreenEnemies();
 	if (spawnCd > 0) --spawnCd;
-	else if (!player->bJumping) {
+	else if (!player->bJumping && enemies->size() < 60) {
 		spawnNormalSoldiers();
 		spawnCd = 120;
 	}
