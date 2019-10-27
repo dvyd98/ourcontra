@@ -1306,10 +1306,10 @@ void EnemyManager::despawnOffScreenEnemies() {
 
 void EnemyManager::didthePlayerFuckingFall() {
 	vector <glm::ivec2> box = player->buildHitBox();
-	if (box[0].y > bottom) updatePlayerState();
+	if (box[1].y > bottom) updatePlayerState();
 	if (_2Playermode) {
 		vector <glm::ivec2> box2 = player2->buildHitBox();
-		if (box2[0].y > bottom) updatePlayer2State();
+		if (box2[1].y > bottom) updatePlayer2State();
 	}
 }
 
@@ -1323,8 +1323,6 @@ void EnemyManager::despawnDeadEnemies() {
 				if (_2Playermode) player2->coreDestroyed = true;
 				projlistLevel2Turret = new list<Projectile>();
 				projlistGreenSoldier = new list<Projectile>();
-				projlist = new list<Projectile>();
-				projlist2 = new list<Projectile>();
 			}
 			it = enemies->erase(it);
 		}
