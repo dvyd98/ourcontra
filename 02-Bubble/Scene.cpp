@@ -187,8 +187,6 @@ void Scene::updateLvl1(int deltaTime) {
 		left += PLAYER_VEL;
 	}
 	player->update(deltaTime, left, right, bottom, top);
-	enemymanager->godmode = godmode;
-	enemymanager->update(deltaTime, left, right, bottom, top);
 	life->update(deltaTime, left, right, bottom, top, player->life);
 	if (_2Playermode) {
 		player2->update(deltaTime, left, right, bottom, top);
@@ -204,6 +202,7 @@ void Scene::updateLvl1(int deltaTime) {
 			changeToScene(LVL2);
 		}
 	}
+
 	else if (player->life <= 0) {
 		changeToScene(GAMEOVER);
 	}
@@ -211,6 +210,8 @@ void Scene::updateLvl1(int deltaTime) {
 	else if (player->getPos().x + 20 >= map->getMapSize().x * map->getTileSize()) {
 		changeToScene(LVL2);
 	}
+	enemymanager->godmode = godmode;
+	enemymanager->update(deltaTime, left, right, bottom, top);
 }
 
 void Scene::updateLvl2(int deltaTime) {

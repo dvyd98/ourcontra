@@ -9,7 +9,7 @@ enum PlayerAnims
 	CROUCH_LOOK_RIGHT, AIM_UP_WALK_RIGHT, AIM_UP_WALK_LEFT, AIM_DOWN_WALK_RIGHT, AIM_DOWN_WALK_LEFT, AIRBONE_LEFT, AIRBONE_RIGHT,
 	DROPPED, UNDERWATER, SWIM_LEFT, SWIM_RIGHT, SWIM_AIM_LEFT, SWIM_AIM_RIGHT, SWIM_AIM_UPRIGHT, SWIM_AIM_UPLEFT, SWIM_AIM_UP_LOOK_LEFT, SWIM_AIM_UP_LOOK_RIGHT,
 	ANIM_DYING, ANIM_DEAD, LVL2_ANIM_DYING,
-	LVL2_IDLE, LVL2_IDLE_SHOOT, LVL2_CROUCH, LVL2_CROUCH_SHOOT, LVL2_FORWARD, LVL2_MOVE_LEFT, LVL2_MOVE_RIGHT, LVL2_ZAP
+	LVL2_IDLE, LVL2_IDLE_SHOOT, LVL2_CROUCH, LVL2_CROUCH_SHOOT, LVL2_FORWARD, LVL2_MOVE_LEFT, LVL2_MOVE_RIGHT, LVL2_ZAP, LVL2_ANIM_DEAD
 
 };
 
@@ -924,14 +924,14 @@ void EnemyManager::spawnProjectileSPREADPlayer2(glm::ivec2 position)
 		}
 	}
 	else {
-		if (dir == STAND_LEFT || dir == AIRBONE_LEFT || dir == SWIM_AIM_LEFT || dir == DROPPED) {
+		if (dir == STAND_LEFT || dir == AIRBONE_LEFT || dir == SWIM_AIM_LEFT || dir == DROPPED ) {
 			newPos = glm::vec2{ -1,0 };
 			newPos2 = glm::vec2{ -1,0.15 };
 			newPos3 = glm::vec2{ -1,0.30 };
 			newPos4 = glm::vec2{ -1,-0.15 };
 			newPos5 = glm::vec2{ -1,-0.30 };
 		}
-		else if (dir == STAND_RIGHT || dir == AIRBONE_RIGHT || dir == SWIM_AIM_RIGHT || dir == DROPPED) {
+		else if (dir == STAND_RIGHT || dir == AIRBONE_RIGHT || dir == SWIM_AIM_RIGHT || dir == DROPPED ) {
 			newPos = glm::vec2{ 1,0 };
 			newPos2 = glm::vec2{ 1,0.15 };
 			newPos3 = glm::vec2{ 1,0.30 };
@@ -944,7 +944,7 @@ void EnemyManager::spawnProjectileSPREADPlayer2(glm::ivec2 position)
 	projectile->init(tilemap, texProgram, 4, newPos);
 	projectile->rank = SPREAD;
 	projectile->sprite->changeAnimation(SPREAD);
-	projectile->setPosition(position + player->getProjectileSpawn());
+	projectile->setPosition(position + player2->getProjectileSpawn());
 	projectile->setTileMap(map);
 	projlist2->push_back(*(projectile));
 
@@ -952,7 +952,7 @@ void EnemyManager::spawnProjectileSPREADPlayer2(glm::ivec2 position)
 	projectile->init(tilemap, texProgram, 4, newPos2);
 	projectile->rank = SPREAD;
 	projectile->sprite->changeAnimation(SPREAD);
-	projectile->setPosition(position + player->getProjectileSpawn());
+	projectile->setPosition(position + player2->getProjectileSpawn());
 	projectile->setTileMap(map);
 	projlist2->push_back(*(projectile));
 
@@ -960,7 +960,7 @@ void EnemyManager::spawnProjectileSPREADPlayer2(glm::ivec2 position)
 	projectile->init(tilemap, texProgram, 4, newPos3);
 	projectile->rank = SPREAD;
 	projectile->sprite->changeAnimation(SPREAD);
-	projectile->setPosition(position + player->getProjectileSpawn());
+	projectile->setPosition(position + player2->getProjectileSpawn());
 	projectile->setTileMap(map);
 	projlist2->push_back(*(projectile));
 
@@ -968,7 +968,7 @@ void EnemyManager::spawnProjectileSPREADPlayer2(glm::ivec2 position)
 	projectile->init(tilemap, texProgram, 4, newPos4);
 	projectile->rank = SPREAD;
 	projectile->sprite->changeAnimation(SPREAD);
-	projectile->setPosition(position + player->getProjectileSpawn());
+	projectile->setPosition(position + player2->getProjectileSpawn());
 	projectile->setTileMap(map);
 	projlist2->push_back(*(projectile));
 
@@ -976,7 +976,7 @@ void EnemyManager::spawnProjectileSPREADPlayer2(glm::ivec2 position)
 	projectile->init(tilemap, texProgram, 4, newPos5);
 	projectile->rank = SPREAD;
 	projectile->sprite->changeAnimation(SPREAD);
-	projectile->setPosition(position + player->getProjectileSpawn());
+	projectile->setPosition(position + player2->getProjectileSpawn());
 	projectile->setTileMap(map);
 	projlist2->push_back(*(projectile));
 }
