@@ -187,24 +187,31 @@ void Scene::updateLvl1(int deltaTime) {
 		left += PLAYER_VEL;
 	}
 	player->update(deltaTime, left, right, bottom, top);
+	life->update(deltaTime, left, right, bottom, top, player->life);
 	if (_2Playermode) {
 		player2->update(deltaTime, left, right, bottom, top);
 		life2->update(deltaTime, left, right, bottom, top, player2->life);
 		if (player2->life <= 0) {
 			changeToScene(GAMEOVER);
 		}
-	}
-	enemymanager->godmode = godmode;
-	enemymanager->update(deltaTime, left, right, bottom, top);
-	life->update(deltaTime, left, right, bottom, top, player->life);
+		else if (player->life <= 0) {
+			changeToScene(GAMEOVER);
+		}
 
-	if (player->life <= 0) {
+		else if (player->getPos().x + 20 >= map->getMapSize().x * map->getTileSize()) {
+			changeToScene(LVL2);
+		}
+	}
+
+	else if (player->life <= 0) {
 		changeToScene(GAMEOVER);
 	}
 
-	if (player->getPos().x >= map->getMapSize().x * map->getTileSize()) {
+	else if (player->getPos().x + 20 >= map->getMapSize().x * map->getTileSize()) {
 		changeToScene(LVL2);
 	}
+	enemymanager->godmode = godmode;
+	enemymanager->update(deltaTime, left, right, bottom, top);
 }
 
 void Scene::updateLvl2(int deltaTime) {
@@ -249,7 +256,7 @@ void Scene::updateGameover(int deltaTime) {
 
 void Scene::lvl2AnimationDoor(int deltaTime) {
 	player->update(deltaTime, left, right, bottom, top);
-	player2->update(deltaTime, left, right, bottom, top);
+	if (_2Playermode) player2->update(deltaTime, left, right, bottom, top);
 	if (--lvl2Delay == 0) {
 		if (Game::instance().getSpecialKey(GLUT_KEY_UP) || Game::instance().getKey('w') && enemymanager->coreDestroyed) {
 			switch (map->getFrame()) {
