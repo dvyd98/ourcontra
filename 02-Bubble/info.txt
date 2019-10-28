@@ -44,3 +44,12 @@ Com jugar:
 		Saltar - H
 		Disparar - G
 
+Developer options:
+
+0 - Game Over
+1 - Menu
+2 - Stage 1
+3 - Stage 2
+8 - God mode OFF
+9 - God mode ON
+
