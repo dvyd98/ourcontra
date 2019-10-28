@@ -171,6 +171,8 @@ void EnemyManager::initLvl2(const glm::ivec2 &tileMapPos, ShaderProgram &shaderP
 	keypressed = false;
 	keyreleased = true;
 	playerShot = false;
+	beat = false;
+	beatTimer = -1;
 	isLaserSpawned = -1;
 	int n = map->getNumEnemies();
 	enemies = new list<Enemy*>();
@@ -398,6 +400,11 @@ void EnemyManager::updateLvl2(int deltaTime, float leftt, float rightt, float bo
 	right = rightt;
 	bottom = bottomm;
 	top = topp;
+
+	if (beatTimer > 0) {
+		--beatTimer;
+		if (beatTimer == 0) beat = true;
+	}
 
 	if (soldierCd > 0) --soldierCd;
 	else if (sublvl < 5) {
@@ -1318,6 +1325,9 @@ void EnemyManager::despawnDeadEnemies() {
 				if (_2Playermode) player2->coreDestroyed = true;
 				projlistLevel2Turret->clear();
 				projlistGreenSoldier->clear();
+			}
+			else if ((*it)->state == DEAD && (*it)->getType() == "boss2final") {
+				beatTimer = 120;
 			}
 			it = enemies->erase(it);
 		}

@@ -242,6 +242,10 @@ void Scene::updateLvl2(int deltaTime) {
 		currentState = GAMEOVER;
 		changeToScene(GAMEOVER);
 	}
+	if (enemymanager->beat) {
+		currentState = END;
+		changeToScene(END);
+	}
 }
 
 void Scene::updateGameover(int deltaTime) {
@@ -345,6 +349,7 @@ void Scene::changeToScene(int scene) {
 		map = TileMap::createTileMap("levels/endgame.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
 		audiomanager->stopAllSounds();
+		break;
 	}
 	}
 }
@@ -390,8 +395,11 @@ void Scene::godMode() {
 		audiomanager->stopAllSounds();
 		audiomanager->play(GAMEOVER_MUSIC, true);
 	}
+	if (Game::instance().getKey('8')) {
+		godmode = false;
+	}
 	if (Game::instance().getKey('9')) {
-		godmode = !godmode;
+		godmode = true;
 	}
 }
 

@@ -78,6 +78,7 @@ public:
 	bool coreDestroyed;
 	bool _2Playermode;
 	bool godmode;
+	bool beat;
 	list<Enemy*> *enemies;
 	TileMap *map;
 	Projectile *projectile;
@@ -105,6 +106,7 @@ private:
 	int soldierCd;
 	int spawnCd;
 	int isLaserSpawned;
+	int beatTimer;
 
 	bool keypressed;
 	bool keyreleased;
