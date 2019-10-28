@@ -49,6 +49,7 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 	keypressed = false;
 	keyreleased = true;
 	playerShot = false;
+	playedboss1 = false;
 	spawnCd = 120;
 	int n = map->getNumEnemies();
 	enemies = new list<Enemy*>();
@@ -1326,16 +1327,20 @@ void EnemyManager::despawnDeadEnemies() {
 				projlistLevel2Turret->clear();
 				projlistGreenSoldier->clear();
 			}
-			else if ((*it)->state == DYING && (*it)->getType() == "bosscore") {
-				audiomanager->stopAllSounds();
-				audiomanager->play(AREA_CLEAR, false);
-			}
-			else if ((*it)->state == DEAD && (*it)->getType() == "boss2final") {
+			else if ((*it)->getType() == "boss2final") {
 				audiomanager->stopAllSounds();
 				audiomanager->play(AREA_CLEAR, false);
 				beatTimer = 180;
 			}
 			it = enemies->erase(it);
+		}
+		else if ((*it)->state == DYING && (*it)->getType() == "bosscore") {
+			if (!playedboss1) {
+				playedboss1 = true;
+				audiomanager->stopAllSounds();
+				audiomanager->play(AREA_CLEAR, false);
+			}
+			++it;
 		}
 		else ++it;
 	}
@@ -1427,7 +1432,7 @@ void EnemyManager::checkPhysics()
 				while (it_enemy_p2 != enemies->end() && !shot) {
 					vector<glm::ivec2> boxEnemy = (*it_enemy_p2)->buildHitBox();
 					if ((*it_enemy_p2)->state == ALIVE && (*it_enemy_p2)->getType() != "bridge" && (*it_enemy_p2)->getType() != "gunupgrade" && areTouching(box[0], box[1], boxEnemy[0], boxEnemy[1])) {
-						if ((*it_enemy_p2)->getType() == "wallturret" || (*it_enemy_p2)->getType() == "cannon") audiomanager->play(TURRET_HIT_SOUND, false);
+						if ((*it_enemy_p2)->getType() == "wallturret" || (*it_enemy_p2)->getType() == "cannon" || (*it_enemy)->getType() == "upgradebox") audiomanager->play(TURRET_HIT_SOUND, false);
 						if ((*it_enemy_p2)->decreaseLife(it_projec_p2->getDmg())) {
 							(*it_enemy_p2)->state = DYING;
 							playDeathSound((*it_enemy_p2)->getType());

@@ -116,6 +116,7 @@ private:
 	bool keypressed2;
 	bool keyreleased2;
 	bool playerShot2;
+	bool playedboss1;
 
 	void playDeathSound(string type);
 };

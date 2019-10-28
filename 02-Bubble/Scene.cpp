@@ -193,9 +193,22 @@ void Scene::updateLvl1(int deltaTime) {
 	}
 	player->update(deltaTime, left, right, bottom, top);
 	life->update(deltaTime, left, right, bottom, top, player->life);
-	if (_2Playermode) {
+	if (!_2Playermode) {
+		enemymanager->godmode = godmode;
+		enemymanager->update(deltaTime, left, right, bottom, top);
+		if (player->life <= 0) {
+			changeToScene(GAMEOVER);
+		}
+
+		else if (player->getPos().x + 20 >= map->getMapSize().x * map->getTileSize()) {
+			changeToScene(LVL2);
+		}
+	}
+	else if (_2Playermode) {
 		player2->update(deltaTime, left, right, bottom, top);
 		life2->update(deltaTime, left, right, bottom, top, player2->life);
+		enemymanager->godmode = godmode;
+		enemymanager->update(deltaTime, left, right, bottom, top);
 		if (player2->life <= 0) {
 			changeToScene(GAMEOVER);
 		}
@@ -207,16 +220,6 @@ void Scene::updateLvl1(int deltaTime) {
 			changeToScene(LVL2);
 		}
 	}
-
-	else if (player->life <= 0) {
-		changeToScene(GAMEOVER);
-	}
-
-	else if (player->getPos().x + 20 >= map->getMapSize().x * map->getTileSize()) {
-		changeToScene(LVL2);
-	}
-	enemymanager->godmode = godmode;
-	enemymanager->update(deltaTime, left, right, bottom, top);
 }
 
 void Scene::updateLvl2(int deltaTime) {
