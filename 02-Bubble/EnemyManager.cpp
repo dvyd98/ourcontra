@@ -151,11 +151,6 @@ void EnemyManager::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgr
 			enemies->push_back(aux);
 		}
 	}
-	Enemy *aux = new Soldier();
-	aux->init(tilemap, texProgram);
-	aux->setPosition(glm::vec2(5 * map->getTileSize(), 1 * map->getTileSize()));
-	aux->setTileMap(map);
-	enemies->push_back(aux);
 
 }
 
