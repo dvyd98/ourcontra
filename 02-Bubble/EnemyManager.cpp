@@ -1326,8 +1326,14 @@ void EnemyManager::despawnDeadEnemies() {
 				projlistLevel2Turret->clear();
 				projlistGreenSoldier->clear();
 			}
+			else if ((*it)->state == DYING && (*it)->getType() == "bosscore") {
+				audiomanager->stopAllSounds();
+				audiomanager->play(AREA_CLEAR, false);
+			}
 			else if ((*it)->state == DEAD && (*it)->getType() == "boss2final") {
-				beatTimer = 120;
+				audiomanager->stopAllSounds();
+				audiomanager->play(AREA_CLEAR, false);
+				beatTimer = 180;
 			}
 			it = enemies->erase(it);
 		}

@@ -34,6 +34,7 @@ void Audio::init()
 	bindAudio("music/Normal gun.wav", NORMAL_GUN_SOUND);
 	bindAudio("music/Spread gun.wav", SPREAD_GUN_SOUND);
 	bindAudio("music/Turret got hit.wav", TURRET_HIT_SOUND);
+	bindAudio("music/Victory.mp3", AREA_CLEAR);
 }
 
 void Audio::bindAudio(const char * file, int i) {
