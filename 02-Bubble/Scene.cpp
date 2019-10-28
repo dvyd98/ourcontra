@@ -46,7 +46,7 @@ Scene::~Scene()
 void Scene::init()
 {
 	_2Playermode = true;
-	godmode = true;
+	godmode = false;
 	initShaders();
 	currentState = LOADING_MENU;
 	map = TileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -128,6 +128,11 @@ void Scene::update(int deltaTime)
 			break;
 		}
 		case CREDITS: {
+			if (Game::instance().getKey(' '))
+				changeToScene(LOADING_MENU);
+			break;
+		}
+		case END: {
 			if (Game::instance().getKey(' '))
 				changeToScene(LOADING_MENU);
 			break;
@@ -233,7 +238,7 @@ void Scene::updateLvl2(int deltaTime) {
 		map->toggleFrame(glm::vec2(SCREEN_X, SCREEN_Y), texProgram, ANIM1);
 		currentState = LVL2_ANIMATION;
 	}
-	else if (player->life <= 0) {
+	if (player->life <= 0) {
 		currentState = GAMEOVER;
 		changeToScene(GAMEOVER);
 	}
@@ -335,6 +340,11 @@ void Scene::changeToScene(int scene) {
 		audiomanager->stopAllSounds();
 		audiomanager->play(GAMEOVER_MUSIC, true);
 		break;
+	}
+	case END: {
+		map = TileMap::createTileMap("levels/endgame.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		left = 0; right = float(SCREEN_WIDTH - 1) / 2;
+		audiomanager->stopAllSounds();
 	}
 	}
 }

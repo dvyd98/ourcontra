@@ -72,7 +72,7 @@ bool TileMap::loadLevel(const string &levelFile)
 	if (typeScene == "LEVEL2") loadLevel2();
 	if (typeScene == "MENU") loadMenu();
 	if (typeScene == "GAMEOVER") loadGameover();
-	if (typeScene == "HOW_TO" || typeScene == "CREDITS") loadExtras();
+	if (typeScene == "HOW_TO" || typeScene == "CREDITS" || typeScene == "END") loadExtras();
 	
 	return true;
 }

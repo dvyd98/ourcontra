@@ -28,6 +28,7 @@ Funcionalitats implementades:
 · Implementacions adicionals:
 	- Jugabilitat de dos jugadors
 	- Pausa clicant la 'P'
+	- Pantalla final que dona les gracies per jugar, després de matar al Boss Stage 2
 
 Com jugar:
 	Select amb , 
