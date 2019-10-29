@@ -26,7 +26,7 @@ void BossCore::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	type = "bosscore";
 	state = ALIVE;
-	life = 10;
+	life = 30;
 	frameCount = 60;
 	spritesheet.loadFromFile("images/BossCore.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
